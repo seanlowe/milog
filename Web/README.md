@@ -6,7 +6,7 @@
   + **firebase init**
   + Choose Hosting and Database Options with **SPACE** and hit **ENTER** to finalize
   + **DONT** overwrite any files
-  + Make any necessary changes
+  + Make any necessary changes, current main page is in *public/index.html*
   + **firebase deploy** will finalize and update changes to index.html and update the Firebase hosting service
 
 Current Website: https://mileagelogger-1755e.firebaseapp.com
