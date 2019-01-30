@@ -1,6 +1,4 @@
-<p>
-	<img src="reactNativeLogo.png">
-</p>
+<img src="reactNativeLogo.png">
 # React Native 
 
 #### First install Expo
