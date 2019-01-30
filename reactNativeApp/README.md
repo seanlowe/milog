@@ -22,7 +22,7 @@ npm start or yarn start or expo start
 Finally open the expo app on your phone and scan the QR code from the 
 development server 
 
-## Voila!
+## Voila - Your now developing on your phone!
 
 ### The official get started link
 https://facebook.github.io/react-native/docs/getting-started
