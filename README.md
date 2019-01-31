@@ -21,6 +21,6 @@ Repo for Spring 2019 Software Engineering class
 </ul>
 
 # Abstract
-<p>
-  to be filled out later
-  </p>
+
+MiLog is a cross platform mileage logger app built originally for **The Berkshire Group**, a realty company in the Denver area. The 
+app aims to give companies and their employees a convenient way to log trip mileage for budget purposes by prompting drivers to enter their mileage based on the starting and ending odometer reading from the vehicle of choice. Bluetooth connectivity and built-in company administration are features that will implemented in the future to further support the reliability of the app and the ease of usage for employees and the company alike.
