@@ -3,9 +3,9 @@
 
 ## Navigation
 
-+ <a href="https://github.com/seanlowe/milog/src/iOS" target="_blank">iOS source</a>
-+ <a href="https://github.com/seanlowe/milog/src/Android" target="_blank">Android source</a>
-+ <a href="https://github.com/seanlowe/milog/build/Web" target="_blank">Web HTML</a>
++ <a href="https://github.com/seanlowe/milog/tree/master/src/iOS" target="_blank">iOS source</a>
++ <a href="https://github.com/seanlowe/milog/tree/master/src/Android" target="_blank">Android source</a>
++ <a href="https://github.com/seanlowe/milog/tree/master/build/Web" target="_blank">Web HTML</a>
 
 <p>
 Repo for Spring 2019 Software Engineering class
