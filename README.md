@@ -1,6 +1,12 @@
 # Mi-Log
 ### A mileage tracker for businesses
 
+## Navigation
+
++ iOS source: https://github.com/seanlowe/milog/src/iOS
++ Android source: https://github.com/seanlowe/milog/src/Android
++ Web HTML: https://github.com/seanlowe/milog/build/Web
+
 <p>
 Repo for Spring 2019 Software Engineering class
 </p>
