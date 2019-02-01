@@ -1,0 +1,6 @@
+framework module Pods_Mi_LogTests {
+  umbrella header "Pods-Mi-LogTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

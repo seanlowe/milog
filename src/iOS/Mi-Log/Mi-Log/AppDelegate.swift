@@ -2,11 +2,12 @@
 //  AppDelegate.swift
 //  Mi-Log
 //
-//  Created by Britni Rogers on 1/31/19.
+//  Created by JR Mathson on 1/31/19.
 //  Copyright © 2019 Mi-Log. All rights reserved.
 //
 
 import UIKit
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        FirebaseApp.configure()
         return true
     }
 

@@ -2,7 +2,7 @@
 //  Mi_LogTests.swift
 //  Mi-LogTests
 //
-//  Created by Britni Rogers on 1/31/19.
+//  Created by JR Mathson on 1/31/19.
 //  Copyright © 2019 Mi-Log. All rights reserved.
 //
 
