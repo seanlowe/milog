@@ -7,6 +7,7 @@ target 'Mi-Log' do
 
   # Pods for Mi-Log
   pod 'Firebase/Core'
+  pod 'Firebase/Database'
 
   target 'Mi-LogTests' do
     inherit! :search_paths
