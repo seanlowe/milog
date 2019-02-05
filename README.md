@@ -20,7 +20,7 @@ app aims to give companies and their employees a convenient way to log trip mile
 </ul>
 
 # Contract
-
+<p align="center">
   <img align="left" width="400" src="icons/Contract-pg10001.jpg">
   <img align="right" width="400" src="icons/Contract-pg10002.jpg">
-
+</p>
