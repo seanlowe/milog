@@ -18,3 +18,10 @@ app aims to give companies and their employees a convenient way to log trip mile
   <li>Robert Dunski <a href="https://github.com/rdunski" target="_blank">GitHub</a></li>
   <li>Sean Lowe <a href="https://github.com/seanlowe" target="_blank">GitHub</a></li>
 </ul>
+
+# Contract
+
+<p align="center">
+  <img width="460" src="Contract-pg10001.jpg">
+  <img width="460" src="Contract-pg10002.jpg">
+</p>
