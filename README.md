@@ -21,6 +21,6 @@ app aims to give companies and their employees a convenient way to log trip mile
 
 # Contract
 
-  <img width="350" src="icons/Contract-pg10001.jpg">
-  <img width="350" src="icons/Contract-pg10002.jpg">
+  <img align="left" width="350" src="icons/Contract-pg10001.jpg">
+  <img align="right" width="350" src="icons/Contract-pg10002.jpg">
 
