@@ -6,4 +6,4 @@ Myrtle Green - #397367
 Medium Turquoise - #63CCCA
 Polished Pine - #5DA399
 ```
-<img src="ColorPalette">
+<img src="ColorPalette.png">
