@@ -1,6 +1,5 @@
-# Mi-Log
+# Mi-Log <img src="https://github.com/seanlowe/milog/blob/master/icons/miLog.png" height=200 width=200 align=right>
 ### A mileage tracker for businesses
-<img src="https://github.com/seanlowe/milog/blob/master/icons/miLog.png">
 MiLog is a cross platform mileage logger app built originally for **The Berkshire Group**, a realty company in the Denver area. The 
 app aims to give companies and their employees a convenient way to log trip mileage for budget purposes by prompting drivers to enter their mileage based on the starting and ending odometer reading from the vehicle of choice. Bluetooth connectivity and built-in company administration are features that will be implemented in the future to further support the reliability of the app and the ease of usage for employees and the company alike.
 
