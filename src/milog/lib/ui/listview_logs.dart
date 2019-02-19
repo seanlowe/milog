@@ -10,7 +10,8 @@ class ListViewLog extends StatefulWidget {
 }
 
 //The database reference
-final tripsReferene = FirebaseDatabase.instance.reference().child('Trips');
+final database = FirebaseDatabase.instance.reference();
+var tripsReferene;
 
 class _ListViewLogState extends State<ListViewLog> {
   //List of Trips
@@ -21,9 +22,13 @@ class _ListViewLogState extends State<ListViewLog> {
   @override
   void initState() {
     super.initState();
-
     items = new List();
 
+    //Turns on Persistence
+    FirebaseDatabase.instance.setPersistenceEnabled(true);
+    tripsReferene = database.child('Trips');
+
+    //TODO: Need to add Listener for when the database data changes
     _onTripAddedSubscription = logsReference.onChildAdded.listen(_onLogAdded);
     _onTripChangedSubscription = logsReference.onChildChanged.listen(_onLogUpdated);
   }
@@ -84,12 +89,13 @@ class _ListViewLogState extends State<ListViewLog> {
                                 ),
                               ),
                             ),
-                            IconButton(
-                                icon: const Icon(Icons.remove_circle_outline),
-                                onPressed: () => _deleteLog(context, items[position], position)),
+                            // IconButton(
+                            //     icon: const Icon(Icons.remove_circle_outline),
+                            //     onPressed: () => _deleteLog(context, items[position], position)),
                           ],
                         ),
                         onTap: () => _navigateToLog(context, items[position]),
+                        onLongPress: () => _deleteLog(context, items[position], position),
                       ),
                     ),
                   ],
@@ -102,9 +108,14 @@ class _ListViewLogState extends State<ListViewLog> {
             padding: EdgeInsets.zero,
             children: <Widget>[
               DrawerHeader(
-                child: Text('Drawer Header'),
+                child: Text('Main Menu'),
                 decoration: BoxDecoration(
-                  color: Color(0xff397367),
+                  color: Color(0xff42CB7C),
+                  image:DecorationImage(
+                    image:AssetImage('images/miLog.png'),
+                    fit: BoxFit.contain,
+
+                  )
                 ),
               ),
               ListTile(

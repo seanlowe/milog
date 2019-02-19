@@ -11,7 +11,8 @@ class LogScreen extends StatefulWidget {
   State<StatefulWidget> createState() => new _LogScreenState();
 }
 
-final logsReference = FirebaseDatabase.instance.reference().child('Trips');
+var database = FirebaseDatabase.instance.reference();
+var logsReference = database.child('Trips');
 
 class _LogScreenState extends State<LogScreen> {
   //Every textbox needs a "controller"
@@ -19,12 +20,17 @@ class _LogScreenState extends State<LogScreen> {
   TextEditingController _notesController;
   TextEditingController _odometerReading;
 
+  //When the "Activity Starts"
   @override
   void initState() {
     super.initState();
 
-    //Create instances of the controller
-    //Remember to convert things to Strings if they are going into textboxes!
+    //Turns on Persistence
+    FirebaseDatabase.instance.setPersistenceEnabled(true);
+
+    /*Create instances of the controller
+    Remember to convert things to Strings if they are going into textboxes!
+    This happens at start... what's written in the TextBoxes */
     _notesController = new TextEditingController(text: widget.trip.notes);
     _vehicleController = new TextEditingController(text: widget.trip.vehicle);
     _odometerReading = new TextEditingController(text: widget.trip.startOdometer.toString());
