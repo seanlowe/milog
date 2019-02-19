@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
-
 import 'package:flutter/material.dart';
-
-import 'package:milog/model/log.dart';
+import 'package:milog/model/Trip.dart';
 import 'package:milog/ui/log_screen.dart';
 
 class ListViewLog extends StatefulWidget {
@@ -11,12 +9,14 @@ class ListViewLog extends StatefulWidget {
   _ListViewLogState createState() => new _ListViewLogState();
 }
 
-final logsReference = FirebaseDatabase.instance.reference().child('Trips');
+//The database reference
+final tripsReferene = FirebaseDatabase.instance.reference().child('Trips');
 
 class _ListViewLogState extends State<ListViewLog> {
-  List<Log> items;
-  StreamSubscription<Event> _onLogAddedSubscription;
-  StreamSubscription<Event> _onLogChangedSubscription;
+  //List of Trips
+  List<Trip> items;
+  StreamSubscription<Event> _onTripAddedSubscription;
+  StreamSubscription<Event> _onTripChangedSubscription;
 
   @override
   void initState() {
@@ -24,14 +24,14 @@ class _ListViewLogState extends State<ListViewLog> {
 
     items = new List();
 
-    _onLogAddedSubscription = logsReference.onChildAdded.listen(_onLogAdded);
-    _onLogChangedSubscription = logsReference.onChildChanged.listen(_onLogUpdated);
+    _onTripAddedSubscription = logsReference.onChildAdded.listen(_onLogAdded);
+    _onTripChangedSubscription = logsReference.onChildChanged.listen(_onLogUpdated);
   }
 
   @override
   void dispose() {
-    _onLogAddedSubscription.cancel();
-    _onLogChangedSubscription.cancel();
+    _onTripAddedSubscription.cancel();
+    _onTripChangedSubscription.cancel();
     super.dispose();
   }
 
@@ -57,14 +57,14 @@ class _ListViewLogState extends State<ListViewLog> {
                       color: Colors.orangeAccent,
                       child:ListTile(
                         title: Text(
-                          '${items[position].vehicle}',
+                          '${items[position].notes}',
                           style: TextStyle(
                             fontSize: 22.0,
-                            color: Color(0xff63ccca),
+                            color: Color(0xffffffff),
                           ),
                         ),
                         subtitle: Text(
-                          '${items[position].description}',
+                          '${items[position].vehicle}',
                           style: new TextStyle(
                             fontSize: 18.0,
                             fontStyle: FontStyle.italic,
@@ -108,7 +108,7 @@ class _ListViewLogState extends State<ListViewLog> {
                 ),
               ),
               ListTile(
-                title: Text('Logs'),
+                title: Text('Trips'),
                 onTap: () {
                   // Update the state of the app
                   // ...
@@ -156,36 +156,37 @@ class _ListViewLogState extends State<ListViewLog> {
 
   void _onLogAdded(Event event) {
     setState(() {
-      items.add(new Log.fromSnapshot(event.snapshot));
+      print("Entered _onLogAdded!");
+      items.add(new Trip.fromSnapshot(event.snapshot));
     });
   }
 
   void _onLogUpdated(Event event) {
-    var oldLogValue = items.singleWhere((log) => log.id == event.snapshot.key);
+    var oldLogValue = items.singleWhere((trip) => trip.tripID == event.snapshot.key);
     setState(() {
-      items[items.indexOf(oldLogValue)] = new Log.fromSnapshot(event.snapshot);
+      items[items.indexOf(oldLogValue)] = new Trip.fromSnapshot(event.snapshot);
     });
   }
 
-  void _deleteLog(BuildContext context, Log log, int position) async {
-    await logsReference.child(log.id).remove().then((_) {
+  void _deleteLog(BuildContext context, Trip trip, int position) async {
+    await logsReference.child(trip.tripID).remove().then((_) {
       setState(() {
         items.removeAt(position);
       });
     });
   }
 
-  void _navigateToLog(BuildContext context, Log log) async {
+  void _navigateToLog(BuildContext context, Trip trip) async {
     await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => LogScreen(log)),
+      MaterialPageRoute(builder: (context) => LogScreen(trip)),
     );
   }
 
   void _createNewLog(BuildContext context) async {
     await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => LogScreen(Log(null, "", ''))),
-    );
+      MaterialPageRoute(builder: (context) => LogScreen(Trip.newTrip()),
+    ));
   }
 }

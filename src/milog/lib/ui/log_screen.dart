@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:milog/model/Trip.dart';
 
-import 'package:milog/model/log.dart';
 
 class LogScreen extends StatefulWidget {
-  final Log log;
-  LogScreen(this.log);
+  final Trip trip;
+  LogScreen(this.trip);
 
   @override
   State<StatefulWidget> createState() => new _LogScreenState();
@@ -14,15 +14,20 @@ class LogScreen extends StatefulWidget {
 final logsReference = FirebaseDatabase.instance.reference().child('Trips');
 
 class _LogScreenState extends State<LogScreen> {
+  //Every textbox needs a "controller"
   TextEditingController _vehicleController;
-  TextEditingController _descriptionController;
+  TextEditingController _notesController;
+  TextEditingController _odometerReading;
 
   @override
   void initState() {
     super.initState();
 
-    _vehicleController = new TextEditingController(text: widget.log.vehicle);
-    _descriptionController = new TextEditingController(text: widget.log.description);
+    //Create instances of the controller
+    //Remember to convert things to Strings if they are going into textboxes!
+    _notesController = new TextEditingController(text: widget.trip.notes);
+    _vehicleController = new TextEditingController(text: widget.trip.vehicle);
+    _odometerReading = new TextEditingController(text: widget.trip.startOdometer.toString());
   }
 
   @override
@@ -34,30 +39,41 @@ class _LogScreenState extends State<LogScreen> {
         alignment: Alignment.center,
         child: Column(
           children: <Widget>[
+            //The Notes Field
+            TextField(
+              controller: _notesController,
+              decoration: InputDecoration(labelText: 'Notes'),
+            ),
+            Padding(padding: new EdgeInsets.all(5.0)),
+            //The Vehicle Text Field
             TextField(
               controller: _vehicleController,
               decoration: InputDecoration(labelText: 'Vehicle'),
             ),
             Padding(padding: new EdgeInsets.all(5.0)),
+            //The Odometer Text Field
             TextField(
-              controller: _descriptionController,
-              decoration: InputDecoration(labelText: 'Description'),
+              controller: _odometerReading,
+              decoration: InputDecoration(labelText: "Odometer Reading"),
+              keyboardType: TextInputType.number,
             ),
             Padding(padding: new EdgeInsets.all(5.0)),
             RaisedButton(
-              child: (widget.log.id != null) ? Text('Update') : Text('Add'),
+              child: (widget.trip.tripID != null) ? Text('Update') : Text('Add'),
               onPressed: () {
-                if (widget.log.id != null) {
-                  logsReference.child(widget.log.id).set({
+                if (widget.trip.tripID != null) {
+                  logsReference.child(widget.trip.tripID).set({
+                    'notes': _notesController.text,
                     'vehicle': _vehicleController.text,
-                    'description': _descriptionController.text
+                    'startOdometer': _odometerReading.text
                   }).then((_) {
                     Navigator.pop(context);
                   });
                 } else {
                   logsReference.push().set({
+                    'notes': _notesController.text,
                     'vehicle': _vehicleController.text,
-                    'description': _descriptionController.text
+                    'startOdometer':_odometerReading.text
                   }).then((_) {
                     Navigator.pop(context);
                   });
