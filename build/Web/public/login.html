@@ -20,8 +20,8 @@ limitations under the License.
   #quickstart-sign-up,
   #quickstart-sign-in,
   #quickstart-verify-email,
-  #quickstart-password-reset { display: block; justify-content: center;}
-  #buttons-container { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
+  #quickstart-password-reset { }
+  #buttons-container { background: white; max-width: 360px; margin: 0 auto; padding: 32px 24px; border-radius: 3px; display: flex; horizontal-align: middle;}
   </style>
   <meta charset=utf-8 />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -237,14 +237,14 @@ limitations under the License.
           <p>Enter an email and password below and either sign in to an existing account or sign up</p>
 
           <input class="mdl-textfield__input" style="display:inline;width:auto;" type="text" id="email" name="email" placeholder="Email"/>
-          &nbsp;&nbsp;&nbsp;
+          <br/><br>
           <input class="mdl-textfield__input" style="display:inline;width:auto;" type="password" id="password" name="password" placeholder="Password"/>
+          <br/><br>
           <input class="mdl-textfield__input" style="display:inline;width:auto;" type="text" id="data" name ="data" placeholder="Data"/>
-          <br/><br/>
-          <button disabled class="mdl-button mdl-js-button mdl-button--raised" id="quickstart-sign-in" name="signin">Sign In</button>
-          &nbsp;&nbsp;&nbsp;
-          <button class="mdl-button mdl-js-button mdl-button--raised" id="quickstart-sign-up" name="signup">Sign Up</button>
-          &nbsp;&nbsp;&nbsp;
+          <br/><br>
+            <button disabled class="mdl-button mdl-js-button mdl-button--raised" id="quickstart-sign-in" name="signin">Sign In</button>
+            <br/><br>
+            <button class="mdl-button mdl-js-button mdl-button--raised" id="quickstart-sign-up" name="signup">Sign Up</button>
           <button class="mdl-button mdl-js-button mdl-button--raised" disabled id="quickstart-verify-email" name="verify-email">Send Email Verification</button>
           &nbsp;&nbsp;&nbsp;
           <button class="mdl-button mdl-js-button mdl-button--raised" id="quickstart-password-reset" name="verify-email">Send Password Reset Email</button>
