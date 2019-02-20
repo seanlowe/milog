@@ -17,11 +17,18 @@ limitations under the License.
   body { background: #00A3BB; color: rgba(0,163,187,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0;}
   h2 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px; text-align: center;}
   p { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px; text-align: center;}
-  #quickstart-sign-up,
-  #quickstart-sign-in,
-  #quickstart-verify-email,
-  #quickstart-password-reset { }
-  #buttons-container { background: white; max-width: 360px; margin: 0 auto; padding: 32px 24px; border-radius: 3px; display: flex; horizontal-align: middle;}
+  #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 16px 24px; border-radius: 3px; }
+  #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
+  #message h1 { font-size: 44px; font-weight: 300; color: rgba(0,0,0,0.6);}
+  #message img { max-width: 100px; text-align: left; display: flex;}
+  #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
+  #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
+  #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
+  #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
+  @media (max-width: 600px) {
+    body, #message { margin-top: 0; background: white; box-shadow: none; }
+    body { border-top: 16px solid #ffa100; }
+  }
   </style>
   <meta charset=utf-8 />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -214,55 +221,48 @@ limitations under the License.
   </script>
 </head>
 <body>
-<div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-header">
-
-  <!-- Header section containing title -->
-  <header class="mdl-layout__header mdl-color-text--white mdl-color--light-blue-700">
-    <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-grid">
-      <div class="mdl-layout__header-row mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--8-col-desktop">
-        <a href="/"><h3>Firebase Authentication</h3></a>
-      </div>
-    </div>
-  </header>
-
-  <main class="mdl-layout__content mdl-color--grey-100">
-    <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-grid">
+  <main>
 
       <!-- Container for the demo -->
-      <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
-        <div class="mdl-card__title mdl-color--light-blue-600 mdl-color-text--white">
-          <h2 class="mdl-card__title-text">Firebase Email &amp; Password Authentication</h2>
+        <div id="message">
+          <img src="icons/miLog.png" align="left">
+          <h1 style="display:flex;justify-content:center;">
+          MiLog
+        </h1>
+          <div style="display:block;text-align:center;">
+          <br/><br>
+          <input style="display:inline;width:auto;" type="text" id="email" name="email" placeholder="Email"/>
+          <br/><br>
+          <input style="display:inline;width:auto;" type="password" id="password" name="password" placeholder="Password"/>
+          <!-- <br/><br>
+          <input style="display:inline;width:auto;" type="text" id="data" name ="data" placeholder="Data"/> -->
+          <br/><br>
         </div>
-        <div class="mdl-card__supporting-text mdl-color-text--grey-600">
-          <p>Enter an email and password below and either sign in to an existing account or sign up</p>
-
-          <input class="mdl-textfield__input" style="display:inline;width:auto;" type="text" id="email" name="email" placeholder="Email"/>
+          <div style="display:block;text-align:center;">
+            <button id="quickstart-sign-in" name="signin">Sign In</button>
+          </div>
           <br/><br>
-          <input class="mdl-textfield__input" style="display:inline;width:auto;" type="password" id="password" name="password" placeholder="Password"/>
-          <br/><br>
-          <input class="mdl-textfield__input" style="display:inline;width:auto;" type="text" id="data" name ="data" placeholder="Data"/>
-          <br/><br>
-            <button disabled class="mdl-button mdl-js-button mdl-button--raised" id="quickstart-sign-in" name="signin">Sign In</button>
-            <br/><br>
-            <button class="mdl-button mdl-js-button mdl-button--raised" id="quickstart-sign-up" name="signup">Sign Up</button>
-          <button class="mdl-button mdl-js-button mdl-button--raised" disabled id="quickstart-verify-email" name="verify-email">Send Email Verification</button>
+          <div style="display:block;text-align:center;">
+            <button id="quickstart-sign-up" name="signup">Sign Up</button>
+          </div>
+          <!-- <div style="display:block;text-align:center;">
+            <button disabled id="quickstart-verify-email" name="verify-email">Send Email Verification</button>
+          </div>
           &nbsp;&nbsp;&nbsp;
-          <button class="mdl-button mdl-js-button mdl-button--raised" id="quickstart-password-reset" name="verify-email">Send Password Reset Email</button>
-          <button id="send-data" name="data">Send Data</button>
+          <div style="display:block;text-align:center;">
+            <button id="quickstart-password-reset" name="verify-email">Send Password Reset Email</button>
+          </div> -->
+          <!--<button id="send-data" name="data">Send Data</button> -->
 
           <!-- Container where we'll display the user details -->
-          <div class="quickstart-user-details-container">
+          <!-- <div class="quickstart-user-details-container">
             Firebase sign-in status: <span id="quickstart-sign-in-status">Unknown</span>
             <div>Firebase auth <code>currentUser</code> object value:</div>
             <pre><code id="quickstart-account-details">null</code></pre>
             <pre><code id="firebase-status">null</code></pre>
-          </div>
+          </div> -->
         </div>
-      </div>
-
-    </div>
   </main>
-</div>
 <script type="text/javascript">
 var config = {
  apiKey: "AIzaSyB_4KJ05TIv6G6sHUObbV91k2Q3qINw52c",
