@@ -1,0 +1,171 @@
+        
+/* Read more css
+============================================================================================ */
+.read_more{
+    width: 150px;
+    border: 1px solid $baseColor;
+    border-radius: 22.5px;
+    display: inline-block;
+    text-align: center;
+    height: 45px;
+    line-height: 45px;
+    font-size: 14px;
+    color: #fff;
+    font-family: $mon;
+    font-weight: 400;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 2;
+    @include transition;
+    overflow: hidden;
+    i{
+        padding-right: 14px;
+        font-size: 24px;
+    }
+    &:before{
+        content: '';
+        position: absolute;
+        top: 0;
+        right: -50px;
+        bottom: 0;
+        left: 0;
+        border-right: 50px solid transparent;
+        border-bottom: 80px solid $baseColor;
+        transform: translateX(0);
+        @include transition;
+        z-index: -1;
+    }
+    &:hover{
+        color: $baseColor;
+        &:before{
+            
+            transform: translateX(-100%);
+        }
+    }
+    &.purple_read{
+        border: 1px solid $mainColor;
+        &:before{
+            border-bottom: 80px solid $mainColor;
+        }
+        &:hover{
+            color: $mainColor;
+        }
+    }
+}
+.submit_btn{
+    width: 170px;
+    border: 1px solid $baseColor;
+    display: inline-block;
+    text-align: center;
+    height: 45px;
+    line-height: 45px;
+    padding: 0px;
+    background: transparent;
+    border-radius: 5px;
+    outline: none !important;
+    box-shadow: none !important;
+    font-size: 15px;
+    color: #fff;
+    font-family: $mon;
+    font-weight: 400;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 2;
+    @include transition;
+    overflow: hidden;
+    i{
+        padding-right: 14px;
+        font-size: 24px;
+    }
+    &:before{
+        content: '';
+        position: absolute;
+        top: 0;
+        right: -50px;
+        bottom: 0;
+        left: 0;
+        border-right: 50px solid transparent;
+        border-bottom: 80px solid $baseColor;
+        transform: translateX(0);
+        @include transition;
+        z-index: -1;
+    }
+    &:hover, &:focus{
+        color: $baseColor;
+        background: transparent;
+        border-color: $baseColor;
+        &:before{
+            
+            transform: translateX(-100%);
+        }
+    }
+    &.purple_submit{
+        border: 1px solid $mainColor;
+        &:before{
+            border-bottom: 80px solid $mainColor;
+        }
+        &:hover, &:focus{
+            color: $mainColor;
+            background: transparent;
+            border-color: $mainColor;
+            &:before{
+
+                transform: translateX(-100%);
+            }
+        }
+    }
+}
+
+.purchase_btn{
+    width: 220px;
+    border: 2px solid $baseColor;
+    border-radius: 5px;
+    display: inline-block;
+    text-align: center;
+    height: 60px;
+    line-height: 60px;
+    font-size: 16px;
+    color: $baseColor;
+    font-family: $mon;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 2;
+    @include transition;
+    overflow: hidden;
+    i{
+        padding-right: 14px;
+        font-size: 24px;
+    }
+    &:before{
+        content: '';
+        position: absolute;
+        top: 0;
+        right: -50px;
+        bottom: 0;
+        left: 0;
+        border-right: 50px solid transparent;
+        border-bottom: 80px solid $baseColor;
+        -webkit-transform: translateX(-100%);
+        transform: translateX(-100%);
+        @include transition;
+        z-index: -1;
+    }
+    &:hover{
+        color: #fff;
+        &:before{
+            transform: translateX(0);
+        }
+    }
+    &.purple_pruchase{
+        border: 2px solid $mainColor;
+        color: $mainColor;
+        &:before{
+            border-bottom: 80px solid $mainColor;
+        }
+        &:hover{
+            color: #fff;
+        }
+    }
+}
+/* End Read more css
+============================================================================================ */

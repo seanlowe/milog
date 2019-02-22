@@ -1,0 +1,35 @@
+/*font Variables*/
+$mon: 'Montserrat', sans-serif;
+$lato: 'Lato', sans-serif;
+
+
+/*Color Variables*/
+
+$baseColor: #f8395d;
+$mainColor: #a640d0;
+$par: #a640d0;
+$dip: #222222;
+$gray: #696969;
+
+
+
+// Mixins
+@mixin transition($property: all, $duration: 400ms, $animate: linear, $delay:0s){
+    transition: $property $duration $animate $delay; 
+}
+
+// Placeholder Mixins
+
+@mixin placeholder {
+  &.placeholder { @content; }
+  &:-moz-placeholder { @content; }
+  &::-moz-placeholder { @content; }
+  &::-webkit-input-placeholder { @content; }
+}
+
+.col-md-offset-right-1 {
+    margin-right: 8.33333333%;
+}
+
+// Font family link
+@import url('https://fonts.googleapis.com/css?family=Lato:300,400,700,900|Montserrat:300,400,400i,500,600,700,800,900');

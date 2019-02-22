@@ -1,0 +1,299 @@
+/* Subscrib area css
+============================================================================================ */
+.subscrib_area{
+    padding: 100px 0px;
+    .content_title{
+        text-align: center;
+        margin-bottom: 50px;
+        h2{
+            text-transform: capitalize;
+            &:before{
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+    }
+    &.purple_subs{
+        .subscrib_form{
+            input{
+                &:focus{
+                    border: 1px solid $mainColor;
+                }
+            }
+            .input-group-btn{
+                .btn-default{
+                    &:before{
+                        border-bottom: 80px solid $mainColor;
+                    }
+                }
+            }
+        }
+    }
+}
+.subscrib_form{
+    max-width: 750px;
+    margin: auto;
+    input{
+        box-shadow: none;
+        outline: none;
+        border: 1px solid #dfdfdf;
+        height: 50px;
+        padding: 0px 15px;
+        font-family: $lato;
+        border-radius: 0px;
+        font-family: $lato;
+        font-size: 14px;
+        color: #999999;
+        @include placeholder{
+            font-family: $lato;
+            font-size: 14px;
+            color: #999999;
+        }
+        &:focus{
+            outline: none;
+            box-shadow: none;
+            border: 1px solid $baseColor;
+        }
+    }
+    .input-group-btn{
+        .btn-default{
+            border: none;
+            background: #e0e0e0;
+            border-radius: 0px;
+            box-shadow: none !important;
+            outline: none !important;
+            height: 50px;
+            width: 140px;
+            position: relative;
+            overflow: hidden;
+            font-size: 12px;
+            color: $dip;
+            text-transform: uppercase;
+            font-weight: 400;
+            @include transition;
+            &:before{
+                content: '';
+                position: absolute;
+                top: 0;
+                right: -50px;
+                bottom: 0;
+                left: 0;
+                border-right: 50px solid transparent;
+                border-bottom: 80px solid $baseColor;
+                -webkit-transform: translateX(-100%);
+                transform: translateX(-100%);
+                @include transition;
+                z-index: -1;
+            }
+            &:hover{
+                color: #fff;
+                &:before{
+                    transform: translateX(0);
+                }
+            }
+        }
+    }
+}
+/* End Subscrib area css
+============================================================================================ */
+
+/* Map area css
+============================================================================================ */
+.map_area{
+    position: relative;
+    .mapBox{
+        min-height: 770px;
+        width: 100%;
+        position: absolute !important;
+        left: 0px;
+        top: 0px;
+    }
+    &.purple_map{
+        .contact_info{
+            .contact_form_left{
+                .form-group{
+                    input{
+                        &:focus{
+                            border-color: $mainColor;
+                        }
+                    }
+                    textarea{
+                        &:focus{
+                            border-color: $mainColor;
+                        }
+                    }
+                    &:last-child{
+                        margin-bottom: 0px;
+                    }
+                }
+            }
+            .contact_details{
+                .media{
+                    .media-left{
+                        i{
+                            color: $mainColor;
+                            font-size: 22px;
+                        }
+                    }
+                }
+                ul{
+                    li{
+                        a{
+                            color: $mainColor;
+                            &:before{
+                                background: rgba(166, 54, 208, .3);
+                            }
+                        }
+                       
+                        &:hover{
+                            a{
+                                background: $mainColor;
+                                color: #fff;
+                                &:before{
+                                    opacity: 1;
+                                    animation-name: hvr-ripple-out;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.contact_info{
+    padding: 100px 0px;
+    .contact_form_left{
+        background: rgba(255, 255, 255, .90);
+        padding: 60px 40px;
+        .form-group{
+            margin-bottom: 30px;
+            input{
+                text-shadow: none;
+                box-shadow: none;
+                border: 1px solid #eeeeee;
+                border-radius: 0px;
+                background: #f8f8f8;
+                height: 45px;
+                font-size: 14px;
+                font-family: $lato;
+                color: #999999;
+                padding: 0px 15px;
+                @include placeholder{
+                    font-size: 14px;
+                    font-family: $lato;
+                    color: #999999;
+                }
+                &:focus{
+                    border-color: $baseColor;
+                }
+            }
+            textarea{
+                text-shadow: none;
+                box-shadow: none;
+                border: 1px solid #eeeeee;
+                border-radius: 0px;
+                background: #f8f8f8;
+                height: 150px;
+                font-size: 14px;
+                font-family: $lato;
+                color: #999999;
+                resize: none;
+                padding: 10px 15px;
+                @include placeholder{
+                    font-size: 14px;
+                    font-family: $lato;
+                    color: #999999;
+                }
+                &:focus{
+                    border-color: $baseColor;
+                }
+            }
+            &:last-child{
+                margin-bottom: 0px;
+            }
+        }
+    }
+    .contact_details{
+        background: rgba(255, 255, 255, .90);
+        padding: 60px 40px;
+        .media{
+            margin-top: 28px;
+            .media-left{
+                padding-right: 40px;
+                i{
+                    color: $baseColor;
+                    font-size: 22px;
+                }
+            }
+            .media-body{
+                h4{
+                    font-size: 18px;
+                    color: $dip;
+                    font-family: $mon;
+                    font-weight: 400;
+                    padding-bottom: 12px;
+                }
+                h5{
+                    font-size: 16px;
+                    font-family: $lato;
+                    color: $gray;
+                    line-height: 26px;
+                }
+            }
+            &:first-child{
+                margin-top: 0px;
+            }
+        }
+        ul{
+            padding-top: 40px;
+            li{
+                display: inline-block;
+                margin-right: 12px;
+                a{
+                    height: 40px;
+                    width: 40px;
+                    border: 1px solid #e2e2e2;
+                    border-radius: 50%;
+                    line-height: 40px;
+                    text-align: center;
+                    color: $baseColor;
+                    font-size: 14px;
+                    display: inline-block;
+                    @include transition;
+                    position: relative;
+                    z-index: 2;
+                    &:before{
+                        content: "";
+                        position: absolute;
+                        background: rgba(248, 57, 93, .3);
+                        top: 0;
+                        right: 0;
+                        bottom: 0;
+                        left: 0;
+                        -webkit-animation-duration: 1s;
+                        animation-duration: 1s;
+                        border-radius: 50%;
+                        opacity: 0;
+                        z-index: -1;
+                    }
+                }
+                &:last-child{
+                    margin-right: 0px;
+                }
+                &:hover{
+                    a{
+                        background: $baseColor;
+                        color: #fff;
+                        &:before{
+                            opacity: 1;
+                            animation-name: hvr-ripple-out;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+/* End Map area css
+============================================================================================ */

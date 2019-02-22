@@ -1,0 +1,163 @@
+/* Clients area css
+============================================================================================ */
+.clients_feedback_area{
+    overflow: hidden;
+    clear: both;
+    background: #f1f1f1;
+    padding: 100px 0px;
+    &.purple_clients{
+        .item{
+            p{
+                background: #ede8ef;
+            }
+            h4{
+                color: $mainColor;
+            }
+            ul{
+                li{
+                    a{
+                        background: $mainColor;
+                        &:before{
+                            content: "";
+                            position: absolute;
+                            border: $mainColor solid 3px;
+                            top: 0;
+                            right: 0;
+                            bottom: 0;
+                            left: 0;
+                            -webkit-animation-duration: 1s;
+                            animation-duration: 1s;
+                            border-radius: 50%;
+                        }
+                    }
+                }
+            }
+        }
+        .owl-dots{
+            .owl-dot{
+                &:hover, &.active{
+                    background: $mainColor;
+                }
+                &:last-child{
+                    margin-right: 0px;
+                }
+            }
+        }
+    }
+}
+.clients_slider{
+    .item{
+        p{
+            text-align: center;
+            font-size: 14px;
+            color: #444444;
+            line-height: 26px;
+            letter-spacing: 0.588px;
+            background: #f1e8e9;
+            border-radius: 10px;
+            padding: 15px 0px;
+            margin-bottom: 25px;
+            position: relative;
+            &:before{
+                content: "";
+                width: 0;
+                height: 0;
+                border-style: solid;
+                border-width: 15px 15px 0 15px;
+                border-color: #f1e8e9 transparent transparent transparent;
+                position: absolute;
+                left: 50%;
+                bottom: -15px;
+                transform: translateX(-50%);
+            }
+        }
+        img{
+            width: auto;
+            max-width: 100%;
+            text-align: center;
+            margin: auto;
+        }
+        h4{
+            text-align: center;
+            font-size: 24px;
+            color: $baseColor;
+            font-family: $mon;
+            font-weight: 400;
+            padding: 25px 0px 12px 0px;
+            @include transition;
+            &:hover{
+                color: $dip;
+            }
+        }
+        h5{
+            font-size: 14px;
+            color: #444;
+            font-family: $lato;
+            text-align: center;
+            padding-bottom: 18px;
+        }
+        ul{
+            text-align: center;
+            padding-bottom: 10px;
+            li{
+                display: inline-block;
+                margin-right: 7px;
+                a{
+                    height: 30px;
+                    width: 30px;
+                    background: $baseColor;
+                    line-height: 30px;
+                    text-align: center;
+                    color: #fff;
+                    border-radius: 50%;
+                    text-align: center;
+                    display: inline-block;
+                    transform: perspective(1px) translateZ(0);
+                    position: relative;
+                    &:before{
+                        content: "";
+                        position: absolute;
+                        border: $baseColor solid 3px;
+                        top: 0;
+                        right: 0;
+                        bottom: 0;
+                        left: 0;
+                        -webkit-animation-duration: 1s;
+                        animation-duration: 1s;
+                        border-radius: 50%;
+                    }
+                }
+                &:hover{
+                    a{
+                        &:before{
+                            animation-name: hvr-ripple-out;
+                        }
+                    }
+                }
+                &:last-child{
+                    margin-right: 0px;
+                }
+            }
+        }
+    }
+    .owl-dots{
+        text-align: center;
+        padding-top: 25px;
+        .owl-dot{
+            height: 6px;
+            width: 6px;
+            background: #b2b2b2;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+            &:hover, &.active{
+                background: $baseColor;
+            }
+            &:last-child{
+                margin-right: 0px;
+            }
+        }
+    }
+}
+/* End Clients area css
+============================================================================================ */

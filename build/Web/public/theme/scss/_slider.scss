@@ -1,0 +1,396 @@
+/* Main Slider css
+============================================================================================ */
+.slider_area{
+    .rev_slider{
+        ul{
+            li{
+                .tp-bgimg{
+                    z-index: 4 !important;
+                }
+                .first_text{
+                    color: #fff;
+                    font-family: $mon;
+                }
+                .some_text{
+                    color: #fff;
+                    font-family: $lato;
+                }
+                .register_angkar_btn{
+                    width: 220px;
+                    border: 2px solid #fff;
+                    border-radius: 5px;
+                    display: inline-block;
+                    text-align: center;
+                    height: 64px;
+                    line-height: 64px;
+                    font-size: 16px;
+                    color: #fff;
+                    font-family: $mon;
+                    text-transform: uppercase;
+                    position: relative;
+                    z-index: 2;
+                    @include transition;
+                    overflow: hidden;
+                    i{
+                        padding-right: 14px;
+                        font-size: 24px;
+                    }
+                    &:before{
+                        content: '';
+                        position: absolute;
+                        top: 0;
+                        right: -50px;
+                        bottom: 0;
+                        left: 0;
+                        border-right: 50px solid transparent;
+                        border-bottom: 80px solid #fff;
+                        -webkit-transform: translateX(-100%);
+                        transform: translateX(-100%);
+                        @include transition;
+                        z-index: -1;
+                    }
+                    &:hover{
+                        color: $baseColor;
+                        &:before{
+                            transform: translateX(0);
+                        }
+                    }
+                    &.purple_s_btn{
+                        &:hover{
+                            color: $mainColor;
+                        }
+                    }
+                }
+                &.first_slider{
+                    .slotholder{
+                        position: relative;
+//                        &:before{
+//                            content: "";
+//                            width: 100%;
+//                            top: 0px;
+//                            height: 100%;
+//                            left: 0;
+//                            position: absolute;
+//                            z-index: 10;
+//                            background-image: -moz-linear-gradient( 150deg, rgb(166,64,208) 0%, rgb(248,57,93) 100%);
+//                            background-image: -webkit-linear-gradient( 150deg, rgb(166,64,208) 0%, rgb(248,57,93) 100%);
+//                            background-image: -ms-linear-gradient( 150deg, rgb(166,64,208) 0%, rgb(248,57,93) 100%);
+//                        }
+                        .tp-bgimg{
+                            background-color: transparent !important;
+                        }
+                    }
+                }
+                &.secand_slider{
+                    .slotholder{
+                        position: relative;
+//                        &:before{
+//                            content: "";
+//                            width: 100%;
+//                            top: 0px;
+//                            height: 100%;
+//                            left: 0;
+//                            position: absolute;
+//                            z-index: 10;
+//                            background: rgba(166, 64, 208, .9);
+//                        }
+                        .tp-bgimg{
+                            background-color: transparent !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.slider_shap{
+    z-index: 99999;
+    max-width: 308px;
+    position: relative;
+    .slider_moblie{
+       position: absolute;
+        top: 49.8%;
+        transform: translateX(-50%) translateY(-50%);
+        bottom: 0px;
+        left: 49.84%;
+        width: 267px;
+        height: 476px;
+        overflow: hidden;
+        .item{
+            img{
+                width: 267px !important;
+                height: 476px !important;
+            }
+        }
+    }
+}
+/* End Main Slider css
+============================================================================================ */
+
+/* Expert Team slider css
+============================================================================================ */
+.expert_team_area{
+    padding: 100px 0px;
+    &.purple_team{
+        .expert_slider{
+            .expert_inner{
+                position: relative;
+                .expert_hover{
+                    .expet_hover_inner{
+                        background: rgba(166, 63, 208, .90);
+                        height: 100%;
+                        transform: scale(.5);
+                        opacity: 0;
+                        visibility: hidden;
+                        @include transition;
+                        .expert_hover_text{
+                            position: absolute;
+                            bottom: 30px;
+                            left: 0px;
+                            width: 100%;
+                            text-align: center;
+                            ul{
+                                overflow: hidden;
+                                li{
+                                    display: inline-block;
+                                    margin-right: 16px;
+                                    a{
+                                        height: 45px;
+                                        width: 45px;
+                                        border: 1px solid #fff;
+                                        border-radius: 50%;
+                                        display: inline-block;
+                                        line-height: 45px;
+                                        color: #fff;
+                                        @include transition;
+                                        bottom: -40px;
+                                        position: relative;
+                                        transition: all 800ms linear;
+                                    }
+                                    &:nth-child(2){
+                                        &:hover{
+                                            a{
+                                                color: #1D9FEF;
+                                            }
+                                        }
+                                    }
+                                    &:last-child{
+                                        margin-right: 0px;
+                                        &:hover{
+                                            a{
+                                                color: #005683;
+                                            }
+                                        }
+                                    }
+                                    &:hover{
+                                        a{
+                                            background: #fff;
+                                            color: #3b5998;
+                                        }
+                                    }
+                                }
+                            }
+                            h4{
+                                color: #fff;
+                                font-size: 18px;
+                                font-family: $mon;
+                                font-weight: 400;
+                                text-transform: uppercase;
+                                padding: 25px 0px 13px 0px;
+                                opacity: 0;
+                                transition: all 800ms linear;
+                            }
+                            h5{
+                                color: #fff;
+                                font-size: 16px;
+                                font-family: $lato;
+                                opacity: 0;
+                                transition: all 800ms linear;
+                            }
+                        }
+                    }
+                }
+                &:hover{
+                    .expert_hover{
+                        .expet_hover_inner{
+                            transform: scale(1);
+                            opacity: 1;
+                            visibility: visible;
+                            .expert_hover_text{
+                                ul{
+                                    li{
+                                        a{
+                                            bottom: 0px;
+                                        }
+                                    }
+                                }
+                                h4{
+                                    opacity: 1;
+                                }
+                                h5{
+                                    opacity: 1;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .owl-dots{
+                .owl-dot{
+                    &:hover, &.active{
+                        background: $mainColor;
+                    }
+                }
+            }
+        }
+    }
+}
+.expert_slider{
+    .expert_inner{
+        position: relative;
+        .expert_hover{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left: 0px;
+            top: 0px;
+            padding: 10px;
+            text-align: center;
+            .expet_hover_inner{
+                background: rgba(248, 57, 93, .90);
+                height: 100%;
+                transform: scale(.5);
+                opacity: 0;
+                visibility: hidden;
+                @include transition;
+                .expert_hover_text{
+                    position: absolute;
+                    bottom: 30px;
+                    left: 0px;
+                    width: 100%;
+                    text-align: center;
+                    ul{
+                        overflow: hidden;
+                        li{
+                            display: inline-block;
+                            margin-right: 16px;
+                            a{
+                                height: 45px;
+                                width: 45px;
+                                border: 1px solid #fff;
+                                border-radius: 50%;
+                                display: inline-block;
+                                line-height: 45px;
+                                color: #fff;
+                                @include transition;
+                                bottom: -40px;
+                                position: relative;
+                                transition: all 800ms linear;
+                            }
+                            &:nth-child(2){
+                                &:hover{
+                                    a{
+                                        color: #1D9FEF;
+                                    }
+                                }
+                            }
+                            &:last-child{
+                                margin-right: 0px;
+                                &:hover{
+                                    a{
+                                        color: #005683;
+                                    }
+                                }
+                            }
+                            &:hover{
+                                a{
+                                    background: #fff;
+                                    color: #3b5998;
+                                }
+                            }
+                        }
+                    }
+                    h4{
+                        color: #fff;
+                        font-size: 18px;
+                        font-family: $mon;
+                        font-weight: 400;
+                        text-transform: uppercase;
+                        padding: 25px 0px 13px 0px;
+                        opacity: 0;
+                        transition: all 800ms linear;
+                    }
+                    h5{
+                        color: #fff;
+                        font-size: 16px;
+                        font-family: $lato;
+                        opacity: 0;
+                        transition: all 800ms linear;
+                    }
+                }
+            }
+        }
+        &:hover{
+            .expert_hover{
+                .expet_hover_inner{
+                    transform: scale(1);
+                    opacity: 1;
+                    visibility: visible;
+                    .expert_hover_text{
+                        ul{
+                            li{
+                                a{
+                                    bottom: 0px;
+                                }
+                            }
+                        }
+                        h4{
+                            opacity: 1;
+                        }
+                        h5{
+                            opacity: 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .owl-dots{
+        text-align: center;
+        padding-top: 60px;
+        .owl-dot{
+            height: 12px;
+            width: 12px;
+            background: #b2b2b2;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 15px;
+            &:hover, &.active{
+                background: $baseColor;
+            }
+            &:last-child{
+                margin-right: 0px;
+            }
+        }
+    }
+}
+/* End Expert Team slider css
+============================================================================================ */
+
+/* Sponsors slider css
+============================================================================================ */
+.sponsors_area{
+    
+}
+.sponsor_slider{
+    padding: 120px 0px;
+    .item{
+        text-align: center;
+        img{
+            width: auto;
+            margin: auto;
+        }
+    }
+}
+/* End Sponsors slider css
+============================================================================================ */

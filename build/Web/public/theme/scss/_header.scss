@@ -1,0 +1,151 @@
+/* Main Header css
+============================================================================================ */
+.main_menu_area{
+    position: absolute;
+    width: 100%;
+    left: 0px;
+    top: 0px;
+    z-index: 99;
+    .navbar-default{
+        border: none;
+        border-radius: 0px;
+        background: transparent;
+        margin-bottom: 0px;
+        border-bottom: 1px solid rgba(255, 255, 255, .10);
+        .navbar-header{
+            .navbar-brand{
+                display: inline-block;
+                padding: 0px;
+                line-height: 85px;
+                img{
+                    display: inline-block;
+                }
+            }
+        }
+        .navbar-collapse{
+            .nav.navbar-nav{
+                li{
+                    margin-right: 20px;
+                    .click_btn{
+                        display: none;
+                    }
+                    a{
+                        padding: 0px;
+                        background: transparent;
+                        display: block;
+                        line-height: 99px;
+                        text-transform: uppercase;
+                        color: #fff;
+                        font-size: 14px;
+                        font-family: $mon;
+                    }
+                    &:last-child{
+                        margin-right: 0px;
+                    }
+                    &.submenu{
+                        .dropdown-menu{
+                            background: #fff;
+                            border-radius: 0px;
+                            border: none;
+                            @media (min-width: 991px){
+                                display: block;
+                                padding: 0px;
+                                left: auto;
+                                right: 0px;
+                                top: 150%;
+                                opacity: 0;
+                                visibility: hidden;
+                                @include transition;
+                                min-width: 200px;
+                            }
+                            li{
+                                width: 100%;
+                                a{
+                                    line-height: 45px;
+                                    border-bottom: 1px solid #f1f4f5;
+                                    color: $baseColor;
+                                    padding: 0px 20px;
+                                    text-shadow: none;
+                                    position: relative;
+                                    font-weight: 400;
+                                    text-transform: capitalize;
+                                    z-index: 3;
+                                    &:before{
+                                        content: '';
+                                        position: absolute;
+                                        left: 0px;
+                                        top: 0px;
+                                        background: $baseColor;
+                                        height: 100%;
+                                        width: 100%;
+                                        z-index: -1;
+                                        transform: scaleX(0);
+                                        transform-origin: 0 50%;
+                                        transition-property: transform;
+                                        @include transition;
+                                    }
+                                }
+                                &:last-child{
+                                    a{
+                                        border-bottom: none;
+                                        &:before{
+                                            display: inline-block;
+                                        }
+                                    }
+                                }
+                                &:hover{
+                                    a{
+                                        color: #fff;
+                                        &:before{
+                                            transform: scaleX(1);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        &:hover{
+                            @media (min-width: 991px){
+                                .dropdown-menu{
+                                    opacity: 1;
+                                    visibility: visible;
+                                    top: 100%;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    &.stricky-fixed{
+        position: fixed;
+        z-index: 99;
+        width: 100%;
+        left: 0;
+        top: 0;
+        background: rgba(0, 0, 0, .5);
+        .navbar-default{
+            .navbar-header{
+                .navbar-brand{
+                    display: inline-block;
+                    padding: 0px;
+                    line-height: 60px;
+                    img{
+                        display: inline-block;
+                    }
+                }
+            }
+            .navbar-collapse{
+                .nav.navbar-nav{
+                    li{
+                        a{
+                            line-height: 70px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+/* End Main Header css
+============================================================================================ */
