@@ -30,7 +30,8 @@ class _ListViewLogState extends State<ListViewLog> {
 
     //TODO: Need to add Listener for when the database data changes
     _onTripAddedSubscription = logsReference.onChildAdded.listen(_onLogAdded);
-    _onTripChangedSubscription = logsReference.onChildChanged.listen(_onLogUpdated);
+    _onTripChangedSubscription =
+        logsReference.onChildChanged.listen(_onLogUpdated);
   }
 
   @override
@@ -58,9 +59,17 @@ class _ListViewLogState extends State<ListViewLog> {
                 return Column(
                   children: <Widget>[
                     Divider(height: 5.0),
+                    Text('Current Trip:',
+                        style: TextStyle(
+                          fontSize: 25.0,
+                          color: Colors.black,
+                        )),
+                    Divider(
+                      height: 5.0,
+                    ),
                     Container(
                       color: Colors.orangeAccent,
-                      child:ListTile(
+                      child: ListTile(
                         title: Text(
                           '${items[position].notes}',
                           style: TextStyle(
@@ -70,7 +79,7 @@ class _ListViewLogState extends State<ListViewLog> {
                         ),
                         subtitle: Text(
                           '${items[position].vehicle}',
-                          style: new TextStyle(
+                          style: TextStyle(
                             fontSize: 18.0,
                             fontStyle: FontStyle.italic,
                           ),
@@ -95,7 +104,8 @@ class _ListViewLogState extends State<ListViewLog> {
                           ],
                         ),
                         onTap: () => _navigateToLog(context, items[position]),
-                        onLongPress: () => _deleteLog(context, items[position], position),
+                        onLongPress: () =>
+                            _deleteLog(context, items[position], position),
                       ),
                     ),
                   ],
@@ -110,20 +120,15 @@ class _ListViewLogState extends State<ListViewLog> {
               DrawerHeader(
                 child: Text('Main Menu'),
                 decoration: BoxDecoration(
-                  color: Color(0xff42CB7C),
-                  image:DecorationImage(
-                    image:AssetImage('images/miLog.png'),
-                    fit: BoxFit.contain,
-
-                  )
-                ),
+                    color: Color(0xff42CB7C),
+                    image: DecorationImage(
+                      image: AssetImage('images/miLog.png'),
+                      fit: BoxFit.fitWidth,
+                    )),
               ),
               ListTile(
                 title: Text('Trips'),
                 onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
                   Navigator.pop(context);
                 },
               ),
@@ -173,7 +178,8 @@ class _ListViewLogState extends State<ListViewLog> {
   }
 
   void _onLogUpdated(Event event) {
-    var oldLogValue = items.singleWhere((trip) => trip.tripID == event.snapshot.key);
+    var oldLogValue =
+        items.singleWhere((trip) => trip.tripID == event.snapshot.key);
     setState(() {
       items[items.indexOf(oldLogValue)] = new Trip.fromSnapshot(event.snapshot);
     });
@@ -195,9 +201,48 @@ class _ListViewLogState extends State<ListViewLog> {
   }
 
   void _createNewLog(BuildContext context) async {
-    await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => LogScreen(Trip.newTrip()),
-    ));
+    if (items.length == 1) {
+      _showDialogTripInProgress();
+    } else {
+      await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LogScreen(Trip.newTrip()),
+          ));
+    }
+  }
+
+  //Dialog that shows a trip is in progress
+  void _showDialogTripInProgress() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text("Oops!",
+          style: TextStyle(
+            fontSize: 18.0,
+            color: Colors.black
+          )),
+          content: Text("A Trip is already in progress.",
+          style:TextStyle(
+            fontSize: 18.0,
+            color: Colors.black
+          )),
+          actions: <Widget>[
+            //buttons at the bottom of the dialog
+            FlatButton(
+              child: Text(
+                "Ok",
+                style: TextStyle(fontSize: 18.0, color: Colors.blueAccent),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

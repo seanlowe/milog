@@ -39,7 +39,7 @@ class _LogScreenState extends State<LogScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Log')),
+      appBar: AppBar(title: Text('New trip')),
       body: Container(
         margin: EdgeInsets.all(15.0),
         alignment: Alignment.center,
@@ -49,23 +49,36 @@ class _LogScreenState extends State<LogScreen> {
             TextField(
               controller: _notesController,
               decoration: InputDecoration(labelText: 'Notes'),
+              style: TextStyle(
+                fontSize: 22,
+                color: Colors.black,
+              ),
             ),
             Padding(padding: new EdgeInsets.all(5.0)),
             //The Vehicle Text Field
             TextField(
               controller: _vehicleController,
               decoration: InputDecoration(labelText: 'Vehicle'),
+              style: TextStyle(
+                fontSize: 22,
+                color: Colors.black,
+              ),
             ),
             Padding(padding: new EdgeInsets.all(5.0)),
             //The Odometer Text Field
             TextField(
               controller: _odometerReading,
               decoration: InputDecoration(labelText: "Odometer Reading"),
+              style: TextStyle(
+                fontSize: 22,
+                color: Colors.black,
+              ),
               keyboardType: TextInputType.number,
             ),
             Padding(padding: new EdgeInsets.all(5.0)),
             RaisedButton(
               child: (widget.trip.tripID != null) ? Text('Update') : Text('Add'),
+              color: Colors.green,
               onPressed: () {
                 if (widget.trip.tripID != null) {
                   logsReference.child(widget.trip.tripID).set({
