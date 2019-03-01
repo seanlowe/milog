@@ -53,15 +53,15 @@
         margin: 0 10px;
     }
     .feature-area,
-    .testimonial-area,
+    /*.testimonial-area,*/
     .video-area,
     .progress-area {
         background-image: none;
         margin-bottom: 0;
     }
-    .testimonial-area {
+    /* .testimonial-area {
         padding: 100px 0;
-    }
+    } */
     .team-slide .owl-controls .owl-nav {
         text-align: center;
     }
@@ -103,9 +103,9 @@
         margin-bottom: 0;
         margin-top: 0;
     }
-    .testimonial-area {
+    /* .testimonial-area {
         padding: 60px 0;
-    }
+    } */
 
     .video-photo {
         margin-bottom: 60px;
@@ -197,9 +197,9 @@
         margin-bottom: 0;
         margin-top: 0;
     }
-    .testimonial-area {
+    /* .testimonial-area {
         padding: 60px 0;
-    }
+    } */
     .team-slide .owl-controls .owl-nav {
         text-align: center;
     }

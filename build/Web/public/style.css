@@ -22,7 +22,6 @@ CSS INDEX
 12. Testimonial-Area
 13. Gallery-Area
 14. Download-Area
-15. Price-Area
 16. Questions-area
 17. Subscribe-Form
 18. Footer-Area
@@ -572,7 +571,7 @@ input:-webkit-autofill:focus {
 
 /*-- 12. Testimonial-Area --*/
 
-.testimonial-area {
+/* .testimonial-area {
     padding-top: 60px;
     padding-bottom: 120px;
 }
@@ -636,7 +635,7 @@ input:-webkit-autofill:focus {
 .team-slide .owl-controls .owl-nav > div.owl-next {
     right: auto;
     left: 100%;
-}
+} */
 
 /*-- 13. Gallery-Area --*/
 
@@ -727,123 +726,6 @@ input:-webkit-autofill:focus {
 .download-area .mobile-image {
     margin-top: -106px;
     margin-bottom: -200px;
-}
-
-/*-- 15. Price-Area --*/
-
-.price-box {
-    border-radius: 5px;
-    overflow: hidden;
-    text-align: center;
-    color: #8790af;
-    -webkit-box-shadow: 0 0 15px -5px rgba(0, 0, 0, 0.1);
-    box-shadow: 0 0 15px -5px rgba(0, 0, 0, 0.1);
-    -webkit-transition: 0.3s;
-    -o-transition: 0.3s;
-    transition: 0.3s;
-}
-
-.price-box:hover {
-    -webkit-box-shadow: 0 0 50px -15px #4d43c6;
-    box-shadow: 0 0 50px -15px #4d43c6;
-}
-
-.price-box .price-header {
-    background-color: #f2f3fc;
-    padding: 40px;
-    color: #768ede;
-    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#482cbf+0,6ac6f0+100 */
-    background: rgb(72, 44, 191);
-    /* Old browsers */
-    /* FF3.6-15 */
-    background: -webkit-linear-gradient(45deg, rgba(72, 44, 191, 1) 0%, rgba(106, 198, 240, 1) 100%);
-    /* Chrome10-25,Safari5.1-6 */
-    background: -o-linear-gradient(45deg, rgba(72, 44, 191, 1) 0%, rgba(106, 198, 240, 1) 100%);
-    background: linear-gradient(45deg, rgba(72, 44, 191, 1) 0%, rgba(106, 198, 240, 1) 100%);
-    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#482cbf', endColorstr='#6ac6f0', GradientType=1);
-    position: relative;
-    overflow: hidden;
-    z-index: 2;
-    -webkit-transition: 0.3s;
-    -o-transition: 0.3s;
-    transition: 0.3s;
-}
-
-.price-box .price-header:before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #f2f3fc;
-    z-index: -1;
-    opacity: 1;
-    -webkit-transition: 0.3s;
-    -o-transition: 0.3s;
-    transition: 0.3s;
-}
-
-.price-box:hover .price-header {
-    color: #ffffff;
-}
-
-.price-box:hover .price-header:before {
-    opacity: 0;
-}
-
-
-.price-box .price-header .price-icon {
-    font-size: 60px;
-    margin-bottom: 10px;
-}
-
-.price-box .price-header h4 {
-    font-weight: 700;
-    font-size: 20px;
-    letter-spacing: 3px;
-}
-
-.price-box .price-body {
-    padding: 40px;
-}
-
-.price-box .price-body ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.price-box .price-rate {
-    color: #768ede;
-    margin-bottom: 40px;
-    font-size: 20px;
-}
-
-.price-box .price-rate sup {
-    top: -20px;
-    font-size: 26px;
-}
-
-.price-box .price-rate .rate {
-    font-size: 56px;
-}
-
-.price-box .price-footer {
-    margin-bottom: 40px;
-}
-
-.price-box .price-footer .bttn-white {
-    padding: 13px 50px;
-}
-
-.price-box .price-footer .bttn-white:before {
-    width: calc(100% - 4px);
-    height: calc(100% - 4px);
-    border-radius: 100px;
-    left: 2px;
-    top: 2px;
 }
 
 /*-- 16. Questions-area --*/
