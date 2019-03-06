@@ -17,11 +17,6 @@ app aims to give companies and their employees a convenient way to log trip mile
   <li>Sean Lowe <a href="https://github.com/seanlowe" target="_blank">GitHub</a></li>
 </ul>
 
-# Contract
-
-<img align="left" width="420" src="icons/Contract-pg10001.jpg">
-<img align="right" width="420" src="icons/Contract-pg10002.jpg">
-
 # Powered By
 
 <p align="center">
@@ -29,5 +24,11 @@ app aims to give companies and their employees a convenient way to log trip mile
   <img width="100" src="icons/firebase-flame.png">
   <img width="150" src="icons/nodejslogo.png">
 </p>
+
+# Contract
+
+<img align="left" width="420" src="icons/Contract-pg10001.jpg">
+<img align="right" width="420" src="icons/Contract-pg10002.jpg">
+
   
 
