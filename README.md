@@ -26,9 +26,7 @@ app aims to give companies and their employees a convenient way to log trip mile
 
 <p align="center">
   <img width="150" src="icons/flutter-logo.png">
-  <br>
   <img width="100" src="icons/firebase-flame.png">
-  <br>
   <img width="150" src="icons/nodejslogo.png">
 </p>
   
