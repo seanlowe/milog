@@ -5,7 +5,8 @@ import 'package:milog/model/Trip.dart';
 
 class LogScreen extends StatefulWidget {
   final Trip trip;
-  LogScreen(this.trip);
+  final String userId;
+  LogScreen(this.userId, this.trip);
 
   @override
   State<StatefulWidget> createState() => new _LogScreenState();
@@ -84,7 +85,8 @@ class _LogScreenState extends State<LogScreen> {
                   logsReference.child(widget.trip.tripID).set({
                     'notes': _notesController.text,
                     'vehicle': _vehicleController.text,
-                    'startOdometer': _odometerReading.text
+                    'startOdometer': _odometerReading.text,
+                    'userID' : widget.userId
                   }).then((_) {
                     Navigator.pop(context);
                   });
@@ -92,7 +94,8 @@ class _LogScreenState extends State<LogScreen> {
                   logsReference.push().set({
                     'notes': _notesController.text,
                     'vehicle': _vehicleController.text,
-                    'startOdometer':_odometerReading.text
+                    'startOdometer':_odometerReading.text,
+                    'userID' : widget.userId
                   }).then((_) {
                     Navigator.pop(context);
                   });

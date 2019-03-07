@@ -104,18 +104,14 @@ class _RootPageState extends State<RootPage> {
       //WHEN THE USER IS LOGGED IN***
       case AuthStatus.LOGGED_IN:
         print("WE'RE LOGGED IN");
-        return new LoginSignUpPage(
-          auth: widget.auth,
-          onSignedIn: _onLoggedIn,
-        );
-      //   if (_userId.length > 0 && _userId != null) {
-      //     return new HomePage(
-      //       userId: _userId,
-      //       auth: widget.auth,
-      //       onSignedOut: _onSignedOut,
-      //     );
-      //   } else
-      //     return _buildWaitingScreen();
+        if (_userId.length > 0 && _userId != null) {
+          return new ListViewLog(
+            userId: _userId,
+            auth: widget.auth,
+            onSignedOut: _onSignedOut,
+          );
+        } else
+          return _buildWaitingScreen();
         break;
       case AuthStatus.LOGGED_IN_NOT_VER:
         print("WE'RE LOGGED IN BUT NOT VERIFIED");
