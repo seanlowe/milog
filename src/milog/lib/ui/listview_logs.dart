@@ -132,7 +132,7 @@ class _ListViewLogState extends State<ListViewLog> {
   }
 
   Widget _showDrawer() {
-    Drawer(
+    return Drawer(
       child: ListView(
         // Important: Remove any padding from the ListView.
         padding: EdgeInsets.zero,
@@ -149,7 +149,7 @@ class _ListViewLogState extends State<ListViewLog> {
           ListTile(
             title: Text('Trips'),
             onTap: () {
-              Navigator.pop(context);
+              // Navigator.pop(context);
             },
           ),
           ListTile(
@@ -158,7 +158,7 @@ class _ListViewLogState extends State<ListViewLog> {
               // Update the state of the app
               // ...
               // Then close the drawer
-              Navigator.pop(context);
+              // Navigator.pop(context);
             },
           ),
           ListTile(
@@ -167,16 +167,17 @@ class _ListViewLogState extends State<ListViewLog> {
               // Update the state of the app
               // ...
               // Then close the drawer
-              Navigator.pop(context);
+              // Navigator.pop(context);
             },
           ),
           ListTile(
             title: Text('Sign Out'),
             onTap: () {
+              _signOut();
               // Update the state of the app
               // ...
               // Then close the drawer
-              Navigator.pop(context);
+              // Navigator.pop(context);
             },
           ),
         ],
@@ -193,17 +194,17 @@ class _ListViewLogState extends State<ListViewLog> {
           title: Text('MiLog'),
           centerTitle: true,
           backgroundColor: Color(0xff42CB7C),
-          actions: <Widget>[
-            FlatButton(
-                child: Text('Logout',
-                    style: TextStyle(fontSize: 17.0, color: Colors.white)),
-                onPressed: _signOut),
-          ],
+          // actions: <Widget>[
+          //   FlatButton(
+          //       child: Text('Logout',
+          //           style: TextStyle(fontSize: 17.0, color: Colors.white)),
+          //       onPressed: _signOut),
+          // ],
         ),
         body: Center(
           child: _showTripList(),
         ),
-        drawer: _showDrawer(),
+        drawer: _showDrawer(context),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () => _createNewLog(context),
@@ -239,7 +240,7 @@ class _ListViewLogState extends State<ListViewLog> {
   void _navigateToLog(BuildContext context, Trip trip) async {
     await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => LogScreen(widget.userId,trip)),
+      MaterialPageRoute(builder: (context) => LogScreen(widget.userId, trip)),
     );
   }
 
@@ -250,7 +251,7 @@ class _ListViewLogState extends State<ListViewLog> {
       await Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => LogScreen(widget.userId,Trip.newTrip()),
+            builder: (context) => LogScreen(widget.userId, Trip.newTrip()),
           ));
     }
   }
