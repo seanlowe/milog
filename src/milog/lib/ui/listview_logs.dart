@@ -204,7 +204,7 @@ class _ListViewLogState extends State<ListViewLog> {
         body: Center(
           child: _showTripList(),
         ),
-        drawer: _showDrawer(context),
+        drawer: _showDrawer(),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () => _createNewLog(context),
