@@ -1,3 +1,19 @@
+// require('dotenv').config()
+
+const status = {
+  
+}
+
+const config = {
+  apiKey: "AIzaSyB_4KJ05TIv6G6sHUObbV91k2Q3qINw52c",
+  authDomain: "mileagelogger-1755e.firebaseapp.com",
+  databaseURL: "https://mileagelogger-1755e.firebaseio.com",
+  projectId: "mileagelogger-1755e",
+  //storageBucket: "bucket.appspot.com"
+};
+firebase.initializeApp(config); 
+
+
 function writeUserData() {
   var database = firebase.database();
   var dat = document.getElementById("data").value;
@@ -53,12 +69,12 @@ function toggleSignIn() {
           alert(errorMessage);
         }
         console.log(error);
-        document.getElementById("quickstart-sign-in").disabled = false;
+        document.getElementById("sign-in").disabled = false;
         // [END_EXCLUDE]
       });
     // [END authwithemail]
   }
-  document.getElementById("quickstart-sign-in").disabled = true;
+  document.getElementById("sign-in").disabled = true;
 }
 
 /**
@@ -94,6 +110,7 @@ function handleSignUp() {
       // [END_EXCLUDE]
     });
   // [END createwithemail]
+  
 }
 
 /**
@@ -101,6 +118,7 @@ function handleSignUp() {
  */
 function sendEmailVerification() {
   // [START sendemailverification]
+
   firebase
     .auth()
     .currentUser.sendEmailVerification()
@@ -151,59 +169,60 @@ function initApp() {
   // [START authstatelistener]
   firebase.auth().onAuthStateChanged(function(user) {
     // [START_EXCLUDE silent]
-    document.getElementById("quickstart-verify-email").disabled = true;
+    document.getElementById("verify-email").disabled = true;
     // [END_EXCLUDE]
-    if (user) {
+    if (user && user.emailVerified == true) {
       // User is signed in.
-      var displayName = user.displayName;
+      // window.location.href = "not-yet.html";
       var email = user.email;
       var emailVerified = user.emailVerified;
-      var photoURL = user.photoURL;
-      var isAnonymous = user.isAnonymous;
       var uid = user.uid;
-      var providerData = user.providerData;
       // [START_EXCLUDE]
-      document.getElementById("quickstart-sign-in-status").textContent =
+      document.getElementById("sign-in-status").textContent =
         "Signed in";
-      document.getElementById("quickstart-sign-in").textContent = "Sign out";
+      document.getElementById("sign-in").textContent = "Sign out";
       document.getElementById(
-        "quickstart-account-details"
+        "account-details"
       ).textContent = JSON.stringify(user, null, "  ");
       if (!emailVerified) {
-        document.getElementById("quickstart-verify-email").disabled = false;
+        document.getElementById("verify-email").disabled = false;
       }
       // [END_EXCLUDE]
+    } else if (user && user.emailVerified == false) {
+      alert("Please verify your email");
+      document.getElementById("verify-email").disabled = false;
     } else {
       // User is signed out.
       // [START_EXCLUDE]
-      document.getElementById("quickstart-sign-in-status").textContent =
+      document.getElementById("sign-in-status").textContent =
         "Signed out";
-      document.getElementById("quickstart-sign-in").textContent = "Sign in";
-      document.getElementById("quickstart-account-details").textContent =
+      document.getElementById("sign-in").textContent = "Sign in";
+      document.getElementById("account-details").textContent =
         "null";
       // [END_EXCLUDE]
     }
     // [START_EXCLUDE silent]
-    document.getElementById("quickstart-sign-in").disabled = false;
+    document.getElementById("sign-in").disabled = false;
     // [END_EXCLUDE]
   });
   // [END authstatelistener]
   document
-    .getElementById("quickstart-sign-in")
+    .getElementById("sign-in")
     .addEventListener("click", toggleSignIn, false);
+  // document
+  //   .getElementById("sign-out")
+  //   .addEventListener("click", handleSignOut, false);
   document
-    .getElementById("quickstart-sign-up")
+    .getElementById("sign-up")
     .addEventListener("click", handleSignUp, false);
   document
-    .getElementById("quickstart-verify-email")
+    .getElementById("verify-email")
     .addEventListener("click", sendEmailVerification, false);
   document
-    .getElementById("quickstart-password-reset")
+    .getElementById("password-reset")
     .addEventListener("click", sendPasswordReset, false);
-  document
-    .getElementById("data")
-    .addEventListener("click", writeUserData, false);
 }
+
 
 window.onload = function() {
   initApp();
