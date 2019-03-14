@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:milog/model/Trip.dart';
 
-
 class LogScreen extends StatefulWidget {
   final Trip trip;
   final String userId;
-  LogScreen(this.userId, this.trip);
+
+  //Are we updating a trip?
+  final bool update;
+  LogScreen(this.userId, this.trip, this.update);
 
   @override
   State<StatefulWidget> createState() => new _LogScreenState();
@@ -21,10 +23,18 @@ class _LogScreenState extends State<LogScreen> {
   TextEditingController _notesController;
   TextEditingController _odometerReading;
 
+  //String set titles for LogScreen (this class)
+  String strUpdateTitle = "Update Trip";
+  String strNewTripTitle = "New Trip";
+  String title;
+
   //When the "Activity Starts"
   @override
   void initState() {
     super.initState();
+
+    //Sets the appropriate title
+    title = widget.update ? strUpdateTitle : strNewTripTitle;
 
     //Turns on Persistence
     FirebaseDatabase.instance.setPersistenceEnabled(true);
@@ -34,13 +44,54 @@ class _LogScreenState extends State<LogScreen> {
     This happens at start... what's written in the TextBoxes */
     _notesController = new TextEditingController(text: widget.trip.notes);
     _vehicleController = new TextEditingController(text: widget.trip.vehicle);
-    _odometerReading = new TextEditingController(text: widget.trip.startOdometer.toString());
+    _odometerReading =
+        new TextEditingController(text: widget.trip.startOdometer.toString());
+  }
+
+  Widget _showPrimaryButton() {
+    return new Padding(
+        padding: EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
+        child: SizedBox(
+          height: 40.0,
+          child: RaisedButton(
+            elevation: 5.0,
+            shape: new RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(35.0)),
+            color: Colors.green,
+            child: (widget.update)
+                ? Text('Update Trip',
+                    style: new TextStyle(fontSize: 20.0, color: Colors.white))
+                : Text('Add Trip',
+                    style: new TextStyle(fontSize: 25.0, color: Colors.white)),
+            onPressed: () {
+              if (widget.trip.tripID != null) {
+                logsReference.child(widget.trip.tripID).set({
+                  'notes': _notesController.text,
+                  'vehicle': _vehicleController.text,
+                  'startOdometer': _odometerReading.text,
+                  'userID': widget.userId
+                }).then((_) {
+                  Navigator.pop(context);
+                });
+              } else {
+                logsReference.push().set({
+                  'notes': _notesController.text,
+                  'vehicle': _vehicleController.text,
+                  'startOdometer': _odometerReading.text,
+                  'userID': widget.userId
+                }).then((_) {
+                  Navigator.pop(context);
+                });
+              }
+            },
+          ),
+        ));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('New trip')),
+      appBar: AppBar(title: Text(title)),
       body: Container(
         margin: EdgeInsets.all(15.0),
         alignment: Alignment.center,
@@ -55,7 +106,7 @@ class _LogScreenState extends State<LogScreen> {
                 color: Colors.black,
               ),
             ),
-            Padding(padding: new EdgeInsets.all(5.0)),
+            //Padding(padding: new EdgeInsets.all(5.0)),
             //The Vehicle Text Field
             TextField(
               controller: _vehicleController,
@@ -65,7 +116,7 @@ class _LogScreenState extends State<LogScreen> {
                 color: Colors.black,
               ),
             ),
-            Padding(padding: new EdgeInsets.all(5.0)),
+            //Padding(padding: new EdgeInsets.all(5.0)),
             //The Odometer Text Field
             TextField(
               controller: _odometerReading,
@@ -76,32 +127,8 @@ class _LogScreenState extends State<LogScreen> {
               ),
               keyboardType: TextInputType.number,
             ),
-            Padding(padding: new EdgeInsets.all(5.0)),
-            RaisedButton(
-              child: (widget.trip.tripID != null) ? Text('Update') : Text('Add'),
-              color: Colors.green,
-              onPressed: () {
-                if (widget.trip.tripID != null) {
-                  logsReference.child(widget.trip.tripID).set({
-                    'notes': _notesController.text,
-                    'vehicle': _vehicleController.text,
-                    'startOdometer': _odometerReading.text,
-                    'userID' : widget.userId
-                  }).then((_) {
-                    Navigator.pop(context);
-                  });
-                } else {
-                  logsReference.push().set({
-                    'notes': _notesController.text,
-                    'vehicle': _vehicleController.text,
-                    'startOdometer':_odometerReading.text,
-                    'userID' : widget.userId
-                  }).then((_) {
-                    Navigator.pop(context);
-                  });
-                }
-              },
-            ),
+            //Padding(padding: new EdgeInsets.all(5.0)),
+            _showPrimaryButton()
           ],
         ),
       ),

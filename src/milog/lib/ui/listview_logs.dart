@@ -14,6 +14,7 @@ class ListViewLog extends StatefulWidget {
   final String userId;
 
   @override
+  //This is the state of ListViewLogs
   _ListViewLogState createState() => new _ListViewLogState();
 }
 
@@ -22,6 +23,7 @@ var tripsReference;
 class _ListViewLogState extends State<ListViewLog> {
   //List of Trips
   List<Trip> _tripList;
+  bool tripInProgress;
 
   //The database reference
   final FirebaseDatabase _database = FirebaseDatabase.instance;
@@ -30,11 +32,13 @@ class _ListViewLogState extends State<ListViewLog> {
   StreamSubscription<Event> _onTripAddedSubscription;
   StreamSubscription<Event> _onTripChangedSubscription;
 
+  //Query to get the User's trips
   Query _tripQuery;
 
   @override
   void initState() {
     super.initState();
+    tripInProgress = false;
 
     _tripList = new List();
     _tripQuery = _database
@@ -108,14 +112,10 @@ class _ListViewLogState extends State<ListViewLog> {
                             ),
                           ),
                         ),
-                        // IconButton(
-                        //     icon: const Icon(Icons.remove_circle_outline),
-                        //     onPressed: () => _deleteLog(context, _tripList[position], position)),
                       ],
                     ),
                     onTap: () => _navigateToLog(context, _tripList[position]),
-                    onLongPress: () =>
-                        _deleteLog(context, _tripList[position], position),
+                    onLongPress: () => _navigateToLog(context, _tripList[position]),
                   ),
                 ),
               ],
@@ -124,14 +124,14 @@ class _ListViewLogState extends State<ListViewLog> {
     } else {
       return Center(
           child: Text(
-        "Welcome. Your list is empty",
+        "No trip logs",
         textAlign: TextAlign.center,
         style: TextStyle(fontSize: 30.0),
       ));
     }
   }
 
-  Widget _showDrawer() {
+  Widget _showDrawer(BuildContext context) {
     return Drawer(
       child: ListView(
         // Important: Remove any padding from the ListView.
@@ -149,7 +149,8 @@ class _ListViewLogState extends State<ListViewLog> {
           ListTile(
             title: Text('Trips'),
             onTap: () {
-              // Navigator.pop(context);
+              //Since we're currently in ListViewLog, do nothing
+              Navigator.pop(context);
             },
           ),
           ListTile(
@@ -158,7 +159,7 @@ class _ListViewLogState extends State<ListViewLog> {
               // Update the state of the app
               // ...
               // Then close the drawer
-              // Navigator.pop(context);
+              Navigator.pop(context);
             },
           ),
           ListTile(
@@ -167,7 +168,7 @@ class _ListViewLogState extends State<ListViewLog> {
               // Update the state of the app
               // ...
               // Then close the drawer
-              // Navigator.pop(context);
+              Navigator.pop(context);
             },
           ),
           ListTile(
@@ -177,7 +178,7 @@ class _ListViewLogState extends State<ListViewLog> {
               // Update the state of the app
               // ...
               // Then close the drawer
-              // Navigator.pop(context);
+              Navigator.pop(context);
             },
           ),
         ],
@@ -186,25 +187,22 @@ class _ListViewLogState extends State<ListViewLog> {
   }
 
   @override
+  /*We need to return a Scaffold instead of another instance of
+  Material app for the Drawer to work
+  */
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'MiLog',
-      home: Scaffold(
+    return Scaffold(
+      appBar: AppBar(title: Text("MiLog")),
+      body: Scaffold(
         appBar: AppBar(
-          title: Text('MiLog'),
+          title: Text('Trips'),
           centerTitle: true,
           backgroundColor: Color(0xff42CB7C),
-          // actions: <Widget>[
-          //   FlatButton(
-          //       child: Text('Logout',
-          //           style: TextStyle(fontSize: 17.0, color: Colors.white)),
-          //       onPressed: _signOut),
-          // ],
         ),
         body: Center(
           child: _showTripList(),
         ),
-        drawer: _showDrawer(),
+        drawer: _showDrawer(context),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () => _createNewLog(context),
@@ -240,23 +238,30 @@ class _ListViewLogState extends State<ListViewLog> {
   void _navigateToLog(BuildContext context, Trip trip) async {
     await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => LogScreen(widget.userId, trip)),
+      //We want to update the Trip, so pass true
+      MaterialPageRoute(builder: (context) => LogScreen(widget.userId, trip, true)),
     );
   }
 
   void _createNewLog(BuildContext context) async {
-    if (_tripList.length >= 1) {
+    //If there is a trip in progress
+    if (tripInProgress) {
       _showDialogTripInProgress();
     } else {
+      /*
+      Mobile apps typically reveal their contents via full-screen elements called "screens" or "pages". 
+      In Flutter these elements are called routes and they're managed by a Navigator widget. 
+      The navigator manages a stack of Route objects and provides methods for managing the stack, like Navigator.push and Navigator.pop.
+      */
       await Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => LogScreen(widget.userId, Trip.newTrip()),
+            builder: (context) => LogScreen(widget.userId, Trip.newTrip(), false),
           ));
     }
   }
 
-  _signOut() async {
+  void _signOut() async {
     try {
       await widget.auth.signOut();
       widget.onSignedOut();
