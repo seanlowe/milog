@@ -42,13 +42,6 @@
             {
               "client_id": "775626106399-lec1a4pfue0ed53vgbn5rr3r5glgkglu.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "775626106399-tg82rlkq2807g19idk9oje9bkljs88mv.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.milog.Mi-Log"
-              }
             }
           ]
         },
@@ -57,7 +50,6 @@
         }
       }
     }
-    
   ],
   "configuration_version": "1"
 }
