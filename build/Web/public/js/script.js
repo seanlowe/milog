@@ -1,7 +1,7 @@
 // require('dotenv').config()
 
 const status = {
-  
+
 }
 
 const config = {
@@ -11,7 +11,7 @@ const config = {
   projectId: "mileagelogger-1755e",
   //storageBucket: "bucket.appspot.com"
 };
-firebase.initializeApp(config); 
+firebase.initializeApp(config);
 
 
 function writeUserData() {
@@ -110,7 +110,7 @@ function handleSignUp() {
       // [END_EXCLUDE]
     });
   // [END createwithemail]
-  
+
 }
 
 /**
@@ -125,7 +125,7 @@ function sendEmailVerification() {
     .then(function() {
       // Email Verification sent!
       // [START_EXCLUDE]
-      alert("Email Verification Sent!");
+      alert("Email Verification Sent!\nPlease verify your e-mail.");
       // [END_EXCLUDE]
     });
   // [END sendemailverification]
@@ -189,8 +189,7 @@ function initApp() {
       }
       // [END_EXCLUDE]
     } else if (user && user.emailVerified == false) {
-      alert("Please verify your email");
-      document.getElementById("verify-email").disabled = false;
+      sendEmailVerification();
     } else {
       // User is signed out.
       // [START_EXCLUDE]
@@ -215,9 +214,9 @@ function initApp() {
   document
     .getElementById("sign-up")
     .addEventListener("click", handleSignUp, false);
-  document
-    .getElementById("verify-email")
-    .addEventListener("click", sendEmailVerification, false);
+  // document
+  //   .getElementById("sign-up")
+  //   .addEventListener("click", sendEmailVerification, false);
   document
     .getElementById("password-reset")
     .addEventListener("click", sendPasswordReset, false);
