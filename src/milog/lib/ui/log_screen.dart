@@ -1,3 +1,9 @@
+/*
+This widget adds or updates logs. It's called using a navigator.
+Since the same widget is used for updating and adding, a bool is
+passed in to determine if we are adding or updating
+*/
+
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:milog/model/Trip.dart';
@@ -39,7 +45,7 @@ class _LogScreenState extends State<LogScreen> {
     //Turns on Persistence
     FirebaseDatabase.instance.setPersistenceEnabled(true);
 
-    /*Create instances of the controller
+    /*Create instances of the controller => A controller for an editable text field.
     Remember to convert things to Strings if they are going into textboxes!
     This happens at start... what's written in the TextBoxes */
     _notesController = new TextEditingController(text: widget.trip.notes);
@@ -64,21 +70,26 @@ class _LogScreenState extends State<LogScreen> {
                 : Text('Add Trip',
                     style: new TextStyle(fontSize: 25.0, color: Colors.white)),
             onPressed: () {
+              //We are updaing trip
               if (widget.trip.tripID != null) {
                 logsReference.child(widget.trip.tripID).set({
                   'notes': _notesController.text,
                   'vehicle': _vehicleController.text,
                   'startOdometer': _odometerReading.text,
-                  'userID': widget.userId
+                  'userID': widget.userId,
                 }).then((_) {
                   Navigator.pop(context);
                 });
+                //We are creating a new trip
               } else {
                 logsReference.push().set({
                   'notes': _notesController.text,
                   'vehicle': _vehicleController.text,
                   'startOdometer': _odometerReading.text,
-                  'userID': widget.userId
+                  'endOdometer': 0,     
+                  'userID': widget.userId,
+                  'inProgress': false,
+                  'paused': false
                 }).then((_) {
                   Navigator.pop(context);
                 });

@@ -17,20 +17,6 @@ class Trip{
   Trip(this._userID, this._tripID, this._carID, this._startOdometer, this._endOdometer,
       this._startTime, this._endTime, this._paused, this._notes, this._inProgress, this._vehicle);
 
-  //Obj's type is explicitly defined so it's dynamic
-  // Trip.map(dynamic obj) {
-  //   this._tripID = obj['tripID'];
-  //   this._carID = obj['carID'];
-  //   this._notes = obj['notes'];
-  //   this._startTime = obj['startTime'];
-  //   this._endTime = obj['endTime'];
-  //   this._paused = obj['paused'];
-  //   this._inProgress = obj['inProgress'];
-  //   this._startOdometer = obj['startOdometer'];
-  //   this._endOdometer = obj['endOdometer'];
-  //   this._vehicle = obj['vehicle'];
-  // }
-
   //Named constructor "defaultTrip"
   Trip.defaultTrip(){
     this._userID = "userID";

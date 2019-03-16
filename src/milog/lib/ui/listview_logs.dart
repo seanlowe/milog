@@ -53,8 +53,7 @@ class _ListViewLogState extends State<ListViewLog> {
 
     //TODO: Need to add Listener for when the database data changes
     _onTripAddedSubscription = _tripQuery.onChildAdded.listen(_onLogAdded);
-    _onTripChangedSubscription =
-        _tripQuery.onChildChanged.listen(_onLogUpdated);
+    _onTripChangedSubscription = _tripQuery.onChildChanged.listen(_onLogUpdated);
   }
 
   @override
@@ -73,11 +72,6 @@ class _ListViewLogState extends State<ListViewLog> {
             return Column(
               children: <Widget>[
                 Divider(height: 5.0),
-                Text('Current Trip:',
-                    style: TextStyle(
-                      fontSize: 25.0,
-                      color: Colors.black,
-                    )),
                 Divider(
                   height: 5.0,
                 ),
@@ -141,10 +135,8 @@ class _ListViewLogState extends State<ListViewLog> {
             child: Text('Main Menu'),
             decoration: BoxDecoration(
                 color: Color(0xff42CB7C),
-                image: DecorationImage(
-                  image: AssetImage('images/miLog.png'),
-                  fit: BoxFit.fitWidth,
-                )),
+                //Add the Drawer image here (user icon perhaps?)
+                ),
           ),
           ListTile(
             title: Text('Trips'),
