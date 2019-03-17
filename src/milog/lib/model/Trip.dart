@@ -7,7 +7,7 @@ class Trip{
   int _startOdometer; //The start odometer reading
   int _endOdometer; //The end odometer reading
   int _milesTravelled; //The delta miles
-  String _startTime;  //The start time of trip
+  int _startTime;  //The start time of trip
   String _endTime;  //The ending time of the trip
   bool _paused; //If the trip is paused
   String _notes;  //Trip notes (client info etc)
@@ -23,7 +23,7 @@ class Trip{
     this._tripID = "tripID";
     this._carID = "carID";
     this._notes = "tripNotes";
-    this._startTime = "startTime";
+    this._startTime = 0;
     this._endTime = "endTime";
     this._paused = false;
     this._inProgress = false;
@@ -38,7 +38,7 @@ class Trip{
     this._tripID = null;
     this._carID = null;
     this._notes = " ";
-    this._startTime = null;
+    this._startTime = 0;
     this._endTime = null;
     this._paused = false;
     this._inProgress = false;
@@ -53,7 +53,7 @@ class Trip{
   String get carID => _carID; 
   int get startOdometer => _startOdometer;
   int get endOdometer => _endOdometer;
-  String get startTime => _startTime;
+  String get startTime => null;
   String get endTime => _endTime; 
   bool get paused => _paused;
   String get notes => _notes; 
@@ -69,7 +69,11 @@ class Trip{
     _userID = snapshot.value["userID"],
     _carID = snapshot.value['carID'],
     _notes = snapshot.value['notes'],
-    _startOdometer = int.parse(snapshot.value['startOdometer']),
+    _startOdometer = snapshot.value['startOdometer'],
+    _endOdometer = snapshot.value['endOdometer'],
+    _inProgress = snapshot.value['inProgress'],
+    _paused = snapshot.value['paused'],
+    _startTime = snapshot.value['startTime'],
     _vehicle = snapshot.value['vehicle'];
   
   toJson() {
@@ -78,9 +82,11 @@ class Trip{
       "userID":userID,
       "carID":carID,
       "notes":notes,
-      "startOdometer": startOdometer,
+      "paused":paused,
+      "inProgress":inProgress,
+      "startOdometer":startOdometer,
+      "endOdometer":endOdometer,
       "vehicle":vehicle,
-
     };
   }
 

@@ -53,7 +53,8 @@ class _ListViewLogState extends State<ListViewLog> {
 
     //TODO: Need to add Listener for when the database data changes
     _onTripAddedSubscription = _tripQuery.onChildAdded.listen(_onLogAdded);
-    _onTripChangedSubscription = _tripQuery.onChildChanged.listen(_onLogUpdated);
+    _onTripChangedSubscription =
+        _tripQuery.onChildChanged.listen(_onLogUpdated);
   }
 
   @override
@@ -66,6 +67,7 @@ class _ListViewLogState extends State<ListViewLog> {
   Widget _showTripList() {
     if (_tripList.length > 0) {
       return ListView.builder(
+          //How many items in the list
           itemCount: _tripList.length,
           padding: const EdgeInsets.all(15.0),
           itemBuilder: (context, position) {
@@ -76,13 +78,16 @@ class _ListViewLogState extends State<ListViewLog> {
                   height: 5.0,
                 ),
                 Container(
-                  color: Colors.orangeAccent,
+                  decoration: (_tripList[position].inProgress) 
+                  ? new BoxDecoration(color: Colors.yellow[300]) 
+                  : new BoxDecoration(color: Colors.white),
+                  //If trip is in progress, the containers is yellow
                   child: ListTile(
                     title: Text(
                       '${_tripList[position].notes}',
                       style: TextStyle(
                         fontSize: 22.0,
-                        color: Color(0xffffffff),
+                        color: Colors.black,
                       ),
                     ),
                     subtitle: Text(
@@ -109,7 +114,8 @@ class _ListViewLogState extends State<ListViewLog> {
                       ],
                     ),
                     onTap: () => _navigateToLog(context, _tripList[position]),
-                    onLongPress: () => _navigateToLog(context, _tripList[position]),
+                    onLongPress: () =>
+                        _navigateToLog(context, _tripList[position]),
                   ),
                 ),
               ],
@@ -134,9 +140,9 @@ class _ListViewLogState extends State<ListViewLog> {
           DrawerHeader(
             child: Text('Main Menu'),
             decoration: BoxDecoration(
-                color: Color(0xff42CB7C),
-                //Add the Drawer image here (user icon perhaps?)
-                ),
+              color: Color(0xff42CB7C),
+              //Add the Drawer image here (user icon perhaps?)
+            ),
           ),
           ListTile(
             title: Text('Trips'),
@@ -185,16 +191,11 @@ class _ListViewLogState extends State<ListViewLog> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("MiLog")),
+      drawer: _showDrawer(context),
       body: Scaffold(
-        appBar: AppBar(
-          title: Text('Trips'),
-          centerTitle: true,
-          backgroundColor: Color(0xff42CB7C),
-        ),
         body: Center(
           child: _showTripList(),
         ),
-        drawer: _showDrawer(context),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () => _createNewLog(context),
@@ -206,6 +207,7 @@ class _ListViewLogState extends State<ListViewLog> {
   void _onLogAdded(Event event) {
     setState(() {
       print("Entered _onLogAdded!");
+      print("onLogAdded added a Trip to the _tripList list!!");
       _tripList.add(new Trip.fromSnapshot(event.snapshot));
     });
   }
@@ -214,6 +216,7 @@ class _ListViewLogState extends State<ListViewLog> {
     var oldLogValue =
         _tripList.singleWhere((trip) => trip.tripID == event.snapshot.key);
     setState(() {
+       print("Entered _onLogUpdated!");
       _tripList[_tripList.indexOf(oldLogValue)] =
           new Trip.fromSnapshot(event.snapshot);
     });
@@ -231,7 +234,8 @@ class _ListViewLogState extends State<ListViewLog> {
     await Navigator.push(
       context,
       //We want to update the Trip, so pass true
-      MaterialPageRoute(builder: (context) => LogScreen(widget.userId, trip, true)),
+      MaterialPageRoute(
+          builder: (context) => LogScreen(widget.userId, trip, true)),
     );
   }
 
@@ -248,7 +252,8 @@ class _ListViewLogState extends State<ListViewLog> {
       await Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => LogScreen(widget.userId, Trip.newTrip(), false),
+            builder: (context) =>
+                LogScreen(widget.userId, Trip.newTrip(), false),
           ));
     }
   }
