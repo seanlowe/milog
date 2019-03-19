@@ -23,7 +23,7 @@ app aims to give companies and their employees a convenient way to log trip mile
   <img width="150" src="icons/flutter-logo.png">
   <img width="150" src="icons/dartlang.png">
   <img width="100" src="icons/firebase-flame.png">
-  <img width="140" src="icons/nodejs-logo.png">
+  <img width="140" src="icons/bootstrap.png">
   <img width="150" src="https://cdn3.iconfinder.com/data/icons/sociocons/256/github-sociocon.png">
   <img width="150" src="https://www.freeiconspng.com/uploads/heart-icon-14.png">
 </p>
