@@ -20,14 +20,14 @@ class LogScreen extends StatefulWidget {
   State<StatefulWidget> createState() => new _LogScreenState();
 }
 
-var database = FirebaseDatabase.instance.reference();
-var logsReference = database.child('Trips');
-
 class _LogScreenState extends State<LogScreen> {
   //Every textbox needs a "controller"
   TextEditingController _vehicleController;
   TextEditingController _notesController;
   TextEditingController _odometerReading;
+
+  var tripDatabase;
+  var tripsReference;
 
   //String set titles for LogScreen (this class)
   String strUpdateTitle = "Update Trip";
@@ -38,6 +38,9 @@ class _LogScreenState extends State<LogScreen> {
   @override
   void initState() {
     super.initState();
+
+    tripDatabase = FirebaseDatabase.instance.reference();
+    tripsReference = tripDatabase.child('Trips');
 
     //Sets the appropriate title
     title = widget.update ? strUpdateTitle : strNewTripTitle;
@@ -50,7 +53,8 @@ class _LogScreenState extends State<LogScreen> {
     This happens at start... what's written in the TextBoxes */
     _notesController = new TextEditingController(text: widget.trip.notes);
     _vehicleController = new TextEditingController(text: widget.trip.vehicle);
-    _odometerReading = new TextEditingController(text: widget.trip.startOdometer.toString());
+    _odometerReading =
+        new TextEditingController(text: widget.trip.startOdometer.toString());
   }
 
   Widget _showPrimaryButton() {
@@ -71,7 +75,7 @@ class _LogScreenState extends State<LogScreen> {
             onPressed: () {
               //We are updaing trip
               if (widget.trip.tripID != null) {
-                logsReference.child(widget.trip.tripID).set({
+                tripsReference.child(widget.trip.tripID).set({
                   'notes': _notesController.text,
                   'vehicle': _vehicleController.text,
                   'startOdometer': _odometerReading.text,
@@ -82,12 +86,12 @@ class _LogScreenState extends State<LogScreen> {
                 //We are creating a new trip
               } else {
                 //TODO: use push class/object instead
-                logsReference.push().set({
+                tripsReference.push().set({
                   'notes': _notesController.text,
                   'vehicle': _vehicleController.text,
                   'startOdometer': int.parse(_odometerReading.text),
                   'startTime': ServerValue.timestamp,
-                  'endOdometer': 0,     
+                  'endOdometer': 0,
                   'userID': widget.userId,
                   'inProgress': true,
                   'paused': false

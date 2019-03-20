@@ -4,6 +4,7 @@ import 'package:milog/services/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:milog/model/Trip.dart';
 import 'package:milog/ui/log_screen.dart';
+import 'package:milog/ui/trip_action.dart';
 
 class ListViewLog extends StatefulWidget {
   ListViewLog({Key key, this.auth, this.userId, this.onSignedOut})
@@ -18,12 +19,12 @@ class ListViewLog extends StatefulWidget {
   _ListViewLogState createState() => new _ListViewLogState();
 }
 
-var tripsReference;
-
 class _ListViewLogState extends State<ListViewLog> {
   //List of Trips
   List<Trip> _tripList;
   bool tripInProgress;
+
+  var tripsReference;
 
   //The database reference
   final FirebaseDatabase _database = FirebaseDatabase.instance;
@@ -49,7 +50,7 @@ class _ListViewLogState extends State<ListViewLog> {
 
     //Turns on Persistence
     FirebaseDatabase.instance.setPersistenceEnabled(true);
-    tripsReference = database.child('Trips');
+    tripsReference = _database.reference().child('Trips');
 
     //TODO: Need to add Listener for when the database data changes
     _onTripAddedSubscription = _tripQuery.onChildAdded.listen(_onLogAdded);
@@ -78,9 +79,9 @@ class _ListViewLogState extends State<ListViewLog> {
                   height: 5.0,
                 ),
                 Container(
-                  decoration: (_tripList[position].inProgress) 
-                  ? new BoxDecoration(color: Colors.yellow[300]) 
-                  : new BoxDecoration(color: Colors.white),
+                  decoration: (_tripList[position].inProgress)
+                      ? new BoxDecoration(color: Colors.yellow[300])
+                      : new BoxDecoration(color: Colors.white),
                   //If trip is in progress, the containers is yellow
                   child: ListTile(
                     title: Text(
@@ -113,7 +114,7 @@ class _ListViewLogState extends State<ListViewLog> {
                         ),
                       ],
                     ),
-                    onTap: () => _navigateToLog(context, _tripList[position]),
+                    onTap: () =>  _naviagateToTripAction(context, _tripList[position]),
                     onLongPress: () =>
                         _navigateToLog(context, _tripList[position]),
                   ),
@@ -207,8 +208,9 @@ class _ListViewLogState extends State<ListViewLog> {
   void _onLogAdded(Event event) {
     setState(() {
       print("Entered _onLogAdded!");
-      print("onLogAdded added a Trip to the _tripList list!!");
+      print("onLogAdded added a Trip to the _tripList list!");
       _tripList.add(new Trip.fromSnapshot(event.snapshot));
+      isTripInProg();
     });
   }
 
@@ -216,14 +218,14 @@ class _ListViewLogState extends State<ListViewLog> {
     var oldLogValue =
         _tripList.singleWhere((trip) => trip.tripID == event.snapshot.key);
     setState(() {
-       print("Entered _onLogUpdated!");
+      print("Entered _onLogUpdated!");
       _tripList[_tripList.indexOf(oldLogValue)] =
           new Trip.fromSnapshot(event.snapshot);
     });
   }
 
   void _deleteLog(BuildContext context, Trip trip, int position) async {
-    await logsReference.child(trip.tripID).remove().then((_) {
+    await tripsReference.child(trip.tripID).remove().then((_) {
       setState(() {
         _tripList.removeAt(position);
       });
@@ -237,6 +239,16 @@ class _ListViewLogState extends State<ListViewLog> {
       MaterialPageRoute(
           builder: (context) => LogScreen(widget.userId, trip, true)),
     );
+  }
+
+  void _naviagateToTripAction(BuildContext context, Trip trip)async {
+    await Navigator.push(
+      context,
+      //We want to update the Trip, so pass true
+      MaterialPageRoute(
+          builder: (context) => TripAction(widget.userId, trip)),
+    );
+
   }
 
   void _createNewLog(BuildContext context) async {
@@ -264,6 +276,32 @@ class _ListViewLogState extends State<ListViewLog> {
       widget.onSignedOut();
     } catch (e) {
       print(e);
+    }
+  }
+
+  //Sets tripInProgress if a trip is in progress, otherwise sets to false
+  void isTripInProg() {
+    bool inProgress = false;
+    for (Trip t in _tripList) {
+      if(t.inProgress){
+        tripInProgress = true;
+        inProgress = true;
+      }
+    }
+    (inProgress) ? makeInProgFirst() : tripInProgress = false;
+  }
+
+  //Swaps the first index trip with trip that is in progress
+  void makeInProgFirst() {
+    if (_tripList.length > 0) {
+      for (int i = 0; i < _tripList.length; i++) {
+        Trip temp;
+        if (_tripList[i].inProgress) {
+          temp = _tripList[0];
+          _tripList[0] = _tripList[i];
+          _tripList[i] = temp;
+        }
+      }
     }
   }
 
