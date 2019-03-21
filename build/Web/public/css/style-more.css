@@ -3058,6 +3058,20 @@ ul.chat-available-user li a:hover {
     margin-bottom: -1px;
 }
 
+.btn-google {
+  color: #fff;
+  background-color: #ea5151;
+  border-color: #e22727;
+}
+.btn-google:hover,
+.btn-google:focus,
+.btn-google:active,
+.btn-google.active,
+.open .dropdown-toggle.btn-google {
+  color: #fff;
+  background-color: #e22727;
+  border-color: #e22727;
+}
 
 .btn-facebook {
   color: #fff;
