@@ -101,20 +101,11 @@ class _ListViewLogState extends State<ListViewLog> {
                     leading: Column(
                       children: <Widget>[
                         Padding(padding: EdgeInsets.all(10.0)),
-                        CircleAvatar(
-                          backgroundColor: Color(0xff00A3BB),
-                          radius: 15.0,
-                          child: Text(
-                            '${position + 1}',
-                            style: TextStyle(
-                              fontSize: 22.0,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
+                        _tripIcon(_tripList[position].inProgress, _tripList[position].paused)
                       ],
                     ),
-                    onTap: () =>  _naviagateToTripAction(context, _tripList[position]),
+                    onTap: () =>
+                        _naviagateToTripAction(context, _tripList[position]),
                     onLongPress: () =>
                         _navigateToLog(context, _tripList[position]),
                   ),
@@ -129,6 +120,17 @@ class _ListViewLogState extends State<ListViewLog> {
         textAlign: TextAlign.center,
         style: TextStyle(fontSize: 30.0),
       ));
+    }
+  }
+
+  //Decides what icon to put into the trip ListTile (that's in a container)
+  Widget _tripIcon(bool inProg, bool paused){
+    if(inProg && !paused)
+      return Icon(Icons.drive_eta, color: Colors.blue[300]);
+    else if(inProg && paused)
+      return Icon(Icons.watch_later, color: Colors.orange);
+    else{
+      return Icon(Icons.check_circle, color: Colors.green[300]);
     }
   }
 
@@ -221,6 +223,7 @@ class _ListViewLogState extends State<ListViewLog> {
       print("Entered _onLogUpdated!");
       _tripList[_tripList.indexOf(oldLogValue)] =
           new Trip.fromSnapshot(event.snapshot);
+      isTripInProg();
     });
   }
 
@@ -241,14 +244,12 @@ class _ListViewLogState extends State<ListViewLog> {
     );
   }
 
-  void _naviagateToTripAction(BuildContext context, Trip trip)async {
+  void _naviagateToTripAction(BuildContext context, Trip trip) async {
     await Navigator.push(
       context,
       //We want to update the Trip, so pass true
-      MaterialPageRoute(
-          builder: (context) => TripAction(widget.userId, trip)),
+      MaterialPageRoute(builder: (context) => TripAction(widget.userId, trip)),
     );
-
   }
 
   void _createNewLog(BuildContext context) async {
@@ -270,6 +271,7 @@ class _ListViewLogState extends State<ListViewLog> {
     }
   }
 
+  //Signs out the user
   void _signOut() async {
     try {
       await widget.auth.signOut();
@@ -283,7 +285,7 @@ class _ListViewLogState extends State<ListViewLog> {
   void isTripInProg() {
     bool inProgress = false;
     for (Trip t in _tripList) {
-      if(t.inProgress){
+      if (t.inProgress) {
         tripInProgress = true;
         inProgress = true;
       }
