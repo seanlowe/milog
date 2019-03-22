@@ -6,7 +6,7 @@ class Trip{
   String _carID;  //The car key
   int _startOdometer; //The start odometer reading
   int _endOdometer; //The end odometer reading
-  int _milesTravelled; //The delta miles
+  int _milesTraveled; //The delta miles
   int _startTime;  //The start time of trip
   String _endTime;  //The ending time of the trip
   bool _paused; //If the trip is paused
@@ -14,7 +14,7 @@ class Trip{
   bool _inProgress; //If the trip is currently in progress
   String _vehicle;  //For now, this will just be a string
 
-  Trip(this._userID, this._tripID, this._carID, this._startOdometer, this._endOdometer,
+  Trip(this._userID, this._tripID, this._carID, this._startOdometer, this._endOdometer, this._milesTraveled,
       this._startTime, this._endTime, this._paused, this._notes, this._inProgress, this._vehicle);
 
   //Named constructor "defaultTrip"
@@ -29,6 +29,7 @@ class Trip{
     this._inProgress = false;
     this._startOdometer = 0;
     this._endOdometer = 0;
+    this._milesTraveled = 0;
     this._vehicle = "vehicle";
   }
 
@@ -44,6 +45,7 @@ class Trip{
     this._inProgress = false;
     this._startOdometer = 0;
     this._endOdometer = 0;
+    this._milesTraveled = 0;
     this._vehicle = " ";
   }
 
@@ -59,6 +61,15 @@ class Trip{
   String get notes => _notes; 
   bool get inProgress => _inProgress;
   String get vehicle => _vehicle;
+  int get milesTraveled => _milesTraveled;
+
+  //Setter for endOdo
+  void setEndOdo(int input){
+    if(input >=startOdometer){
+       _endOdometer = input;
+       calculateFinalOdo();
+    } 
+  }
 
   /*This is how Snapshot gets values from Firebase
   We need to cast in order to match the datatypes!
@@ -71,6 +82,7 @@ class Trip{
     _notes = snapshot.value['notes'],
     _startOdometer = snapshot.value['startOdometer'],
     _endOdometer = snapshot.value['endOdometer'],
+    _milesTraveled =snapshot.value['milesTraveled'],
     _inProgress = snapshot.value['inProgress'],
     _paused = snapshot.value['paused'],
     _startTime = snapshot.value['startTime'],
@@ -86,11 +98,17 @@ class Trip{
       "inProgress":inProgress,
       "startOdometer":startOdometer,
       "endOdometer":endOdometer,
+      "milesTraveled":milesTraveled,
       "vehicle":vehicle,
     };
   }
 
+  //Calculates delta Odometer and turns the value
   void calculateFinalOdo(){
-    
+    print("Trip object is calculating delta Miles");
+    if(_endOdometer >=_startOdometer)
+      _milesTraveled = _endOdometer - _startOdometer;
+    else
+      print("ERROR! -> startOdometer > endOdoter");
   }
 }

@@ -104,6 +104,7 @@ class _ListViewLogState extends State<ListViewLog> {
                         _tripIcon(_tripList[position].inProgress, _tripList[position].paused)
                       ],
                     ),
+                    //TODO: Add logic that decides which screen to navigate to..
                     onTap: () =>
                         _naviagateToTripAction(context, _tripList[position]),
                     onLongPress: () =>
