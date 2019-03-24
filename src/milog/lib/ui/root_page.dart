@@ -9,6 +9,10 @@ class RootPage extends StatefulWidget {
   final BaseAuth auth;
 
   @override
+  /*State is information that (1) can be read synchronously when the widget is built and 
+  (2) might change during the lifetime of the widget.*/
+
+  //This is the state of the RootPage
   State<StatefulWidget> createState() => new _RootPageState();
 }
 
@@ -73,6 +77,7 @@ class _RootPageState extends State<RootPage> {
     }
   }
 
+  //Sets state to NOT_LOGGED_IN
   void _onSignedOut() {
     setState(() {
       authStatus = AuthStatus.NOT_LOGGED_IN;
@@ -92,9 +97,11 @@ class _RootPageState extends State<RootPage> {
   @override
   Widget build(BuildContext context) {
     switch (authStatus) {
+      //WHEN NOT DETERMINED IF USER LOGGED IN
       case AuthStatus.NOT_DETERMINED:
         return _buildWaitingScreen();
         break;
+      //WHEN USER IS NOT LOGGED IN
       case AuthStatus.NOT_LOGGED_IN:
         return new LoginSignUpPage(
           auth: widget.auth,
@@ -105,6 +112,7 @@ class _RootPageState extends State<RootPage> {
       case AuthStatus.LOGGED_IN:
         print("WE'RE LOGGED IN");
         if (_userId.length > 0 && _userId != null) {
+          //Return the ListViewLog Widget
           return new ListViewLog(
             userId: _userId,
             auth: widget.auth,
@@ -115,6 +123,7 @@ class _RootPageState extends State<RootPage> {
         break;
       case AuthStatus.LOGGED_IN_NOT_VER:
         print("WE'RE LOGGED IN BUT NOT VERIFIED");
+        //Show the SignUpPage again
         return new LoginSignUpPage(
           auth: widget.auth,
           onSignedIn: _onLoggedIn,

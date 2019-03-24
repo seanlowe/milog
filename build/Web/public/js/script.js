@@ -6,7 +6,7 @@ const config = {
   projectId: "mileagelogger-1755e",
   //storageBucket: "bucket.appspot.com"
 };
-firebase.initializeApp(config); 
+firebase.initializeApp(config);
 
 
 function writeUserData() {
