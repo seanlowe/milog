@@ -35,19 +35,19 @@
       *********************************************************************************************************************************************************** -->
   <div id="login-page">
     <div class="container">
-      <form class="form-login" action="index.html">
+      <form class="form-login" action="home.html">
         <h2 class="form-login-heading">sign in now</h2>
         <div class="login-wrap">
-          <input type="text" id="email" class="form-control" placeholder="Email" autofocus>
+          <input type="email" id="email" class="form-control required" placeholder="Email" autofocus>
           <br>
-          <input type="password" id="password" class="form-control" placeholder="Password">
+          <input type="password" id="password" class="form-control required" placeholder="Password">
           <label class="checkbox">
             <input type="checkbox" value="remember-me"> Remember me
             <span class="pull-right">
             <a data-toggle="modal" href="login.html#myModal"> Forgot Password?</a>
             </span>
             </label>
-          <button class="btn btn-theme btn-block" href="home.html" id="sign-in" type="submit"><i class="fa fa-lock"></i> SIGN IN</button>
+          <button class="btn btn-theme btn-block" id="sign-in" type="submit"><i class="fa fa-lock"></i> SIGN IN</button>
           <hr>
           <div class="login-social-link centered">
             <p>or you can sign in via your social network</p>
@@ -73,13 +73,13 @@
               </div>
               <div class="modal-body">
                 <p>Enter an e-mail address.</p>
-                <input type="text" name="email" placeholder="Email" autocomplete="off" class="form-control placeholder-no-fix">
+                <input type="email" id="signup-Email" name="email" placeholder="Email" autocomplete="off" class="form-control placeholder-no-fix">
                 <p>Enter a password.</p>
-                <input type="password" name="password" placeholder="Password" autocomplete="off" class="form-control placeholder-no-fix">
+                <input type="password" id="signup-Password" name="password" placeholder="Password" autocomplete="off" class="form-control placeholder-no-fix">
               </div>
               <div class="modal-footer">
                 <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
-                <button class="btn btn-theme" type="button">Submit</button>
+                <input id="sign-up" class="btn btn-theme" data-dismiss="modal" type="submit" value="Submit">
               </div>
             </div>
           </div>
@@ -96,25 +96,31 @@
               </div>
               <div class="modal-body">
                 <p>Enter your e-mail address below to reset your password.</p>
-                <input type="text" name="email" placeholder="Email" autocomplete="off" class="form-control placeholder-no-fix">
+                <input type="email" id="resetEmail" name="email" placeholder="Email" autocomplete="off" class="form-control placeholder-no-fix">
               </div>
               <div class="modal-footer">
                 <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
-                <button class="btn btn-theme" type="button">Submit</button>
+                <button id="password-reset" class="btn btn-theme" data-dismiss="modal" type="button">Submit</button>
               </div>
             </div>
           </div>
         </div>
         <!-- modal -->
+
       </form>
     </div>
   </div>
+  <div id="sign-out"></div>
   <!-- js placed at the end of the document so the pages load faster -->
   <script src="lib/jquery/jquery.min.js"></script>
   <script src="lib/bootstrap/js/bootstrap.min.js"></script>
   <!--BACKSTRETCH-->
   <!-- You can use an image of whatever size. This script will stretch to fit in any screen size.-->
   <script type="text/javascript" src="lib/jquery.backstretch.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.8.6/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.8.6/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.8.6/firebase-database.js"></script>
+  <script type="text/javascript" src="js/script.js"></script>
   <script>
     $.backstretch("images/login-bg.jpg", {
       speed: 500

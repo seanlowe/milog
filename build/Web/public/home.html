@@ -235,10 +235,13 @@
       <!-- </div> -->
       <div class="top-menu">
         <ul class="nav pull-right top-menu">
-          <li><a class="logout" href="login.html">Logout</a></li>
+          <li><a id="sign-out" class="logout" href="login.html">Logout</a></li>
         </ul>
       </div>
     </header>
+    <div id="sign-in"></div>
+    <div id="sign-up"></div>
+    <div id="password-reset"></div>
     <!--header end-->
     <!-- **********************************************************************************************************************************************************
         MAIN SIDEBAR MENU
@@ -249,7 +252,7 @@
         <!-- sidebar menu start-->
         <ul class="sidebar-menu" id="nav-accordion">
           <p class="centered"><a href="profile.html"><img src="images/apple-icon-76x76.png" class="img-circle" width="80"></a></p>
-          <h5 class="centered">MiLog</h5>
+          <h5 id="userEmail" class="centered">MiLog</h5>
           <li class="mt">
             <a href="advanced_form_components.html">
               <i class="fa fa-plus"></i>
@@ -996,6 +999,11 @@
   <!-- <script src="lib/common-scripts.js"></script> -->
   <script type="text/javascript" src="lib/gritter/js/jquery.gritter.js"></script>
   <script type="text/javascript" src="lib/gritter-conf.js"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/5.8.6/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.8.6/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.8.6/firebase-database.js"></script>
+  <script type="text/javascript" src="js/script.js"></script>
   <!--script for this page-->
   <!-- <script src="lib/sparkline-chart.js"></script> -->
   <!-- <script src="lib/zabuto_calendar.js"></script> -->
