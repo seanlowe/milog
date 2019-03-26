@@ -32,6 +32,8 @@ class _TripScreenActionState extends State<TripAction> {
 
     //Turns on Persistence
     FirebaseDatabase.instance.setPersistenceEnabled(true);
+
+    _odometerReadingDiag.text = "";
   }
 
   @override
@@ -43,7 +45,7 @@ class _TripScreenActionState extends State<TripAction> {
         alignment: Alignment.center,
         child: Column(
           children: <Widget>[
-            showSelectedTrip(),
+            _showSelectedTrip(),
             _showPauseResumeButton(),
             _showEndTripButton(),
             _showOdoTextField()
@@ -54,7 +56,7 @@ class _TripScreenActionState extends State<TripAction> {
   }
 
   //Displays the information of the selected trip
-  Widget showSelectedTrip() {
+  Widget _showSelectedTrip() {
     return Container(
         margin: EdgeInsets.all(15.0),
         padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
@@ -77,31 +79,74 @@ class _TripScreenActionState extends State<TripAction> {
       //Pause the trip
       print("Selected trip paused set to true");
       tripsReference.child(widget.trip.tripID).child("paused").set(true);
+      widget.trip.setpaused = true;
     } else {
       //Resume the trip
       print("Selected trip paused set to false");
       tripsReference.child(widget.trip.tripID).child("paused").set(false);
+      widget.trip.setpaused = false;
     }
   }
 
-  //Set inProgress to false in DB
-  void endTrip() {
-    print("Selected trip inProgress set to false");
-    tripsReference.child(widget.trip.tripID).child("inProgress").set(false);
-  }
-
   /*Check if the user entered something in the Odometer TextField
-  If there is something, it pops to the main screen
+  If there is something, it pops to the main screen.
+  End the trip by setting the endOdometer and invoke calculation
   */
   void processOdoMiles() {
-    if (_odometerReadingDiag.text == "")
+    if (_odometerReadingDiag.text == "") {
+      print("User did not put a Odometer value! -> aborting");
       _showDialogEmptyOdo();
-      //TODO: Need to check if the input is correct!
+    }
+    //TODO: Need to check if the input is correct!
     else {
       //Sets the end Odometer reading in the DB
       widget.trip.setEndOdo(int.parse(_odometerReadingDiag.text));
-      tripsReference.child(widget.trip.tripID).child("endOdometer").set(int.parse(_odometerReadingDiag.text));
-      tripsReference.child(widget.trip.tripID).child("milesTraveled").set(widget.trip.milesTraveled);
+      tripsReference
+          .child(widget.trip.tripID)
+          .child("endOdometer")
+          .set(int.parse(_odometerReadingDiag.text));
+      tripsReference
+          .child(widget.trip.tripID)
+          .child("milesTraveled")
+          .set(widget.trip.milesTraveled);
+      //End the trip - set inProgress and paused to false just in case
+      tripsReference.child(widget.trip.tripID).child("inProgress").set(false);
+      tripsReference.child(widget.trip.tripID).child("paused").set(false);
+      Navigator.pop(context);
+    }
+  }
+
+  //When user presses pause or resume
+  //TODO: Check user input!
+  void processPause() {
+    if (_odometerReadingDiag.text.isEmpty){
+      _showDialogEmptyOdo();
+    }
+    else {
+      if (widget.trip.paused) {
+        //Trip is paused
+        print("#1 RAN!");
+        widget.trip.resumeTrip(int.parse(_odometerReadingDiag.text));
+        print("In trip, miles traveled = " + widget.trip.milesTraveled.toString());
+        tripsReference
+            .child(widget.trip.tripID)
+            .child("startOdometer")
+            .set(widget.trip.startOdometer);
+      } else {
+        print("#2 RAN!");
+        //Trip is not paused
+        widget.trip.pauseTrip(int.parse(_odometerReadingDiag.text));
+        tripsReference
+            .child(widget.trip.tripID)
+            .child("milesTraveled")
+            .set(widget.trip.milesTraveled);
+        tripsReference
+            .child(widget.trip.tripID)
+            .child("startOdometer")
+            .set(widget.trip.startOdometer);
+      }
+      //Update the trip paused bool
+      setPausedOrResume();
       Navigator.pop(context);
     }
   }
@@ -123,6 +168,7 @@ class _TripScreenActionState extends State<TripAction> {
 
   //Dialog when Odometer field is empty
   void _showDialogEmptyOdo() {
+    print("showDialogEmptyOdo invoked");
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -167,8 +213,7 @@ class _TripScreenActionState extends State<TripAction> {
                     style: new TextStyle(fontSize: 20.0, color: Colors.black)),
             onPressed: () {
               //We are setting isPaused in Trip to true in DB
-              setPausedOrResume();
-              Navigator.pop(context);
+              processPause();
             },
           ),
         ));
@@ -188,7 +233,6 @@ class _TripScreenActionState extends State<TripAction> {
             child: Text('END TRIP',
                 style: new TextStyle(fontSize: 20.0, color: Colors.black)),
             onPressed: () {
-              endTrip();
               processOdoMiles();
             },
           ),
