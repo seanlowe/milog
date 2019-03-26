@@ -1,5 +1,5 @@
 
-const config = {
+var config = {
   apiKey: "AIzaSyB_4KJ05TIv6G6sHUObbV91k2Q3qINw52c",
   authDomain: "mileagelogger-1755e.firebaseapp.com",
   databaseURL: "https://mileagelogger-1755e.firebaseio.com",
@@ -8,6 +8,26 @@ const config = {
 };
 firebase.initializeApp(config);
 
+function googleSignIn() {
+  var provider = new firebase.auth.GoogleAuthProvider();
+
+  firebase.auth().signInWithPopup(provider).then(function(result) {
+    // This gives you a Google Access Token. You can use it to access the Google API.
+    var token = result.credential.accessToken;
+    // The signed-in user info.
+    var user = result.user;
+    // ...
+  }).catch(function(error) {
+    // Handle Errors here.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // The email of the user's account used.
+    var email = error.email;
+    // The firebase.auth.AuthCredential type that was used.
+    var credential = error.credential;
+    // ...
+  });
+}
 
 function writeUserData() {
   var database = firebase.database();
@@ -35,6 +55,7 @@ function writeUserData() {
 function handleSignIn() {
   var email = document.getElementById("email").value;
   var password = document.getElementById("password").value;
+  // alert("sign in button pressed");
   if (email.length < 4) {
     alert("Please enter an email address.");
     return;
@@ -43,6 +64,7 @@ function handleSignIn() {
     alert("Please enter a password.");
     return;
   }
+  alert("entered email");
   // Sign in with email and pass.
   // [START authwithemail]
   firebase
@@ -62,9 +84,16 @@ function handleSignIn() {
       // [END_EXCLUDE]
     });
     // [END authwithemail]
+
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        window.location.href = "home.html";
+      }
+    });
 }
 
 function handleSignOut() {
+  // alert("Logout has been pressed");
   firebase.auth().signOut();
   window.location.href = "login.html";
 }
@@ -154,24 +183,16 @@ function initApp() {
   // Listening for auth state changes.
   // [START authstatelistener]
   firebase.auth().onAuthStateChanged(function(user) {
-
     if (user) {
+      // alert(user.email + " is signed in");
+      document.getElementById("userEmail").textContent = user.email;
       // User is signed in.
-      var email = user.email;
-      var emailVerified = user.emailVerified;
-      var uid = user.uid;
-      if (emailVerified == true){
-        window.location.href = "home.html";
-        document.getElementById("userEmail").textContent = email;
-        alert("Signed in with email: " + email);
-      } else {
-        window.location.href = "login.html";
-        sendEmailVerification();
-        alert("Please verify your email");
-      }
-  
+      // var email = user.email;
+      // var emailVerified = user.emailVerified;
+      // var uid = user.uid;
     } else {
       // User is signed out.
+      alert("No one is signed in");
     }
   });
   // [END authstatelistener]
@@ -179,6 +200,9 @@ function initApp() {
   document
     .getElementById("sign-in")
     .addEventListener("click", handleSignIn, false);
+  document
+    .getElementById("googleSignIn")
+    .addEventListener("click", googleSignIn, false);
   document
     .getElementById("sign-out")
     .addEventListener("click", handleSignOut, false);
