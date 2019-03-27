@@ -7,10 +7,10 @@
   <meta name="description" content="">
   <meta name="author" content="Dashboard">
   <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
-  <title>MiLog</title>
+  <title>MiLog - Home Page</title>
 
   <!-- Favicons -->
-  <link href="img/favicon.png" rel="icon">
+  <link href="images/favicons/favicon-16x16.png" rel="icon">
   <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Bootstrap core CSS -->
@@ -49,14 +49,11 @@
       
       <div class="top-menu">
         <ul class="nav pull-right top-menu">
+          <li><a href="faq.html" class="faq"><i class="fa fa-question"></i><span>FAQ</span></a></li>
           <li><button id="sign-out" class="logout" >Logout</button></li>
         </ul>
       </div>
     </header>
-    <div id="sign-in"></div>
-    <div id="sign-up"></div>
-    <div id="password-reset"></div>
-    <div id="googleSignIn"></div>
     <!--header end-->
     <!-- **********************************************************************************************************************************************************
         MAIN SIDEBAR MENU
@@ -69,43 +66,74 @@
           <p class="centered"><a href="profile.html"><img src="images/apple-icon-76x76.png" class="img-circle" width="80"></a></p>
           <h5 id="userEmail" class="centered">MiLog</h5>
           <li class="mt">
-            <a href="advanced_form_components.html">
+            <a href="home.html#myModal" data-toggle="modal">
               <i class="fa fa-plus"></i>
               <span>Create Log</span>
-              </a>
+            </a>
           </li>
           <li class="mt">
             <a class="active" href="home.html">
               <i class="fa fa-dashboard"></i>
               <span>Logs</span>
-              </a>
+            </a>
           </li>
-          
           <li class="sub-menu">
             <a href="basic_table.html">
               <i class="fa fa-car"></i>
               <span>Vehicles</span>
-              </a>
-            <!-- <ul class="sub">
-              <li><a href="advanced_form_components.html">Advanced Components</a></li>
-              <li><a href="contactform.html">Contact Form</a></li>
-            </ul> -->
+            </a>
+          </li>
+          <li class="sub-menu">
+            <a href="advanced_form_components.html">
+              <i class="fa fa-print"></i>
+              <span>Print/Export</span>
+            </a>
           </li>
           <li class="sub-menu">
             <a href="profile.html">
               <i class="fa fa-user"></i>
               <span>Account</span>
-              </a>
+            </a>
             <!-- <ul class="sub">
-              <li><a href="basic_table.html">Basic Table</a></li>
-              <li><a href="advanced_table.html">Advanced Table</a></li>
+              <li><a href="home.html">Change Email</a></li>
+              <li><a href="home.html">Change Password</a></li>
             </ul> -->
+          </li>
+          <li class="sub-menu">
+            <a href="faq.html">
+              <i class="fa fa-question"></i>
+              <span>FAQ</span>
+            </a>
           </li>
         </ul>
         <!-- sidebar menu end-->
       </div>
     </aside>
     <!--sidebar end-->
+
+    <!-- Modal - Create Log -->
+    <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Create Log</h4>
+          </div>
+          <div class="modal-body">
+            <p>Enter starting mileage.</p>
+            <input type="text" id="initialOdo" name="initial" placeholder="Starting Mileage" autocomplete="off" class="form-control placeholder-no-fix">
+            <br>
+            <p>Enter final milage.</p>
+            <input type="text" id="finalOdo" name="final" placeholder="Final Mileage" autocomplete="off" class="form-control placeholder-no-fix">
+          </div>
+          <div class="modal-footer">
+            <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
+            <input id="createLog" class="btn btn-theme" data-dismiss="modal" type="submit" value="Submit">
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- modal -->
     <!-- **********************************************************************************************************************************************************
         MAIN CONTENT
         *********************************************************************************************************************************************************** -->
@@ -561,6 +589,12 @@
       </div>
     </footer>
     <!--footer end-->
+
+    <!-- Event Listeners From Sign In -->
+    <div id="sign-in"></div>
+    <div id="sign-up"></div>
+    <div id="password-reset"></div>
+    <div id="googleSignIn"></div>
   </section>
   <!-- js placed at the end of the document so the pages load faster -->
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
@@ -569,10 +603,10 @@
   <script src="lib/jquery/jquery.min.js"></script>
   <script type="text/javascript" language="javascript" src="lib/advanced-datatable/js/jquery.js"></script>
   <script class="include" type="text/javascript" src="lib/jquery.dcjqaccordion.2.7.js"></script>
-  <!-- <script src="lib/jquery.scrollTo.min.js"></script> -->
+  <script src="lib/jquery.scrollTo.min.js"></script>
   <!-- <script src="lib/jquery.nicescroll.js" type="text/javascript"></script> -->
   <script type="text/javascript" language="javascript" src="lib/advanced-datatable/js/jquery.dataTables.js"></script>
-  <!-- <script type="text/javascript" src="lib/advanced-datatable/js/DT_bootstrap.js"></script> -->
+  <script type="text/javascript" src="lib/advanced-datatable/js/DT_bootstrap.js"></script>
   <!--common script for all pages-->
   <script src="lib/common-scripts.js"></script>
   <!-- <script type="text/javascript" src="lib/gritter/js/jquery.gritter.js"></script> -->

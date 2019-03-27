@@ -27,6 +27,12 @@ function googleSignIn() {
     var credential = error.credential;
     // ...
   });
+
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      window.location.href = "home.html";
+    }
+  });
 }
 
 function writeUserData() {
