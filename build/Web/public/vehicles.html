@@ -45,7 +45,6 @@
       
       <div class="top-menu">
         <ul class="nav pull-right top-menu">
-          <li><a href="faq.html" class="faq"><i class="fa fa-question"></i><span>FAQ</span></a></li>
           <li><a id="sign-out" class="logout" href="login.html">Logout</a></li>
         </ul>
       </div>
@@ -62,9 +61,9 @@
           <p class="centered">
             <a href="profile.html"><img src="images/apple-icon-76x76.png" class="img-circle" width="80"></a>
           </p>
-          <h5 id="userEmail" class="centered">MiLog</h5>
+          <h5 id="userEmail" class="centered"></h5>
           <li class="mt">
-              <a href="basic_table.html#myModal" data-toggle="modal">
+              <a href="vehicles.html#myModal" data-toggle="modal">
                 <i class="fa fa-plus"></i>
                 <span>Add Vehicle</span>
                 </a>
@@ -77,13 +76,13 @@
           </li>
           
           <li class="sub-menu">
-            <a class="active" href="basic_table.html">
+            <a class="active" href="#">
               <i class="fa fa-car"></i>
               <span>Vehicles</span>
               </a>
           </li>
           <li class="sub-menu">
-            <a href="advanced_form_components.html">
+            <a href="print-export.html">
               <i class="fa fa-print"></i>
               <span>Print/Export</span>
             </a>
@@ -140,16 +139,16 @@
         <div class="row mt">
           <div class="col-md-12">
             <div class="content-panel">
-              <table class="table table-striped table-advance table-hover">
+              <table class="table table-striped table-advance table-hover" id="vehicleTable">
                 <h4><i class="fa fa-angle-right"></i> Vehicles</h4>
                 <hr>
                 <thead>
                   <tr>
-                    <th><i class="fa fa-bullhorn"></i> Company</th>
-                    <th class="hidden-phone"><i class="fa fa-question-circle"></i> Descrition</th>
-                    <th><i class="fa fa-bookmark"></i> Profit</th>
-                    <th><i class=" fa fa-edit"></i> Status</th>
-                    <th></th>
+                    <th><i class="fa fa-bullhorn"></i>Date</th>
+                    <th class="hidden-phone"><i class="fa fa-question-circle"></i>Notes</th>
+                    <th><i class="fa fa-bookmark"></i>Vehicle</th>
+                    <th><i class=" fa fa-edit"></i>Miles Traveled</th>
+                    <th>Tolls/Fees</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -161,63 +160,7 @@
                     <td>12000.00$ </td>
                     <td><span class="label label-info label-mini">Due</span></td>
                     <td>
-                      <button class="btn btn-success btn-xs"><i class="fa fa-check"></i></button>
-                      <button class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></button>
-                      <button class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <a href="basic_table.html#">
-                        Dashio co
-                        </a>
-                    </td>
-                    <td class="hidden-phone">Lorem Ipsum dolor</td>
-                    <td>17900.00$ </td>
-                    <td><span class="label label-warning label-mini">Due</span></td>
-                    <td>
-                      <button class="btn btn-success btn-xs"><i class="fa fa-check"></i></button>
-                      <button class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></button>
-                      <button class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <a href="basic_table.html#">
-                        Another Co
-                        </a>
-                    </td>
-                    <td class="hidden-phone">Lorem Ipsum dolor</td>
-                    <td>14400.00$ </td>
-                    <td><span class="label label-success label-mini">Paid</span></td>
-                    <td>
-                      <button class="btn btn-success btn-xs"><i class="fa fa-check"></i></button>
-                      <button class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></button>
-                      <button class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <a href="basic_table.html#">Dashio ext</a>
-                    </td>
-                    <td class="hidden-phone">Lorem Ipsum dolor</td>
-                    <td>22000.50$ </td>
-                    <td><span class="label label-success label-mini">Paid</span></td>
-                    <td>
-                      <button class="btn btn-success btn-xs"><i class="fa fa-check"></i></button>
-                      <button class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></button>
-                      <button class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <a href="basic_table.html#">Total Ltd</a>
-                    </td>
-                    <td class="hidden-phone">Lorem Ipsum dolor</td>
-                    <td>12120.00$ </td>
-                    <td><span class="label label-warning label-mini">Due</span></td>
-                    <td>
-                      <button class="btn btn-success btn-xs"><i class="fa fa-check"></i></button>
+                      <!-- <button class="btn btn-success btn-xs"><i class="fa fa-check"></i></button> -->
                       <button class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></button>
                       <button class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></button>
                     </td>

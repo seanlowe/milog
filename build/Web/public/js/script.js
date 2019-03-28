@@ -8,6 +8,11 @@ var config = {
 };
 firebase.initializeApp(config);
 
+// Database references
+var tripsRef = firebase.database().ref("Trips");
+var vehicleRef = firebase.database().ref("Vehicles");
+var usersRef = firebase.database().ref("Users");
+
 function googleSignIn() {
   var provider = new firebase.auth.GoogleAuthProvider();
 
@@ -180,6 +185,11 @@ function sendPasswordReset() {
   // [END sendpasswordemail];
 }
 
+function generateVehicleTable() {
+  var header_count = $('#vehicleTable > thead').children('tr').children('th').length-1;
+  console.log(header_count);
+}
+
 /**
  * initApp handles setting up UI event listeners and registering Firebase auth listeners:
  *  - firebase.auth().onAuthStateChanged: This listener is called when the user is signed in or
@@ -190,11 +200,33 @@ function initApp() {
   // [START authstatelistener]
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
+      // User is signed in.
+      var header_count = $('#tripsTable > thead').children('tr').children('th').length;
+      console.log(header_count);
       // alert(user.email + " is signed in");
       document.getElementById("userEmail").textContent = user.email;
-      // User is signed in.
-      // var email = user.email;
-      // var emailVerified = user.emailVerified;
+
+      // Get users data
+      tripsRef.once("value").then(function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+          var key = childSnapshot.key;
+          var value = childSnapshot.val();
+      
+          if(value.userID == user.uid) {
+            console.log(key + ": " + value.notes);
+
+            // Dynamically generating tables from users data
+            // for(var i = 0; i < header_count - 1; i++) {
+              $('#tripsTable > tbody').append('<tr></tr>');
+              $('#tripsTable > tbody > tr:last-child').append("<td>" + value.startTime + "</td><td>" +
+                value.notes + "</td><td>" + value.vehicle + "<td class=\"center\">" +
+                value.milesTraveled + "</td><td class=\"center\"><button class='btn btn-primary btn-xs'><i class='fa fa-pencil'></i></button>\n" +
+                "<button class='btn btn-danger btn-xs'><i class='fa fa-trash-o '></i></button> </td>");
+            // }
+          }
+        });
+      });
+      
       // var uid = user.uid;
     } else {
       // User is signed out.
