@@ -12,36 +12,36 @@ var tripsRef = firebase.database().ref("Trips");
 var vehicleRef = firebase.database().ref("Vehicles");
 var usersRef = firebase.database().ref("Users");
 
-function googleSignIn() {
-  var provider = new firebase.auth.GoogleAuthProvider();
+// function googleSignIn() {
+//   var provider = new firebase.auth.GoogleAuthProvider();
 
-  firebase
-    .auth()
-    .signInWithPopup(provider)
-    .then(function(result) {
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      var token = result.credential.accessToken;
-      // The signed-in user info.
-      var user = result.user;
-      // ...
-    })
-    .catch(function(error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // The email of the user's account used.
-      var email = error.email;
-      // The firebase.auth.AuthCredential type that was used.
-      var credential = error.credential;
-      // ...
-    });
+//   firebase
+//     .auth()
+//     .signInWithPopup(provider)
+//     .then(function(result) {
+//       // This gives you a Google Access Token. You can use it to access the Google API.
+//       var token = result.credential.accessToken;
+//       // The signed-in user info.
+//       var user = result.user;
+//       // ...
+//     })
+//     .catch(function(error) {
+//       // Handle Errors here.
+//       var errorCode = error.code;
+//       var errorMessage = error.message;
+//       // The email of the user's account used.
+//       var email = error.email;
+//       // The firebase.auth.AuthCredential type that was used.
+//       var credential = error.credential;
+//       // ...
+//     });
 
-  firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
-      window.location.href = "home.html";
-    }
-  });
-}
+//   firebase.auth().onAuthStateChanged(function(user) {
+//     if (user) {
+//       window.location.href = "home.html";
+//     }
+//   });
+// }
 
 function writeUserData() {
   var database = firebase.database();
@@ -66,45 +66,45 @@ function writeUserData() {
     });
 }
 
-function handleSignIn() {
-  var email = document.getElementById("email").value;
-  var password = document.getElementById("password").value;
-  // alert("sign in button pressed");
-  if (email.length < 4) {
-    alert("Please enter an email address.");
-    return;
-  }
-  if (password.length < 4) {
-    alert("Please enter a password.");
-    return;
-  }
-  alert("entered email");
-  // Sign in with email and pass.
-  // [START authwithemail]
-  firebase
-    .auth()
-    .signInWithEmailAndPassword(email, password)
-    .catch(function(error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // [START_EXCLUDE]
-      if (errorCode === "auth/wrong-password") {
-        alert("Wrong password.");
-      } else {
-        alert(errorMessage);
-      }
-      console.log(error);
-      // [END_EXCLUDE]
-    });
-  // [END authwithemail]
+// function handleSignIn() {
+//   var email = document.getElementById("email").value;
+//   var password = document.getElementById("password").value;
+//   // alert("sign in button pressed");
+//   if (email.length < 4) {
+//     alert("Please enter an email address.");
+//     return;
+//   }
+//   if (password.length < 4) {
+//     alert("Please enter a password.");
+//     return;
+//   }
+//   alert("entered email");
+//   // Sign in with email and pass.
+//   // [START authwithemail]
+//   firebase
+//     .auth()
+//     .signInWithEmailAndPassword(email, password)
+//     .catch(function(error) {
+//       // Handle Errors here.
+//       var errorCode = error.code;
+//       var errorMessage = error.message;
+//       // [START_EXCLUDE]
+//       if (errorCode === "auth/wrong-password") {
+//         alert("Wrong password.");
+//       } else {
+//         alert(errorMessage);
+//       }
+//       console.log(error);
+//       // [END_EXCLUDE]
+//     });
+//   // [END authwithemail]
 
-  firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
-      window.location.href = "home.html";
-    }
-  });
-}
+//   firebase.auth().onAuthStateChanged(function(user) {
+//     if (user) {
+//       window.location.href = "home.html";
+//     }
+//   });
+// }
 
 function handleSignOut() {
   // alert("Logout has been pressed");
@@ -115,50 +115,50 @@ function handleSignOut() {
 /**
  * Handles the sign up button press.
  */
-function handleSignUp() {
-  var email = document.getElementById("signup-Email").value;
-  var password = document.getElementById("signup-Password").value;
-  if (email.length < 4) {
-    alert("Please enter an email address.");
-    return;
-  }
-  if (password.length < 4) {
-    alert("Please enter a password.");
-    return;
-  }
-  // Sign up with email and pass.
-  // [START createwithemail]
-  firebase
-    .auth()
-    .createUserWithEmailAndPassword(email, password)
-    .catch(function(error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // [START_EXCLUDE]
-      if (errorCode == "auth/weak-password") {
-        alert("The password is too weak.");
-      } else {
-        alert(errorMessage);
-      }
-      console.log(error);
-      // [END_EXCLUDE]
-    });
-  // [END createwithemail]
-}
+// function handleSignUp() {
+//   var email = document.getElementById("signup-Email").value;
+//   var password = document.getElementById("signup-Password").value;
+//   if (email.length < 4) {
+//     alert("Please enter an email address.");
+//     return;
+//   }
+//   if (password.length < 4) {
+//     alert("Please enter a password.");
+//     return;
+//   }
+//   // Sign up with email and pass.
+//   // [START createwithemail]
+//   firebase
+//     .auth()
+//     .createUserWithEmailAndPassword(email, password)
+//     .catch(function(error) {
+//       // Handle Errors here.
+//       var errorCode = error.code;
+//       var errorMessage = error.message;
+//       // [START_EXCLUDE]
+//       if (errorCode == "auth/weak-password") {
+//         alert("The password is too weak.");
+//       } else {
+//         alert(errorMessage);
+//       }
+//       console.log(error);
+//       // [END_EXCLUDE]
+//     });
+//   // [END createwithemail]
+// }
 
-/**
- * Sends an email verification to the user.
- */
-function sendEmailVerification() {
-  firebase
-    .auth()
-    .currentUser.sendEmailVerification()
-    .then(function() {
-      // Email Verification sent!
-      alert("Email Verification Sent!");
-    });
-}
+// /**
+//  * Sends an email verification to the user.
+//  */
+// function sendEmailVerification() {
+//   firebase
+//     .auth()
+//     .currentUser.sendEmailVerification()
+//     .then(function() {
+//       // Email Verification sent!
+//       alert("Email Verification Sent!");
+//     });
+// }
 
 function sendPasswordReset() {
   var email = document.getElementById("resetEmail").value;
@@ -200,13 +200,13 @@ async function generateTripTable(trips) {
   var dataSets = [];
   for (var i = 0; i < trips.length; i++) {
     let date = new Date(trips[i].startTime);
-    console.log(date.toLocaleDateString());
+    // console.log(date.toLocaleDateString());
     dataSets.push([
       date.toLocaleDateString(),
       trips[i].notes,
       trips[i].vehicle,
       trips[i].milesTraveled,
-      '<div class="text-center"><button class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></button><button class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></button></div>'
+      '<div class="text-center"><a href="home.html#myDeleteModal" data-toggle="modal" class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></a> <a href="home.html#myUpdateModal" data-toggle="modal" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a></div>'
       
     ]);
   }
@@ -313,6 +313,11 @@ function getTripData(snapshot, uid) {
   // });
 }
 
+// Delete log
+function deleteLog() {
+
+}
+
 /**
  * initApp handles setting up UI event listeners and registering Firebase auth listeners:
  *  - firebase.auth().onAuthStateChanged: This listener is called when the user is signed in or
@@ -321,6 +326,7 @@ function getTripData(snapshot, uid) {
 function initApp() {
   // Listening for auth state changes.
   // [START authstatelistener]
+  var tripArray = [];
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
       // User is signed in.
@@ -346,18 +352,18 @@ function initApp() {
   });
   // [END authstatelistener]
 
-  document
-    .getElementById("sign-in")
-    .addEventListener("click", handleSignIn, false);
-  document
-    .getElementById("googleSignIn")
-    .addEventListener("click", googleSignIn, false);
+  // document
+  //   .getElementById("sign-in")
+  //   .addEventListener("click", handleSignIn, false);
+  // document
+  //   .getElementById("googleSignIn")
+  //   .addEventListener("click", googleSignIn, false);
   document
     .getElementById("sign-out")
     .addEventListener("click", handleSignOut, false);
-  document
-    .getElementById("sign-up")
-    .addEventListener("click", handleSignUp, false);
+  // document
+  //   .getElementById("sign-up")
+  //   .addEventListener("click", handleSignUp, false);
   document
     .getElementById("password-reset")
     .addEventListener("click", sendPasswordReset, false);
@@ -367,7 +373,9 @@ window.onload = function() {
   initApp();
 };
 
-// jquery ready start
+
+
+// jQuery ready start
 $(document).ready(function() {
   // jQuery code
   $("input[data-type='currency']").on({
