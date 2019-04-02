@@ -1,9 +1,8 @@
-
 var config = {
   apiKey: "AIzaSyB_4KJ05TIv6G6sHUObbV91k2Q3qINw52c",
   authDomain: "mileagelogger-1755e.firebaseapp.com",
   databaseURL: "https://mileagelogger-1755e.firebaseio.com",
-  projectId: "mileagelogger-1755e",
+  projectId: "mileagelogger-1755e"
   //storageBucket: "bucket.appspot.com"
 };
 firebase.initializeApp(config);
@@ -16,22 +15,26 @@ var usersRef = firebase.database().ref("Users");
 function googleSignIn() {
   var provider = new firebase.auth.GoogleAuthProvider();
 
-  firebase.auth().signInWithPopup(provider).then(function(result) {
-    // This gives you a Google Access Token. You can use it to access the Google API.
-    var token = result.credential.accessToken;
-    // The signed-in user info.
-    var user = result.user;
-    // ...
-  }).catch(function(error) {
-    // Handle Errors here.
-    var errorCode = error.code;
-    var errorMessage = error.message;
-    // The email of the user's account used.
-    var email = error.email;
-    // The firebase.auth.AuthCredential type that was used.
-    var credential = error.credential;
-    // ...
-  });
+  firebase
+    .auth()
+    .signInWithPopup(provider)
+    .then(function(result) {
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      var token = result.credential.accessToken;
+      // The signed-in user info.
+      var user = result.user;
+      // ...
+    })
+    .catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      // The email of the user's account used.
+      var email = error.email;
+      // The firebase.auth.AuthCredential type that was used.
+      var credential = error.credential;
+      // ...
+    });
 
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
@@ -94,13 +97,13 @@ function handleSignIn() {
       console.log(error);
       // [END_EXCLUDE]
     });
-    // [END authwithemail]
+  // [END authwithemail]
 
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        window.location.href = "home.html";
-      }
-    });
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      window.location.href = "home.html";
+    }
+  });
 }
 
 function handleSignOut() {
@@ -186,7 +189,10 @@ function sendPasswordReset() {
 }
 
 function generateVehicleTable() {
-  var header_count = $('#vehicleTable > thead').children('tr').children('th').length-1;
+  var header_count =
+    $("#vehicleTable > thead")
+      .children("tr")
+      .children("th").length - 1;
   console.log(header_count);
 }
 
@@ -195,15 +201,14 @@ async function generateTripTable(trips) {
   for (var i = 0; i < trips.length; i++) {
     let date = new Date(trips[i].startTime);
     console.log(date.toLocaleDateString());
-    dataSets.push(
-      [
-        date.toLocaleDateString(),
-        trips[i].notes,
-        trips[i].vehicle,
-        trips[i].milesTraveled,
-        0
-      ]
-    );
+    dataSets.push([
+      date.toLocaleDateString(),
+      trips[i].notes,
+      trips[i].vehicle,
+      trips[i].milesTraveled,
+      '<div class="text-center"><button class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></button><button class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></button></div>'
+      
+    ]);
   }
 
   console.log(dataSets);
@@ -211,25 +216,25 @@ async function generateTripTable(trips) {
   /*
    * Initialse DataTables, with no sorting on the 'details' column
    */
-  var oTable = $('#hidden-table-info').dataTable({
-    "aaData": dataSets,
-    "aoColumnDefs": [{
-      "bSortable": false,
-      "aTargets": [0]
-    }],
-    "aaSorting": [
-      [1, 'asc']
-    ]
+  var oTable = $("#hidden-table-info").dataTable({
+    aaData: dataSets,
+    aoColumnDefs: [
+      {
+        bSortable: false,
+        aTargets: [0]
+      }
+    ],
+    aaSorting: [[1, "asc"]]
   });
 
   /* Formating function for row details */
   function fnFormatDetails(oTable, nTr) {
     var aData = oTable.fnGetData(nTr);
     var sOut = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
-    sOut += '<tr><td>Rendering engine:</td><td>' + aData[1] + ' ' + aData[4] + '</td></tr>';
-    sOut += '<tr><td>Link to source:</td><td>Could provide a link here</td></tr>';
-    sOut += '<tr><td>Extra info:</td><td>And any further details here (images etc)</td></tr>';
-    sOut += '</table>';
+    sOut += "<tr><td>Vehicle:</td><td>" + aData[2] + "</td></tr>";
+    sOut += "<tr><td>Final Odometer:</td><td> Final Reading </td></tr>";
+    sOut += "<tr><td>Fees or Tolls:</td><td>Total Fees</td></tr>";
+    sOut += "</table>";
 
     return sOut;
   }
@@ -238,38 +243,27 @@ async function generateTripTable(trips) {
     /*
      * Insert a 'details' column to the table
      */
-    var nCloneTh = document.createElement('th');
-    var nCloneTd = document.createElement('td');
-    nCloneTd.innerHTML = '<img src="lib/advanced-datatable/images/details_open.png">';
+    var nCloneTh = document.createElement("th");
+    var nCloneTd = document.createElement("td");
+    nCloneTh.innerHTML = "Details";
+    nCloneTd.innerHTML =
+      '<img src="lib/advanced-datatable/images/details_open.png">';
     nCloneTd.className = "center";
 
-    $('#hidden-table-info thead tr').each(function() {
+    $("#hidden-table-info thead tr").each(function() {
       this.insertBefore(nCloneTh, this.childNodes[0]);
     });
 
-    $('#hidden-table-info tbody tr').each(function() {
+    $("#hidden-table-info tbody tr").each(function() {
       this.insertBefore(nCloneTd.cloneNode(true), this.childNodes[0]);
     });
-
-    // /*
-    //  * Initialse DataTables, with no sorting on the 'details' column
-    //  */
-    // var oTable = $('#hidden-table-info').dataTable({
-    //   "aoColumnDefs": [{
-    //     "bSortable": false,
-    //     "aTargets": [0]
-    //   }],
-    //   "aaSorting": [
-    //     [1, 'asc']
-    //   ]
-    // });
 
     /* Add event listener for opening and closing details
      * Note that the indicator for showing which row is open is not controlled by DataTables,
      * rather it is done here
      */
-    $('#hidden-table-info tbody td img').live('click', function() {
-      var nTr = $(this).parents('tr')[0];
+    $("#hidden-table-info tbody td img").live("click", function() {
+      var nTr = $(this).parents("tr")[0];
       if (oTable.fnIsOpen(nTr)) {
         /* This row is already open - close it */
         this.src = "lib/advanced-datatable/media/images/details_open.png";
@@ -277,7 +271,7 @@ async function generateTripTable(trips) {
       } else {
         /* Open this row */
         this.src = "lib/advanced-datatable/images/details_close.png";
-        oTable.fnOpen(nTr, fnFormatDetails(oTable, nTr), 'details');
+        oTable.fnOpen(nTr, fnFormatDetails(oTable, nTr), "details");
       }
     });
   });
@@ -285,30 +279,37 @@ async function generateTripTable(trips) {
 
 function getTripData(snapshot, uid) {
   // tripsRef.once("value").then(function(snapshot) {
-    var tripArray = [];
-    snapshot.forEach(function(childSnapshot) {
-      var key = childSnapshot.key;
-      var value = childSnapshot.val();
-      
-      if(value.userID == uid) {
-        tripArray.push(value);
-        // console.log(value);
-        // console.log(key + ": " + value.notes);
-        tripDate = value.startTime;
-        tripNotes = value.notes;
-        tripVehicle = value.vehicle;
-        tripMiles = value.milesTraveled;
-        // console.log("Trip array = " + tripArray.notes);
-        // Dynamically generating tables from users data
-        $('#vehicleTable > tbody').append('<tr></tr>');
-        $('#vehicleTable > tbody > tr:last-child').append("<td>" + value.startTime + "</td><td>" +
-          value.notes + "</td><td>" + value.vehicle + "<td class=\"center\">" +
-          value.milesTraveled + "</td><td class=\"center\"><button class='btn btn-primary btn-xs'><i class='fa fa-pencil'></i></button>\n" +
-          "<button class='btn btn-danger btn-xs'><i class='fa fa-trash-o '></i></button> </td>");
-      }
-    });
-    // console.log("Trip array = " + tripArray.length);
-    return tripArray;
+  var tripArray = [];
+  snapshot.forEach(function(childSnapshot) {
+    var key = childSnapshot.key;
+    var value = childSnapshot.val();
+
+    if (value.userID == uid) {
+      tripArray.push(value);
+
+      tripDate = value.startTime;
+      tripNotes = value.notes;
+      tripVehicle = value.vehicle;
+      tripMiles = value.milesTraveled;
+      // console.log("Trip array = " + tripArray.notes);
+      // Dynamically generating tables from users data
+      $("#vehicleTable > tbody").append("<tr></tr>");
+      $("#vehicleTable > tbody > tr:last-child").append(
+        "<td>" +
+          value.startTime +
+          "</td><td>" +
+          value.notes +
+          "</td><td>" +
+          value.vehicle +
+          '<td class="center">' +
+          value.milesTraveled +
+          "</td><td class=\"center\"><button class='btn btn-primary btn-xs'><i class='fa fa-pencil'></i></button>\n" +
+          "<button class='btn btn-danger btn-xs'><i class='fa fa-trash-o '></i></button> </td>"
+      );
+    }
+  });
+  // console.log("Trip array = " + tripArray.length);
+  return tripArray;
   // });
 }
 
@@ -323,28 +324,24 @@ function initApp() {
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
       // User is signed in.
-      var header_count = $('#vehicleTable > thead').children('tr').children('th').length;
+      var header_count = $("#vehicleTable > thead")
+        .children("tr")
+        .children("th").length;
       // console.log(header_count);
       // alert(user.email + " is signed in");
       document.getElementById("userEmail").textContent = user.email;
 
-      var tripDate = [];
-      var tripNotes = [];
-      var tripVehicle = [];
-      var tripMiles = [];
       var tripArray = [];
-      // generateTripTable(user.uid);
       // Get users data
       tripsRef.once("value").then(function(snapshot) {
         tripArray = getTripData(snapshot, user.uid);
         console.log("Trip array = " + tripArray.length);
         generateTripTable(tripArray);
       });
-
     } else {
       // User is signed out.
       alert("No one is signed in");
-      
+      window.location.href = "login.html";
     }
   });
   // [END authstatelistener]
@@ -366,7 +363,91 @@ function initApp() {
     .addEventListener("click", sendPasswordReset, false);
 }
 
-
 window.onload = function() {
   initApp();
 };
+
+// jquery ready start
+$(document).ready(function() {
+  // jQuery code
+  $("input[data-type='currency']").on({
+    keyup: function() {
+      formatCurrency($(this));
+    },
+    blur: function() {
+      formatCurrency($(this), "blur");
+    }
+  });
+
+  function formatNumber(n) {
+    // format number 1000000 to 1,234,567
+    return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  function formatCurrency(input, blur) {
+    // appends $ to value, validates decimal side
+    // and puts cursor back in right position.
+
+    // get input value
+    var input_val = input.val();
+
+    // don't validate empty input
+    if (input_val === "") {
+      return;
+    }
+
+    // original length
+    var original_len = input_val.length;
+
+    // initial caret position
+    var caret_pos = input.prop("selectionStart");
+
+    // check for decimal
+    if (input_val.indexOf(".") >= 0) {
+      // get position of first decimal
+      // this prevents multiple decimals from
+      // being entered
+      var decimal_pos = input_val.indexOf(".");
+
+      // split number by decimal point
+      var left_side = input_val.substring(0, decimal_pos);
+      var right_side = input_val.substring(decimal_pos);
+
+      // add commas to left side of number
+      left_side = formatNumber(left_side);
+
+      // validate right side
+      right_side = formatNumber(right_side);
+
+      // On blur make sure 2 numbers after decimal
+      if (blur === "blur") {
+        right_side += "00";
+      }
+
+      // Limit decimal to only 2 digits
+      right_side = right_side.substring(0, 2);
+
+      // join number by .
+      input_val = "$" + left_side + "." + right_side;
+    } else {
+      // no decimal entered
+      // add commas to number
+      // remove all non-digits
+      input_val = formatNumber(input_val);
+      input_val = "$" + input_val;
+
+      // final formatting
+      if (blur === "blur") {
+        input_val += ".00";
+      }
+    }
+
+    // send updated string to input
+    input.val(input_val);
+
+    // put caret back in the right position
+    var updated_len = input_val.length;
+    caret_pos = updated_len - original_len + caret_pos;
+    input[0].setSelectionRange(caret_pos, caret_pos);
+  }
+});
