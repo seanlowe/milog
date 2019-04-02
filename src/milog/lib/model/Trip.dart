@@ -13,6 +13,7 @@ class Trip {
   String _notes; //Trip notes (client info etc)
   bool _inProgress; //If the trip is currently in progress
   String _vehicle; //For now, this will just be a string
+  double _totCharges; //The total charges incurred in trip
 
   Trip(
       this._userID,
@@ -26,7 +27,8 @@ class Trip {
       this._paused,
       this._notes,
       this._inProgress,
-      this._vehicle);
+      this._vehicle,
+      this._totCharges);
 
   //Named constructor "defaultTrip"
   Trip.defaultTrip() {
@@ -41,6 +43,7 @@ class Trip {
     this._startOdometer = 0;
     this._endOdometer = 0;
     this._milesTraveled = 0;
+    this._totCharges = 0.0;
     this._vehicle = "vehicle";
   }
 
@@ -57,6 +60,7 @@ class Trip {
     this._startOdometer = 0;
     this._endOdometer = 0;
     this._milesTraveled = 0;
+    this._totCharges = 0.0;
     this._vehicle = " ";
   }
 
@@ -73,6 +77,7 @@ class Trip {
   bool get inProgress => _inProgress;
   String get vehicle => _vehicle;
   int get milesTraveled => _milesTraveled;
+  double get totCharges => _totCharges;
 
   //Setters
   set setpaused(bool value) => _paused = value;
@@ -168,5 +173,11 @@ class Trip {
       //_paused = false;
     } else
       print("Class: ERROR! -> curOdo < startOdometer");
+  }
+
+  //Increments the charges & tolls 
+  void addCharge(double newCharge){
+    if(newCharge >= 0)
+      _totCharges += newCharge;
   }
 }

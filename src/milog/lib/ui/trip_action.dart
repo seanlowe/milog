@@ -49,7 +49,8 @@ class _TripScreenActionState extends State<TripAction> {
             _showSelectedTrip(),
             _showPauseResumeButton(),
             _showEndTripButton(),
-            _showOdoTextField()
+            _showOdoTextField(),
+            _showAddChargeButton(),
           ],
         ),
       ),
@@ -61,9 +62,9 @@ class _TripScreenActionState extends State<TripAction> {
     return Container(
         margin: EdgeInsets.all(15.0),
         decoration: BoxDecoration(
-            color: Colors.yellow[100],
-            border: Border.all(color: Colors.black),
-            borderRadius: BorderRadius.all(Radius.circular(10.0))),
+            color: Colors.blueAccent[100],
+            border: Border.all(color: Colors.black, width: 2),
+            borderRadius: BorderRadius.all(Radius.circular(20.0))),
         child: Column(children: <Widget>[
           Text(widget.trip.notes,
               style: new TextStyle(fontSize: 20.0, color: Colors.black)),
@@ -240,6 +241,25 @@ class _TripScreenActionState extends State<TripAction> {
                 style: new TextStyle(fontSize: 20.0, color: Colors.black)),
             onPressed: () {
               processOdoMiles();
+            },
+          ),
+        ));
+  }
+
+  Widget _showAddChargeButton() {
+    print("User Pressed Toll Charge Button!");
+    return new Padding(
+        padding: EdgeInsets.all(15.0),
+        child: SizedBox(
+          height: 40.0,
+          child: RaisedButton(
+            elevation: 5.0,
+            shape: new RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(60.0)),
+            color: Colors.orange, 
+            child: Text('Add Charges \$',
+                style: new TextStyle(fontSize: 20.0, color: Colors.white)),
+            onPressed: () {
             },
           ),
         ));

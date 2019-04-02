@@ -59,13 +59,13 @@ class _LogScreenState extends State<LogScreen> {
 
   Widget _showPrimaryButton() {
     return new Padding(
-        padding: EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
+        padding: EdgeInsets.all(15.0),
         child: SizedBox(
           height: 40.0,
           child: RaisedButton(
             elevation: 5.0,
             shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(15.0)),
+                borderRadius: new BorderRadius.circular(60.0)),
             color: Colors.green,
             child: (widget.update)
                 ? Text('Update Trip',
@@ -85,6 +85,7 @@ class _LogScreenState extends State<LogScreen> {
                   'endTime': 0,
                   'endOdometer': 0,
                   'milesTraveled': 0,
+                  'totCharges' : 0.0,
                   'userID': widget.userId,
                   'inProgress': true,
                   'paused': false
@@ -171,9 +172,9 @@ class _LogScreenState extends State<LogScreen> {
     return Container(
         margin: EdgeInsets.all(15.0),
         decoration: BoxDecoration(
-            color: Colors.yellow[100],
-            border: Border.all(color: Colors.black),
-            borderRadius: BorderRadius.all(Radius.circular(10.0))),
+            color: Colors.blueAccent[100],
+            border: Border.all(color: Colors.black, width: 2),
+            borderRadius: BorderRadius.all(Radius.circular(20.0))),
         child: Column(children: <Widget>[
           Text("Notes: " + widget.trip.notes, textAlign: TextAlign.left,
               style: new TextStyle(fontSize: 20.0, color: Colors.black)),
@@ -182,6 +183,25 @@ class _LogScreenState extends State<LogScreen> {
           Text(widget.trip.startOdometer.toString(), textAlign: TextAlign.left,
               style: new TextStyle(fontSize: 20.0, color: Colors.black))
         ]));
+  }
+
+  Widget _showTollChargeButton() {
+    print("User Pressed Toll Charge Button!");
+    return new Padding(
+        padding: EdgeInsets.all(15.0),
+        child: SizedBox(
+          height: 40.0,
+          child: RaisedButton(
+            elevation: 5.0,
+            shape: new RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(60.0)),
+            color: Colors.orange,
+            child: Text('Add Charges \$',
+                style: new TextStyle(fontSize: 20.0, color: Colors.white)),
+            onPressed: () {
+            },
+          ),
+        ));
   }
 
   @override
@@ -194,13 +214,16 @@ class _LogScreenState extends State<LogScreen> {
         child: new ListView(
           //shrinkWrap makes it scrollable
           shrinkWrap: true,
+          /*New discovery, to make widgets optional, look at code below*/
           children: <Widget>[
             _selectTopWidget(),
             _showNotesTextBox(),
             _showVehicleTextBox(),
             _showOdometerTextBox(),
-            _showPrimaryButton()
-          ],
+            //Optinal
+            (widget.trip.startOdometer != 0) ? _showTollChargeButton() : null,
+            _showPrimaryButton(),
+          ].where((c) => c != null).toList(),
         ),
       ),
     );
