@@ -127,15 +127,15 @@ class _TripScreenActionState extends State<TripAction> {
   //When user presses pause or resume
   //TODO: Check user input!
   void processPause() {
-    if (_odometerReadingDiag.text.isEmpty){
+    if (_odometerReadingDiag.text.isEmpty) {
       _showDialogEmptyOdo();
-    }
-    else {
+    } else {
       if (widget.trip.paused) {
         //Trip is paused
         print("#1 RAN!");
         widget.trip.resumeTrip(int.parse(_odometerReadingDiag.text));
-        print("In trip, miles traveled = " + widget.trip.milesTraveled.toString());
+        print("In trip, miles traveled = " +
+            widget.trip.milesTraveled.toString());
         tripsReference
             .child(widget.trip.tripID)
             .child("startOdometer")
@@ -203,6 +203,47 @@ class _TripScreenActionState extends State<TripAction> {
     );
   }
 
+  void _showDialogAddCharge() {
+    TextEditingController _chargeFieldControl = TextEditingController();
+    print("showDialogAddCharge invoked");
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text("Trip Charge",
+              style: TextStyle(fontSize: 18.0, color: Colors.black)),
+          content: TextField(
+            controller: _chargeFieldControl,
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            decoration: InputDecoration(hintText: "0.00"),
+          ),
+          actions: <Widget>[
+            //buttons at the bottom of the dialog
+            FlatButton(
+              child: Text(
+                "Add",
+                style: TextStyle(fontSize: 18.0, color: Colors.green),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text(
+                "Cancel",
+                style: TextStyle(fontSize: 18.0, color: Colors.red),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Widget _showPauseResumeButton() {
     return new Padding(
         padding: EdgeInsets.all(15.0),
@@ -256,10 +297,11 @@ class _TripScreenActionState extends State<TripAction> {
             elevation: 5.0,
             shape: new RoundedRectangleBorder(
                 borderRadius: new BorderRadius.circular(60.0)),
-            color: Colors.orange, 
+            color: Colors.orange,
             child: Text('Add Charges \$',
                 style: new TextStyle(fontSize: 20.0, color: Colors.white)),
             onPressed: () {
+               _showDialogAddCharge();
             },
           ),
         ));
