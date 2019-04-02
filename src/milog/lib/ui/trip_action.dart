@@ -101,14 +101,21 @@ class _TripScreenActionState extends State<TripAction> {
     else {
       //Sets the end Odometer reading in the DB
       widget.trip.setEndOdo(int.parse(_odometerReadingDiag.text));
+      //Sets endOdometer in DB
       tripsReference
           .child(widget.trip.tripID)
           .child("endOdometer")
           .set(int.parse(_odometerReadingDiag.text));
+      //Sets milesTraveled in DB
       tripsReference
           .child(widget.trip.tripID)
           .child("milesTraveled")
           .set(widget.trip.milesTraveled);
+      //Sets endTime via Server timestamp
+      tripsReference
+          .child(widget.trip.tripID)
+          .child("endTime")
+          .set(ServerValue.timestamp);
       //End the trip - set inProgress and paused to false just in case
       tripsReference.child(widget.trip.tripID).child("inProgress").set(false);
       tripsReference.child(widget.trip.tripID).child("paused").set(false);

@@ -82,6 +82,7 @@ class _LogScreenState extends State<LogScreen> {
                   'vehicle': _vehicleController.text,
                   'startOdometer': int.parse(_odometerReading.text),
                   'startTime': ServerValue.timestamp,
+                  'endTime': 0,
                   'endOdometer': 0,
                   'milesTraveled': 0,
                   'userID': widget.userId,

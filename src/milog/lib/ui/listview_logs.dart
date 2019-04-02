@@ -99,9 +99,11 @@ class _ListViewLogState extends State<ListViewLog> {
                   height: 5.0,
                 ),
                 Container(
-                  decoration: (_tripList[position].inProgress)
-                      ? new BoxDecoration(color: Colors.yellow[300])
-                      : new BoxDecoration(color: Colors.white),
+                  
+                  decoration: 
+                  (_tripList[position].inProgress)
+                      ? new BoxDecoration(color: Colors.yellow[300], border: new Border.all(color: Colors.grey, width: 2))
+                      : new BoxDecoration(color: Colors.white, border: new Border.all(color: Colors.grey, width: 2)),
                   //If trip is in progress, the containers is yellow
                   child: ListTile(
                       title: Text(
@@ -115,6 +117,7 @@ class _ListViewLogState extends State<ListViewLog> {
                           _tripList[position].inProgress, position),
                       leading: _tripIcon(_tripList[position].inProgress,
                           _tripList[position].paused),
+
 
                       //TAP
                       onTap: () {
