@@ -42,8 +42,9 @@ class _TripScreenActionState extends State<TripAction> {
       appBar: AppBar(title: Text("Trip Options")),
       body: Container(
         margin: EdgeInsets.all(1.0),
-        alignment: Alignment.center,
-        child: Column(
+        alignment: Alignment.topCenter,
+        child: new ListView(
+          shrinkWrap: true,
           children: <Widget>[
             _showSelectedTrip(),
             _showPauseResumeButton(),
@@ -59,9 +60,8 @@ class _TripScreenActionState extends State<TripAction> {
   Widget _showSelectedTrip() {
     return Container(
         margin: EdgeInsets.all(15.0),
-        padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
         decoration: BoxDecoration(
-            color: Colors.blue[200],
+            color: Colors.yellow[100],
             border: Border.all(color: Colors.black),
             borderRadius: BorderRadius.all(Radius.circular(10.0))),
         child: Column(children: <Widget>[
@@ -197,9 +197,8 @@ class _TripScreenActionState extends State<TripAction> {
 
   Widget _showPauseResumeButton() {
     return new Padding(
-        padding: EdgeInsets.fromLTRB(0.0, 40.0, 0.0, 0.0),
+        padding: EdgeInsets.all(15.0),
         child: SizedBox(
-          height: 40.0,
           child: RaisedButton(
             elevation: 5.0,
             shape: new RoundedRectangleBorder(
@@ -222,13 +221,13 @@ class _TripScreenActionState extends State<TripAction> {
   Widget _showEndTripButton() {
     print("User Pressed End Trip Button!");
     return new Padding(
-        padding: EdgeInsets.fromLTRB(0.0, 40.0, 0.0, 0.0),
+        padding: EdgeInsets.all(15.0),
         child: SizedBox(
           height: 40.0,
           child: RaisedButton(
             elevation: 5.0,
             shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(30.0)),
+                borderRadius: new BorderRadius.circular(60.0)),
             color: Colors.red[300],
             child: Text('END TRIP',
                 style: new TextStyle(fontSize: 20.0, color: Colors.black)),

@@ -30,7 +30,7 @@ class _LogScreenState extends State<LogScreen> {
   var tripsReference;
 
   //String set titles for LogScreen (this class)
-  String strUpdateTitle = "Update Trip";
+  String strUpdateTitle = "View & Edit Trip";
   String strNewTripTitle = "New Trip";
   String title;
 
@@ -54,7 +54,7 @@ class _LogScreenState extends State<LogScreen> {
     _notesController = new TextEditingController(text: widget.trip.notes);
     _vehicleController = new TextEditingController(text: widget.trip.vehicle);
     _odometerReading =
-        new TextEditingController(text: widget.trip.startOdometer.toString());
+        new TextEditingController(text: widget.trip.endOdometer.toString());
   }
 
   Widget _showPrimaryButton() {
@@ -65,7 +65,7 @@ class _LogScreenState extends State<LogScreen> {
           child: RaisedButton(
             elevation: 5.0,
             shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(35.0)),
+                borderRadius: new BorderRadius.circular(15.0)),
             color: Colors.green,
             child: (widget.update)
                 ? Text('Update Trip',
@@ -73,17 +73,8 @@ class _LogScreenState extends State<LogScreen> {
                 : Text('Add Trip',
                     style: new TextStyle(fontSize: 25.0, color: Colors.white)),
             onPressed: () {
-              //We are updaing trip
               if (widget.trip.tripID != null) {
-                tripsReference.child(widget.trip.tripID).set({
-                  'notes': _notesController.text,
-                  'vehicle': _vehicleController.text,
-                  'startOdometer': _odometerReading.text,
-                  'userID': widget.userId,
-                }).then((_) {
-                  Navigator.pop(context);
-                });
-                //We are creating a new trip
+                updateTrip();
               } else {
                 //TODO: use push class/object instead
                 tripsReference.push().set({
@@ -105,46 +96,108 @@ class _LogScreenState extends State<LogScreen> {
         ));
   }
 
+  void updateTrip() {
+    tripsReference
+        .child(widget.trip.tripID)
+        .child('notes')
+        .set(_notesController.text);
+    tripsReference.child(widget.trip.tripID).child('vehicle').set(
+          _vehicleController.text,
+        );
+    tripsReference
+        .child(widget.trip.tripID)
+        .child('endOdometer')
+        .set(int.parse(_odometerReading.text));
+    Navigator.pop(context);
+  }
+
+  Widget _showNotesTextBox() {
+    return TextField(
+        controller: _notesController,
+        decoration: InputDecoration(labelText: 'Notes'),
+        style: TextStyle(
+          fontSize: 22,
+          color: Colors.black,
+        ));
+  }
+
+  //TODO: Make this a drop down box!
+  Widget _showVehicleTextBox() {
+    return TextField(
+        controller: _vehicleController,
+        decoration: InputDecoration(labelText: 'Vehicle'),
+        style: TextStyle(
+          fontSize: 22,
+          color: Colors.black,
+        ));
+  }
+
+  /*Determines whcih widget to show, if updating or viewing
+  the Trip information will be displayed on top. If we are
+  adding a new trip, we don't have trip info so it will
+  return a text with instructions.
+  */
+  Widget _selectTopWidget() {
+    if (widget.trip.startOdometer == 0) {
+      return _showAddIns();
+    } else {
+      return _showSelectedTrip();
+    }
+  }
+
+  //A little message when adding a trip
+  Widget _showAddIns() {
+    return Center(
+      child: Text('Almost ready to go!',
+          style: new TextStyle(fontSize: 24.0, color: Colors.black)),
+    );
+  }
+
+  Widget _showOdometerTextBox() {
+    return TextField(
+      controller: _odometerReading,
+      decoration: InputDecoration(labelText: "Odometer Reading"),
+      style: TextStyle(
+        fontSize: 22,
+        color: Colors.black,
+      ),
+      keyboardType: TextInputType.number,
+    );
+  }
+
+  //Displays the information of the selected trip
+  Widget _showSelectedTrip() {
+    return Container(
+        margin: EdgeInsets.all(15.0),
+        decoration: BoxDecoration(
+            color: Colors.yellow[100],
+            border: Border.all(color: Colors.black),
+            borderRadius: BorderRadius.all(Radius.circular(10.0))),
+        child: Column(children: <Widget>[
+          Text("Notes: " + widget.trip.notes, textAlign: TextAlign.left,
+              style: new TextStyle(fontSize: 20.0, color: Colors.black)),
+          Text("Vehicle: " + widget.trip.vehicle, textAlign: TextAlign.left,
+              style: new TextStyle(fontSize: 20.0, color: Colors.black)),
+          Text(widget.trip.startOdometer.toString(), textAlign: TextAlign.left,
+              style: new TextStyle(fontSize: 20.0, color: Colors.black))
+        ]));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(title)),
       body: Container(
         margin: EdgeInsets.all(15.0),
-        alignment: Alignment.center,
-        child: Column(
+        alignment: Alignment.topCenter,
+        child: new ListView(
+          //shrinkWrap makes it scrollable
+          shrinkWrap: true,
           children: <Widget>[
-            //The Notes Field
-            TextField(
-              controller: _notesController,
-              decoration: InputDecoration(labelText: 'Notes'),
-              style: TextStyle(
-                fontSize: 22,
-                color: Colors.black,
-              ),
-            ),
-            //Padding(padding: new EdgeInsets.all(5.0)),
-            //The Vehicle Text Field
-            TextField(
-              controller: _vehicleController,
-              decoration: InputDecoration(labelText: 'Vehicle'),
-              style: TextStyle(
-                fontSize: 22,
-                color: Colors.black,
-              ),
-            ),
-            //Padding(padding: new EdgeInsets.all(5.0)),
-            //The Odometer Text Field
-            TextField(
-              controller: _odometerReading,
-              decoration: InputDecoration(labelText: "Odometer Reading"),
-              style: TextStyle(
-                fontSize: 22,
-                color: Colors.black,
-              ),
-              keyboardType: TextInputType.number,
-            ),
-            //Padding(padding: new EdgeInsets.all(5.0)),
+            _selectTopWidget(),
+            _showNotesTextBox(),
+            _showVehicleTextBox(),
+            _showOdometerTextBox(),
             _showPrimaryButton()
           ],
         ),
