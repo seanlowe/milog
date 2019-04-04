@@ -3,17 +3,20 @@ import 'package:firebase_database/firebase_database.dart';
 class Vehicle {
   String _name;
   String _userID;
+  String _vehicleID;
+  bool _inUse;
   String _bluetoothMAC;   // MAC address of vehicle's bluetooth device, if any.
   int _lastKnownOdometer; // last reported Odo of the vehicle. 
       // If new trip w/ this vehicle has starting odo less than this number, throw error.
-  String _vehicleID;
 
-  Vehicle(this._name, this._userID, this._bluetoothMAC, this._lastKnownOdometer);
+  Vehicle(this._name, this._userID, this._vehicleID, this.inUse, this._bluetoothMAC, this._lastKnownOdometer);
 
   // named constructor "defaultVehicle"
   Vehicle.defaultVehicle() {
     this._name = "Vehicle Name";
     this._userID = "userID";
+    this._vehicleID = "vehicleID";
+    this._inUse = false;
     this._bluetoothMAC = "00-00-00-00-00-00";
     this._lastKnownOdometer = 0;
     this._vehicleID = "vehicleID";
@@ -23,6 +26,8 @@ class Vehicle {
   Vehicle.newVehicle() {
     this._name = " ";
     this._userID = null;
+    this._vehicleID = null;
+    this._inUse = false;
     this._bluetoothMAC = null;
     this._lastKnownOdometer = null;
     this._vehicleID = null;
@@ -31,16 +36,19 @@ class Vehicle {
   // Getters
   String get name => _name;
   String get userID => _userID;
+  String get vehicleID => _vehicleID;
+  bool get inUse => _inUse;
   String get bluetoothMAC => _bluetoothMAC;
   int get lastKnownOdometer => _lastKnownOdometer;
-  String get vehicleID => _vehicleID;
 
   // Setters
 
   // Database snapshot getters
   Vehicle.fromSnapshot(DataSnapshot snapshot) :
-    _userID = snapshot.value['userID'],
     _name = snapshot.value['name'],
+    _userID = snapshot.value['userID'],
+    _vehicleID = snapshot.value['vehicleID'],
+    _inUse = snapshot.value['inUse'],
     _bluetoothMAC = snapshot.value['bluetoothMAC'],
     _lastKnownOdometer = snapshot.value['lastKnownOdometer'];
 

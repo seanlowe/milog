@@ -60,15 +60,16 @@ class _VehicleScreenState extends State<VehicleScreen> {
                 color: Colors.black,
               )
             ),
-            TextField(
+              TextField(
               // odometer field
               controller: _lastKnownOdoController,
               decoration: InputDecoration(labelText: 'Current Odometer Reading'),
               style: TextStyle(
                 fontSize: 22.0,
                 color: Colors.black,
+              ),
+              keyboardType: TextInputType.number,
               )
-            )
           ],
         )
       )
