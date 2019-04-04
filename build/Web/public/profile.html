@@ -7,10 +7,10 @@
   <meta name="description" content="">
   <meta name="author" content="Dashboard">
   <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
-  <title>Dashio - Bootstrap Admin Template</title>
+  <title>User Profile</title>
 
   <!-- Favicons -->
-  <link href="img/favicon.png" rel="icon">
+  <link href="images/favicons/favicon-16x16.png" rel="icon">
   <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Bootstrap core CSS -->
@@ -45,6 +45,7 @@
       
       <div class="top-menu">
         <ul class="nav pull-right top-menu">
+          <!-- <li><a href="faq.html" class="faq"><i class="fa fa-question"></i><span>FAQ</span></a></li> -->
           <li><a id="sign-out" class="logout" href="login.html">Logout</a></li>
         </ul>
       </div>
@@ -59,36 +60,36 @@
         <!-- sidebar menu start-->
         <ul class="sidebar-menu" id="nav-accordion">
           <p class="centered"><a href="profile.html"><img src="images/apple-icon-76x76.png" class="img-circle" width="80"></a></p>
-          <h5 class="centered">MiLog</h5>
+          <h5 id="userEmail" class="centered"></h5>
           <li class="mt">
             <a href="home.html">
               <i class="fa fa-dashboard"></i>
               <span>Logs</span>
-              </a>
+            </a>
           </li>
-          
           <li class="sub-menu">
-            <a href="basic_table.html">
+            <a href="vehicles.html">
               <i class="fa fa-car"></i>
               <span>Vehicles</span>
-              </a>
-            <!-- <ul class="sub">
-              <li><a href="form_component.html">Form Components</a></li>
-              <li><a href="advanced_form_components.html">Advanced Components</a></li>
-              <li><a href="form_validation.html">Form Validation</a></li>
-              <li><a href="contactform.html">Contact Form</a></li>
-            </ul> -->
+            </a>
           </li>
           <li class="sub-menu">
-            <a class="active" href="profile.html">
+            <a href="print-export.html">
+              <i class="fa fa-print"></i>
+              <span>Print/Export</span>
+            </a>
+          </li>
+          <li class="sub-menu">
+            <a class="active" href="#">
               <i class="fa fa-user"></i>
               <span>Account</span>
-              </a>
-            <!-- <ul class="sub">
-              <li><a href="basic_table.html">Basic Table</a></li>
-              <li><a href="responsive_table.html">Responsive Table</a></li>
-              <li><a href="advanced_table.html">Advanced Table</a></li>
-            </ul> -->
+            </a>
+          </li>
+          <li class="sub-menu">
+            <a href="faq.html">
+              <i class="fa fa-question"></i>
+              <span>FAQ</span>
+            </a>
           </li>
           
         </ul>
@@ -109,13 +110,13 @@
             <div class="row content-panel">
               <div class="panel-heading">
                 <ul class="nav nav-tabs nav-justified">
-                  <li class="active">
+                  <!-- <li class="active">
                     <a data-toggle="tab" href="#overview">Overview</a>
                   </li>
                   <li>
                     <a data-toggle="tab" href="#contact" class="contact-map">Contact</a>
-                  </li>
-                  <li>
+                  </li> -->
+                  <li class="active">
                     <a data-toggle="tab" href="#edit">Edit Profile</a>
                   </li>
                 </ul>
@@ -123,7 +124,7 @@
               <!-- /panel-heading -->
               <div class="panel-body">
                 <div class="tab-content">
-                  <div id="overview" class="tab-pane active">
+                  <div id="overview" class="tab-pane">
                     <div class="row">
                       <div class="col-md-6">
                         <textarea rows="3" class="form-control" placeholder="Whats on your mind?"></textarea>
@@ -249,7 +250,7 @@
                     <!-- /row -->
                   </div>
                   <!-- /tab-pane -->
-                  <div id="edit" class="tab-pane">
+                  <div id="edit" class="tab-pane active">
                     <div class="row">
                       <div class="col-lg-8 col-lg-offset-2 detailed">
                         <h4 class="mb">Personal Information</h4>
@@ -374,6 +375,13 @@
       </div>
     </footer>
     <!--footer end-->
+
+    <!-- Event Listeners From Sign In -->
+    <div id="sign-in"></div>
+    <div id="sign-up"></div>
+    <div id="password-reset"></div>
+    <div id="googleSignIn"></div>
+
   </section>
   <div id="sign-in"></div>
   <div id="sign-up"></div>
@@ -382,8 +390,8 @@
   <script src="lib/jquery/jquery.min.js"></script>
   <script src="lib/bootstrap/js/bootstrap.min.js"></script>
   <script class="include" type="text/javascript" src="lib/jquery.dcjqaccordion.2.7.js"></script>
-  <!-- <script src="lib/jquery.scrollTo.min.js"></script>
-  <script src="lib/jquery.nicescroll.js" type="text/javascript"></script> -->
+  <script src="lib/jquery.scrollTo.min.js"></script>
+  <!-- <script src="lib/jquery.nicescroll.js" type="text/javascript"></script> -->
   <!--common script for all pages-->
   <script src="lib/common-scripts.js"></script>
   <!--script for this page-->

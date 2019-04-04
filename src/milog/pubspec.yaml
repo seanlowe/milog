@@ -17,11 +17,13 @@ dependencies:
     sdk: flutter
 
   firebase_database: ^1.0.5
-
   firebase_core: ^0.2.5+1
   firebase_analytics: ^1.0.4
   firebase_auth: ^0.7.0
   # google_sign_in: ^3.2.4
+  flutter_launcher_icons: ^0.7.0
+
+  
 
   rxdart: 0.20.0
 
@@ -32,6 +34,11 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  image_path: "images/miLog.png" 
+  android: true
+  ios: true
 
 
 # For information on the generic Dart part of this file, see the

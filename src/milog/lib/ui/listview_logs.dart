@@ -65,6 +65,26 @@ class _ListViewLogState extends State<ListViewLog> {
     super.dispose();
   }
 
+  Widget _showTripSubtitle(bool inProg, int position) {
+    if (inProg) {
+      return Text(
+        "Active car: " + _tripList[position].vehicle.toString(),
+        style: TextStyle(
+          fontSize: 18.0,
+          fontStyle: FontStyle.italic,
+        ),
+      );
+    } else {
+      return Text(
+        "Miles Traveled: " + _tripList[position].milesTraveled.toString(),
+        style: TextStyle(
+          fontSize: 18.0,
+          fontStyle: FontStyle.italic,
+        ),
+      );
+    }
+  }
+
   Widget _showTripList() {
     if (_tripList.length > 0) {
       return ListView.builder(
@@ -79,37 +99,37 @@ class _ListViewLogState extends State<ListViewLog> {
                   height: 5.0,
                 ),
                 Container(
-                  decoration: (_tripList[position].inProgress)
-                      ? new BoxDecoration(color: Colors.yellow[300])
-                      : new BoxDecoration(color: Colors.white),
+                  
+                  decoration: 
+                  (_tripList[position].inProgress)
+                      ? new BoxDecoration(color: Colors.yellow[300], border: new Border.all(color: Colors.black, width: 2))
+                      : new BoxDecoration(color: Colors.white, border: new Border.all(color: Colors.black, width: 2)),
                   //If trip is in progress, the containers is yellow
                   child: ListTile(
-                    title: Text(
-                      '${_tripList[position].notes}',
-                      style: TextStyle(
-                        fontSize: 22.0,
-                        color: Colors.black,
+                      title: Text(
+                        _tripList[position].notes.toString(),
+                        style: TextStyle(
+                          fontSize: 22.0,
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
-                    subtitle: Text(
-                      '${_tripList[position].vehicle}',
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        fontStyle: FontStyle.italic,
-                      ),
-                    ),
-                    leading: Column(
-                      children: <Widget>[
-                        Padding(padding: EdgeInsets.all(10.0)),
-                        _tripIcon(_tripList[position].inProgress, _tripList[position].paused)
-                      ],
-                    ),
-                    //TODO: Add logic that decides which screen to navigate to..
-                    onTap: () =>
-                        _naviagateToTripAction(context, _tripList[position]),
-                    onLongPress: () =>
-                        _navigateToLog(context, _tripList[position]),
-                  ),
+                      subtitle: _showTripSubtitle(
+                          _tripList[position].inProgress, position),
+                      leading: _tripIcon(_tripList[position].inProgress,
+                          _tripList[position].paused),
+
+
+                      //TAP
+                      onTap: () {
+                        if (_tripList[position].inProgress) {
+                          _navigateToTripAction(context, _tripList[position]);
+                        } else {
+                          _navigateToLog(context, _tripList[position]);
+                        }
+                      },
+                      //LONG PRESS
+                      onLongPress: () =>
+                          checkIfCanDel(context, _tripList[position],position)),
                 ),
               ],
             );
@@ -125,12 +145,12 @@ class _ListViewLogState extends State<ListViewLog> {
   }
 
   //Decides what icon to put into the trip ListTile (that's in a container)
-  Widget _tripIcon(bool inProg, bool paused){
-    if(inProg && !paused)
+  Widget _tripIcon(bool inProg, bool paused) {
+    if (inProg && !paused)
       return Icon(Icons.drive_eta, color: Colors.blue[300]);
-    else if(inProg && paused)
+    else if (inProg && paused)
       return Icon(Icons.watch_later, color: Colors.orange);
-    else{
+    else {
       return Icon(Icons.check_circle, color: Colors.green[300]);
     }
   }
@@ -142,14 +162,30 @@ class _ListViewLogState extends State<ListViewLog> {
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            child: Text('Main Menu'),
-            decoration: BoxDecoration(
-              color: Color(0xff42CB7C),
+              child: Container(
+            child: Text(
+              'Main Menu',
+              style: TextStyle(
+                fontSize: 24.0,
+                color: Colors.black,
+              ),
+            ),
+            margin: const EdgeInsets.only(bottom: 10.0),
+            width: 10.0,
+            height: 10.0,
+            decoration: new BoxDecoration(
+              shape: BoxShape.rectangle,
+              image: DecorationImage(
+                image: AssetImage("images/miLog.png"),
+                alignment: Alignment(1, 1),
+                fit: BoxFit.scaleDown,
+              ),
               //Add the Drawer image here (user icon perhaps?)
             ),
-          ),
+          )),
           ListTile(
             title: Text('Trips'),
+            leading: new Icon(Icons.speaker_notes, color: Colors.blueAccent),
             onTap: () {
               //Since we're currently in ListViewLog, do nothing
               Navigator.pop(context);
@@ -157,6 +193,7 @@ class _ListViewLogState extends State<ListViewLog> {
           ),
           ListTile(
             title: Text('Account'),
+            leading: new Icon(Icons.perm_identity, color: Colors.black),
             onTap: () {
               // Update the state of the app
               // ...
@@ -166,6 +203,7 @@ class _ListViewLogState extends State<ListViewLog> {
           ),
           ListTile(
             title: Text('Vehicles'),
+            leading: new Icon(Icons.directions_car, color: Colors.blue),
             onTap: () {
               // Update the state of the app
               // ...
@@ -174,6 +212,7 @@ class _ListViewLogState extends State<ListViewLog> {
             },
           ),
           ListTile(
+            leading: new Icon(Icons.exit_to_app, color: Colors.red[300]),
             title: Text('Sign Out'),
             onTap: () {
               _signOut();
@@ -194,7 +233,7 @@ class _ListViewLogState extends State<ListViewLog> {
   */
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("MiLog")),
+      appBar: AppBar(title: Text("My Trips")),
       drawer: _showDrawer(context),
       body: Scaffold(
         body: Center(
@@ -228,7 +267,13 @@ class _ListViewLogState extends State<ListViewLog> {
     });
   }
 
-  void _deleteLog(BuildContext context, Trip trip, int position) async {
+  //Check to make sure we can't delete a trip that is in progress
+  void checkIfCanDel(BuildContext context, Trip trip, int position) {
+    if(!trip.inProgress)
+      _showConfimDelDialog(context, trip, position);
+  }
+
+  void _deleteTrip(BuildContext context, Trip trip, int position) async {
     await tripsReference.child(trip.tripID).remove().then((_) {
       setState(() {
         _tripList.removeAt(position);
@@ -245,7 +290,7 @@ class _ListViewLogState extends State<ListViewLog> {
     );
   }
 
-  void _naviagateToTripAction(BuildContext context, Trip trip) async {
+  void _navigateToTripAction(BuildContext context, Trip trip) async {
     await Navigator.push(
       context,
       //We want to update the Trip, so pass true
@@ -306,6 +351,45 @@ class _ListViewLogState extends State<ListViewLog> {
         }
       }
     }
+  }
+
+  // user defined function
+  void _showConfimDelDialog(BuildContext context, Trip trip, int position) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text("Delete Trip",
+              style: TextStyle(fontSize: 18.0, color: Colors.red)),
+          content: Text("Are you sure you want to delete this trip?",
+              style: TextStyle(fontSize: 18.0, color: Colors.black)),
+          actions: <Widget>[
+            //buttons at the bottom of the dialog
+            FlatButton(
+              child: Text(
+                "Yes",
+                style: TextStyle(fontSize: 18.0, color: Colors.red),
+              ),
+              onPressed: () {
+                _deleteTrip(context, trip, position);
+                Navigator.of(context).pop();
+              },
+            ),
+             FlatButton(
+              child: Text(
+                "No",
+                style: TextStyle(fontSize: 18.0, color: Colors.black),
+              ),
+              onPressed: () {
+                
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   //Dialog that shows a trip is in progress
