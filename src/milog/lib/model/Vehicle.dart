@@ -9,7 +9,7 @@ class Vehicle {
   int _lastKnownOdometer; // last reported Odo of the vehicle. 
       // If new trip w/ this vehicle has starting odo less than this number, throw error.
 
-  Vehicle(this._name, this._userID, this._vehicleID, this.inUse, this._bluetoothMAC, this._lastKnownOdometer);
+  Vehicle(this._name, this._userID, this._vehicleID, this._inUse, this._bluetoothMAC, this._lastKnownOdometer);
 
   // named constructor "defaultVehicle"
   Vehicle.defaultVehicle() {
