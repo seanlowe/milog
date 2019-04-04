@@ -102,8 +102,8 @@ class _ListViewLogState extends State<ListViewLog> {
                   
                   decoration: 
                   (_tripList[position].inProgress)
-                      ? new BoxDecoration(color: Colors.yellow[300], border: new Border.all(color: Colors.black, width: 2))
-                      : new BoxDecoration(color: Colors.white, border: new Border.all(color: Colors.black, width: 2)),
+                      ? new BoxDecoration(color: Colors.yellow[300], border: new Border(bottom: BorderSide(color: Colors.blue, width: 2)))
+                      : new BoxDecoration(color: Colors.white, border: new Border(bottom: BorderSide(color: Colors.blue, width: 2))),
                   //If trip is in progress, the containers is yellow
                   child: ListTile(
                       title: Text(

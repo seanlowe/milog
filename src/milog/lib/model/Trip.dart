@@ -8,7 +8,7 @@ class Trip {
   int _endOdometer; //The end odometer reading
   int _milesTraveled; //The delta miles
   int _startTime; //The start time of trip
-  String _endTime; //The ending time of the trip
+  int _endTime; //The ending time of the trip
   bool _paused; //If the trip is paused
   String _notes; //Trip notes (client info etc)
   bool _inProgress; //If the trip is currently in progress
@@ -37,7 +37,7 @@ class Trip {
     this._carID = "carID";
     this._notes = "tripNotes";
     this._startTime = 0;
-    this._endTime = "endTime";
+    this._endTime = 0;
     this._paused = false;
     this._inProgress = false;
     this._startOdometer = 0;
@@ -54,7 +54,7 @@ class Trip {
     this._carID = null;
     this._notes = " ";
     this._startTime = 0;
-    this._endTime = null;
+    this._endTime = 0;
     this._paused = false;
     this._inProgress = false;
     this._startOdometer = 0;
@@ -70,8 +70,8 @@ class Trip {
   String get carID => _carID;
   int get startOdometer => _startOdometer;
   int get endOdometer => _endOdometer;
-  String get startTime => null;
-  String get endTime => _endTime;
+  int get startTime => _startTime;
+  int get endTime => _endTime;
   bool get paused => _paused;
   String get notes => _notes;
   bool get inProgress => _inProgress;
@@ -116,7 +116,8 @@ class Trip {
         _milesTraveled = snapshot.value['milesTraveled'],
         _inProgress = snapshot.value['inProgress'],
         _paused = snapshot.value['paused'],
-        _startTime = snapshot.value['startTime'],
+        _startTime = snapshot.value['startTime'].toInt(),
+        _endTime = snapshot.value['endTime'].toInt(),
         _vehicle = snapshot.value['vehicle'],
         _totCharges = snapshot.value['totCharges'].toDouble();
 
@@ -183,5 +184,12 @@ class Trip {
       _totCharges += newCharge;
 
     print("totCharges = " + _totCharges.toString());
+  }
+
+  /* Called if user is ending a paused trip */
+  void endPausedTrip(){
+    _endOdometer = _startOdometer;
+    _paused = false;
+    _inProgress = false;
   }
 }

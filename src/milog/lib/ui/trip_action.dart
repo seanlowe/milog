@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:milog/model/Trip.dart';
+import 'package:intl/intl.dart';
 
 //This class handles pausing, resuming and ending trips
 
@@ -57,6 +58,17 @@ class _TripScreenActionState extends State<TripAction> {
     );
   }
 
+  String getTripDate() {
+    print("startTime timestamp in Class: " + widget.trip.startTime.toString());
+
+    DateTime date =
+        new DateTime.fromMillisecondsSinceEpoch(widget.trip.startTime)
+            .toLocal();
+    var formatter = new DateFormat('MM/dd/yyyy');
+    String formatted = formatter.format(date);
+    return formatted;
+  }
+
   //Displays the information of the selected trip
   Widget _showSelectedTrip() {
     return Container(
@@ -66,11 +78,17 @@ class _TripScreenActionState extends State<TripAction> {
             border: Border.all(color: Colors.black, width: 2),
             borderRadius: BorderRadius.all(Radius.circular(20.0))),
         child: Column(children: <Widget>[
-          Text(widget.trip.notes,
+          Text("Notes: " + widget.trip.notes,
+              textAlign: TextAlign.left,
               style: new TextStyle(fontSize: 20.0, color: Colors.black)),
-          Text(widget.trip.vehicle,
+          Text("Vehicle: " + widget.trip.vehicle,
+              textAlign: TextAlign.left,
               style: new TextStyle(fontSize: 20.0, color: Colors.black)),
-          Text(widget.trip.startOdometer.toString(),
+          Text("Starting Odometer: " + widget.trip.startOdometer.toString(),
+              textAlign: TextAlign.left,
+              style: new TextStyle(fontSize: 20.0, color: Colors.black)),
+          Text("Date: " + getTripDate(),
+              textAlign: TextAlign.left,
               style: new TextStyle(fontSize: 20.0, color: Colors.black))
         ]));
   }
@@ -94,12 +112,29 @@ class _TripScreenActionState extends State<TripAction> {
   End the trip by setting the endOdometer and invoke calculation
   */
   void processOdoMiles() {
-    if (_odometerReadingDiag.text == "") {
+    /*If trip is not paused and the odometer text field is empty */
+    if (_odometerReadingDiag.text.isEmpty && !widget.trip.paused) {
       print("User did not put a Odometer value! -> aborting");
       _showDialogEmptyOdo();
-    }
-    //TODO: Need to check if the input is correct!
-    else {
+      /*If trip is paused and odometer text field is empty */
+    } else if (_odometerReadingDiag.text.isEmpty && widget.trip.paused) {
+      print("Trip is paused and Odo text field is empty -> ending trip");
+      widget.trip.endPausedTrip();
+      //Sets endOdometer in DB
+      tripsReference
+          .child(widget.trip.tripID)
+          .child("endOdometer")
+          .set(widget.trip.endOdometer);
+      //Sets endTime via Server timestamp
+      tripsReference
+          .child(widget.trip.tripID)
+          .child("endTime")
+          .set(ServerValue.timestamp);
+      //End the trip - set inProgress and paused to false just in case
+      tripsReference.child(widget.trip.tripID).child("inProgress").set(false);
+      tripsReference.child(widget.trip.tripID).child("paused").set(false);
+      Navigator.pop(context);
+    } else {
       //Sets the end Odometer reading in the DB
       widget.trip.setEndOdo(int.parse(_odometerReadingDiag.text));
       //Sets endOdometer in DB
@@ -226,12 +261,16 @@ class _TripScreenActionState extends State<TripAction> {
                 style: TextStyle(fontSize: 18.0, color: Colors.green),
               ),
               onPressed: () {
-                double newChargeAmt = double.parse(_chargeFieldControl.text.toString());
+                double newChargeAmt =
+                    double.parse(_chargeFieldControl.text.toString());
                 print("Got: " + newChargeAmt.toString() + " from user.");
                 //Set it in the trip object
                 widget.trip.addCharge(newChargeAmt);
                 //Set it in DB as well
-                tripsReference.child(widget.trip.tripID).child('totCharges').set(widget.trip.totCharges);
+                tripsReference
+                    .child(widget.trip.tripID)
+                    .child('totCharges')
+                    .set(widget.trip.totCharges);
                 Navigator.of(context).pop();
               },
             ),
@@ -307,7 +346,7 @@ class _TripScreenActionState extends State<TripAction> {
             child: Text('Add Charges \$',
                 style: new TextStyle(fontSize: 20.0, color: Colors.white)),
             onPressed: () {
-               _showDialogAddCharge();
+              _showDialogAddCharge();
             },
           ),
         ));

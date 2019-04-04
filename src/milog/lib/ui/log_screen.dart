@@ -7,6 +7,7 @@ passed in to determine if we are adding or updating
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:milog/model/Trip.dart';
+import 'package:intl/intl.dart';
 
 class LogScreen extends StatefulWidget {
   final Trip trip;
@@ -38,6 +39,7 @@ class _LogScreenState extends State<LogScreen> {
   @override
   void initState() {
     super.initState();
+    getTripDate();
 
     tripDatabase = FirebaseDatabase.instance.reference();
     tripsReference = tripDatabase.child('Trips');
@@ -86,7 +88,7 @@ class _LogScreenState extends State<LogScreen> {
                   'endTime': 0,
                   'endOdometer': 0,
                   'milesTraveled': 0,
-                  'totCharges' : zero,
+                  'totCharges': zero,
                   'userID': widget.userId,
                   'inProgress': true,
                   'paused': false
@@ -177,15 +179,22 @@ class _LogScreenState extends State<LogScreen> {
             border: Border.all(color: Colors.black, width: 2),
             borderRadius: BorderRadius.all(Radius.circular(20.0))),
         child: Column(children: <Widget>[
-          Text("Notes: " + widget.trip.notes, textAlign: TextAlign.left,
+          Text("Notes: " + widget.trip.notes,
+              textAlign: TextAlign.left,
               style: new TextStyle(fontSize: 20.0, color: Colors.black)),
-          Text("Vehicle: " + widget.trip.vehicle, textAlign: TextAlign.left,
+          Text("Vehicle: " + widget.trip.vehicle,
+              textAlign: TextAlign.left,
               style: new TextStyle(fontSize: 20.0, color: Colors.black)),
-          Text(widget.trip.startOdometer.toString(), textAlign: TextAlign.left,
+          Text("Miles Traveled: " + widget.trip.milesTraveled.toString(),
+              textAlign: TextAlign.left,
+              style: new TextStyle(fontSize: 20.0, color: Colors.black)),
+          Text("Date: " + getTripDate(),
+              textAlign: TextAlign.left,
               style: new TextStyle(fontSize: 20.0, color: Colors.black))
         ]));
   }
 
+  //Button for adding charges when the trip is over
   Widget _showAddChargeButton() {
     print("User Pressed Toll Charge Button!");
     return new Padding(
@@ -229,12 +238,16 @@ class _LogScreenState extends State<LogScreen> {
                 style: TextStyle(fontSize: 18.0, color: Colors.green),
               ),
               onPressed: () {
-                double newChargeAmt = double.parse(_chargeFieldControl.text.toString());
+                double newChargeAmt =
+                    double.parse(_chargeFieldControl.text.toString());
                 print("Got: " + newChargeAmt.toString() + " from user.");
                 //Set it in the trip object
                 widget.trip.addCharge(newChargeAmt);
                 //Set it in DB as well
-                tripsReference.child(widget.trip.tripID).child('totCharges').set(widget.trip.totCharges);
+                tripsReference
+                    .child(widget.trip.tripID)
+                    .child('totCharges')
+                    .set(widget.trip.totCharges);
                 Navigator.of(context).pop();
               },
             ),
@@ -251,6 +264,16 @@ class _LogScreenState extends State<LogScreen> {
         );
       },
     );
+  }
+
+  String getTripDate() {
+    print("startTime timestamp in Class: " + widget.trip.startTime.toString());
+    
+    DateTime date =
+        new DateTime.fromMillisecondsSinceEpoch(widget.trip.startTime).toLocal();
+    var formatter = new DateFormat('MM/dd/yyyy');
+    String formatted = formatter.format(date);
+    return formatted;
   }
 
   @override
