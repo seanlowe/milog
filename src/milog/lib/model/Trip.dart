@@ -110,14 +110,15 @@ class Trip {
       : _tripID = snapshot.key,
         _userID = snapshot.value["userID"],
         _carID = snapshot.value['carID'],
-        _notes = snapshot.value['notes'],
+        _notes = snapshot.value['notes'].toString(),
         _startOdometer = snapshot.value['startOdometer'],
         _endOdometer = snapshot.value['endOdometer'],
         _milesTraveled = snapshot.value['milesTraveled'],
         _inProgress = snapshot.value['inProgress'],
         _paused = snapshot.value['paused'],
         _startTime = snapshot.value['startTime'],
-        _vehicle = snapshot.value['vehicle'];
+        _vehicle = snapshot.value['vehicle'],
+        _totCharges = snapshot.value['totCharges'].toDouble();
 
   toJson() {
     return {
@@ -131,6 +132,7 @@ class Trip {
       "endOdometer": endOdometer,
       "milesTraveled": milesTraveled,
       "vehicle": vehicle,
+      "totCharges": totCharges
     };
   }
 
@@ -177,7 +179,9 @@ class Trip {
 
   //Increments the charges & tolls 
   void addCharge(double newCharge){
-    if(newCharge >= 0)
+    if(newCharge >= 0.0)
       _totCharges += newCharge;
+
+    print("totCharges = " + _totCharges.toString());
   }
 }

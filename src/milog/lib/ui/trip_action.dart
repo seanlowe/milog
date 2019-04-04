@@ -226,6 +226,12 @@ class _TripScreenActionState extends State<TripAction> {
                 style: TextStyle(fontSize: 18.0, color: Colors.green),
               ),
               onPressed: () {
+                double newChargeAmt = double.parse(_chargeFieldControl.text.toString());
+                print("Got: " + newChargeAmt.toString() + " from user.");
+                //Set it in the trip object
+                widget.trip.addCharge(newChargeAmt);
+                //Set it in DB as well
+                tripsReference.child(widget.trip.tripID).child('totCharges').set(widget.trip.totCharges);
                 Navigator.of(context).pop();
               },
             ),

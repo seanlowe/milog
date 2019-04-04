@@ -76,6 +76,7 @@ class _LogScreenState extends State<LogScreen> {
               if (widget.trip.tripID != null) {
                 updateTrip();
               } else {
+                double zero = 0.0;
                 //TODO: use push class/object instead
                 tripsReference.push().set({
                   'notes': _notesController.text,
@@ -85,7 +86,7 @@ class _LogScreenState extends State<LogScreen> {
                   'endTime': 0,
                   'endOdometer': 0,
                   'milesTraveled': 0,
-                  'totCharges' : 0.0,
+                  'totCharges' : zero,
                   'userID': widget.userId,
                   'inProgress': true,
                   'paused': false
@@ -185,7 +186,7 @@ class _LogScreenState extends State<LogScreen> {
         ]));
   }
 
-  Widget _showTollChargeButton() {
+  Widget _showAddChargeButton() {
     print("User Pressed Toll Charge Button!");
     return new Padding(
         padding: EdgeInsets.all(15.0),
@@ -199,9 +200,57 @@ class _LogScreenState extends State<LogScreen> {
             child: Text('Add Charges \$',
                 style: new TextStyle(fontSize: 20.0, color: Colors.white)),
             onPressed: () {
+              _showDialogAddCharge();
             },
           ),
         ));
+  }
+
+  void _showDialogAddCharge() {
+    TextEditingController _chargeFieldControl = TextEditingController();
+    print("showDialogAddCharge invoked");
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text("Trip Charge",
+              style: TextStyle(fontSize: 18.0, color: Colors.black)),
+          content: TextField(
+            controller: _chargeFieldControl,
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            decoration: InputDecoration(hintText: "0.00"),
+          ),
+          actions: <Widget>[
+            //buttons at the bottom of the dialog
+            FlatButton(
+              child: Text(
+                "Add",
+                style: TextStyle(fontSize: 18.0, color: Colors.green),
+              ),
+              onPressed: () {
+                double newChargeAmt = double.parse(_chargeFieldControl.text.toString());
+                print("Got: " + newChargeAmt.toString() + " from user.");
+                //Set it in the trip object
+                widget.trip.addCharge(newChargeAmt);
+                //Set it in DB as well
+                tripsReference.child(widget.trip.tripID).child('totCharges').set(widget.trip.totCharges);
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text(
+                "Cancel",
+                style: TextStyle(fontSize: 18.0, color: Colors.red),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -221,7 +270,7 @@ class _LogScreenState extends State<LogScreen> {
             _showVehicleTextBox(),
             _showOdometerTextBox(),
             //Optinal
-            (widget.trip.startOdometer != 0) ? _showTollChargeButton() : null,
+            (widget.trip.startOdometer != 0) ? _showAddChargeButton() : null,
             _showPrimaryButton(),
           ].where((c) => c != null).toList(),
         ),
