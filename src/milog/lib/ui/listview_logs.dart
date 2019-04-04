@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:milog/model/Trip.dart';
 import 'package:milog/ui/log_screen.dart';
 import 'package:milog/ui/trip_action.dart';
+import 'package:milog/ui/vehicle_list.dart';
 
 class ListViewLog extends StatefulWidget {
   ListViewLog({Key key, this.auth, this.userId, this.onSignedOut})
@@ -205,6 +206,7 @@ class _ListViewLogState extends State<ListViewLog> {
             title: Text('Vehicles'),
             leading: new Icon(Icons.directions_car, color: Colors.blue),
             onTap: () {
+              _navigateToVehicles(context);
               // Update the state of the app
               // ...
               // Then close the drawer
@@ -279,6 +281,14 @@ class _ListViewLogState extends State<ListViewLog> {
         _tripList.removeAt(position);
       });
     });
+  }
+
+  void _navigateToVehicles(BuildContext context) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => VehicleList(widget.userId)),
+    );
   }
 
   void _navigateToLog(BuildContext context, Trip trip) async {

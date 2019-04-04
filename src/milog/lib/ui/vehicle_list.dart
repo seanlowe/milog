@@ -7,9 +7,10 @@ import 'package:milog/ui/vehicle_action.dart';
 
 class VehicleList extends StatefulWidget {
   final String userID;
-  final Vehicle vehicle;
+  //final Vehicle vehicle;
 
-  VehicleList(this.userID, this.vehicle);
+  //VehicleList(this.userID, this.vehicle);
+  VehicleList(this.userID);
 
   @override
   _VehicleListState createState() => new _VehicleListState();
