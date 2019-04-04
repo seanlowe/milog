@@ -92,8 +92,6 @@ class _VehicleListState extends State<VehicleList> {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

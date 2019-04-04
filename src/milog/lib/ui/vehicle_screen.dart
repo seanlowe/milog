@@ -1,7 +1,8 @@
 /* 
-This widget adds or updates vehicles. It's called using a navigator.
-Since the same widget is used for updating and adding, a bool is
-passed in to determine if we are adding or updating.
+This widget adds vehicles. It's called using a navigator.
+  fields for new vehicles:
+    - name
+    - current odometer reading
 */
 
 import 'package:flutter/material.dart';
@@ -9,12 +10,10 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:milog/model/Vehicle.dart';
 
 class VehicleScreen extends StatefulWidget {
-  final Vehicle vehicle;
   final String userID;
+  final Vehicle vehicle;
 
-  // are we updating a vehicle?
-  final bool update;
-  VehicleScreen(this.userID, this.vehicle, this.update);
+  VehicleScreen(this.userID, this.vehicle);
 
   @override
   State<StatefulWidget> createState() => new _VehicleScreenState();
@@ -23,15 +22,12 @@ class VehicleScreen extends StatefulWidget {
 class _VehicleScreenState extends State<VehicleScreen> {
   // every textbox needs a "controller"
   TextEditingController _nameController;
-  TextEditingController _vehicleController;
+  TextEditingController _lastKnownOdoController;
 
   var vehicleDatabase;
   var vehicleReference;
 
-  // various title Strings for VehicleScreen
-  String strUpdateTitle = "Update Vehicle";
-  String strNewVehicleTitle = "New Vehicle";
-  String title;
+  String title = "New Vehicle";
 
   @override
   void initState() {
@@ -40,12 +36,10 @@ class _VehicleScreenState extends State<VehicleScreen> {
     vehicleDatabase = FirebaseDatabase.instance.reference();
     vehicleReference = vehicleDatabase.child('Vehicles');
 
-    title = widget.update ? strUpdateTitle : strNewVehicleTitle;
-
     FirebaseDatabase.instance.setPersistenceEnabled(true);
 
     _nameController = new TextEditingController(text: widget.vehicle.name);
-
+    _lastKnownOdoController = new TextEditingController(text: widget.vehicle.lastKnownOdometer.toString());
   }
 
   @override
@@ -58,8 +52,18 @@ class _VehicleScreenState extends State<VehicleScreen> {
         child: Column(
           children: <Widget>[
             TextField(
+              // name field
               controller: _nameController,
               decoration: InputDecoration(labelText: 'Name'),
+              style: TextStyle(
+                fontSize: 22.0,
+                color: Colors.black,
+              )
+            ),
+            TextField(
+              // odometer field
+              controller: _lastKnownOdoController,
+              decoration: InputDecoration(labelText: 'Current Odometer Reading'),
               style: TextStyle(
                 fontSize: 22.0,
                 color: Colors.black,
@@ -71,4 +75,4 @@ class _VehicleScreenState extends State<VehicleScreen> {
     );
   }
   
-}
+} // end of class _VehicleScreenState
