@@ -210,7 +210,6 @@ class _ListViewLogState extends State<ListViewLog> {
               // Update the state of the app
               // ...
               // Then close the drawer
-              Navigator.pop(context);
             },
           ),
           ListTile(
@@ -289,6 +288,7 @@ class _ListViewLogState extends State<ListViewLog> {
       MaterialPageRoute(
         builder: (context) => VehicleList(widget.userId)),
     );
+    Navigator.pop(context);
   }
 
   void _navigateToLog(BuildContext context, Trip trip) async {
