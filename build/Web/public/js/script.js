@@ -206,7 +206,7 @@ async function generateTripTable(trips) {
       trips[i].notes,
       trips[i].vehicle,
       trips[i].milesTraveled,
-      '<div class="text-center"><a href="home.html#myDeleteModal" data-toggle="modal" class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></a> <a href="home.html#myUpdateModal" data-toggle="modal" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a></div>'
+      '<div class="text-center"><a href="home.html#myDeleteModal" data-toggle="modal" id="deleteRow" class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></a> <a href="home.html#myUpdateModal" data-toggle="modal" id="editRow" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a></div>'
       
     ]);
   }
@@ -245,17 +245,18 @@ async function generateTripTable(trips) {
      */
     var nCloneTh = document.createElement("th");
     var nCloneTd = document.createElement("td");
+    nCloneTh.style.width = "50px";
     nCloneTh.innerHTML = "Details";
     nCloneTd.innerHTML =
       '<img src="lib/advanced-datatable/images/details_open.png">';
     nCloneTd.className = "center";
 
     $("#hidden-table-info thead tr").each(function() {
-      this.insertBefore(nCloneTh, this.childNodes[0]);
+      this.insertBefore(nCloneTh, this.childNodes[4]);
     });
 
     $("#hidden-table-info tbody tr").each(function() {
-      this.insertBefore(nCloneTd.cloneNode(true), this.childNodes[0]);
+      this.insertBefore(nCloneTd.cloneNode(true), this.childNodes[4]);
     });
 
     /* Add event listener for opening and closing details
@@ -274,6 +275,11 @@ async function generateTripTable(trips) {
         oTable.fnOpen(nTr, fnFormatDetails(oTable, nTr), "details");
       }
     });
+
+    $("#hidden-table-info tbody td").live("click", function() {
+      var nTr = $(this).parents("tr")[0];
+    });
+
   });
 }
 
@@ -308,13 +314,32 @@ function getTripData(snapshot, uid) {
       );
     }
   });
-  // console.log("Trip array = " + tripArray.length);
   return tripArray;
   // });
 }
 
+function createLog() {
+  
+}
+
 // Delete log
 function deleteLog() {
+
+}
+
+function updateLog() {
+
+}
+
+function addVehicle() {
+
+}
+
+function deleteVehicle() {
+
+}
+
+function updateVehicle() {
 
 }
 
@@ -378,6 +403,10 @@ window.onload = function() {
 // jQuery ready start
 $(document).ready(function() {
   // jQuery code
+
+
+
+
   $("input[data-type='currency']").on({
     keyup: function() {
       formatCurrency($(this));

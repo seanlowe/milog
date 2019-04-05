@@ -1,367 +1,247 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <meta name="author" content="Dashboard" />
+    <meta
+      name="keyword"
+      content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina"
+    />
+    <title>User Profile</title>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="">
-  <meta name="author" content="Dashboard">
-  <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
-  <title>User Profile</title>
+    <!-- Favicons -->
+    <link href="images/favicons/favicon-16x16.png" rel="icon" />
+    <link href="img/apple-touch-icon.png" rel="apple-touch-icon" />
 
-  <!-- Favicons -->
-  <link href="images/favicons/favicon-16x16.png" rel="icon">
-  <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
+    <!-- Bootstrap core CSS -->
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <!--external css-->
+    <link href="lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <!-- Custom styles for this template -->
+    <link href="css/style-more.css" rel="stylesheet" />
+    <link href="css/style-responsive.css" rel="stylesheet" />
 
-  <!-- Bootstrap core CSS -->
-  <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <!--external css-->
-  <link href="lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
-  <!-- Custom styles for this template -->
-  <link href="css/style-more.css" rel="stylesheet">
-  <link href="css/style-responsive.css" rel="stylesheet">
-
-  <!-- =======================================================
+    <!-- =======================================================
     Template Name: Dashio
     Template URL: https://templatemag.com/dashio-bootstrap-admin-template/
     Author: TemplateMag.com
     License: https://templatemag.com/license/
   ======================================================= -->
-</head>
+  </head>
 
-<body>
-  <section id="container">
-    <!-- **********************************************************************************************************************************************************
+  <body>
+    <section id="container">
+      <!-- **********************************************************************************************************************************************************
         TOP BAR CONTENT & NOTIFICATIONS
         *********************************************************************************************************************************************************** -->
-    <!--header start-->
-    <header class="header black-bg">
-      <div class="sidebar-toggle-box">
-        <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
-      </div>
-      <!--logo start-->
-      <a href="home.html" class="logo"><b>Mi<span>Log</span></b></a>
-      <!--logo end-->
-      
-      <div class="top-menu">
-        <ul class="nav pull-right top-menu">
-          <!-- <li><a href="faq.html" class="faq"><i class="fa fa-question"></i><span>FAQ</span></a></li> -->
-          <li><a id="sign-out" class="logout" href="login.html">Logout</a></li>
-        </ul>
-      </div>
-    </header>
-    <!--header end-->
-    <!-- **********************************************************************************************************************************************************
+      <!--header start-->
+      <header class="header black-bg">
+        <div class="sidebar-toggle-box">
+          <div
+            class="fa fa-bars tooltips"
+            data-placement="right"
+            data-original-title="Toggle Navigation"
+          ></div>
+        </div>
+        <!--logo start-->
+        <a href="home.html" class="logo"
+          ><b>Mi<span>Log</span></b></a
+        >
+        <!--logo end-->
+
+        <div class="top-menu">
+          <ul class="nav pull-right top-menu">
+            <!-- <li><a href="faq.html" class="faq"><i class="fa fa-question"></i><span>FAQ</span></a></li> -->
+            <li>
+              <a id="sign-out" class="logout" href="login.html">Logout</a>
+            </li>
+          </ul>
+        </div>
+      </header>
+      <!--header end-->
+      <!-- **********************************************************************************************************************************************************
         MAIN SIDEBAR MENU
         *********************************************************************************************************************************************************** -->
-    <!--sidebar start-->
-    <aside>
-      <div id="sidebar" class="nav-collapse ">
-        <!-- sidebar menu start-->
-        <ul class="sidebar-menu" id="nav-accordion">
-          <p class="centered"><a href="profile.html"><img src="images/apple-icon-76x76.png" class="img-circle" width="80"></a></p>
-          <h5 id="userEmail" class="centered"></h5>
-          <li class="mt">
-            <a href="home.html">
-              <i class="fa fa-dashboard"></i>
-              <span>Logs</span>
-            </a>
-          </li>
-          <li class="sub-menu">
-            <a href="vehicles.html">
-              <i class="fa fa-car"></i>
-              <span>Vehicles</span>
-            </a>
-          </li>
-          <li class="sub-menu">
-            <a href="print-export.html">
-              <i class="fa fa-print"></i>
-              <span>Print/Export</span>
-            </a>
-          </li>
-          <li class="sub-menu">
-            <a class="active" href="#">
-              <i class="fa fa-user"></i>
-              <span>Account</span>
-            </a>
-          </li>
-          <li class="sub-menu">
-            <a href="faq.html">
-              <i class="fa fa-question"></i>
-              <span>FAQ</span>
-            </a>
-          </li>
-          
-        </ul>
-        <!-- sidebar menu end-->
-      </div>
-    </aside>
-    <!--sidebar end-->
-    <!-- **********************************************************************************************************************************************************
+      <!--sidebar start-->
+      <aside>
+        <div id="sidebar" class="nav-collapse ">
+          <!-- sidebar menu start-->
+          <ul class="sidebar-menu" id="nav-accordion">
+            <p class="centered">
+              <a href="profile.html"
+                ><img
+                  src="images/apple-icon-76x76.png"
+                  class="img-circle"
+                  width="80"
+              /></a>
+            </p>
+            <h5 id="userEmail" class="centered"></h5>
+            <li class="mt">
+              <a href="home.html">
+                <i class="fa fa-dashboard"></i>
+                <span>Logs</span>
+              </a>
+            </li>
+            <li class="sub-menu">
+              <a href="vehicles.html">
+                <i class="fa fa-car"></i>
+                <span>Vehicles</span>
+              </a>
+            </li>
+            <li class="sub-menu">
+              <a href="print-export.html">
+                <i class="fa fa-print"></i>
+                <span>Print/Export</span>
+              </a>
+            </li>
+            <li class="sub-menu">
+              <a class="active" href="#">
+                <i class="fa fa-user"></i>
+                <span>Account</span>
+              </a>
+            </li>
+            <li class="sub-menu">
+              <a href="faq.html">
+                <i class="fa fa-question"></i>
+                <span>FAQ</span>
+              </a>
+            </li>
+          </ul>
+          <!-- sidebar menu end-->
+        </div>
+      </aside>
+      <!--sidebar end-->
+      <!-- **********************************************************************************************************************************************************
         MAIN CONTENT
         *********************************************************************************************************************************************************** -->
-    <!--main content start-->
-    <section id="main-content">
-      <section class="wrapper site-min-height">
-        <div class="row mt">
-          
-          <!-- /col-lg-12 -->
-          <div class="col-lg-12 mt">
-            <div class="row content-panel">
-              <div class="panel-heading">
-                <ul class="nav nav-tabs nav-justified">
-                  <!-- <li class="active">
-                    <a data-toggle="tab" href="#overview">Overview</a>
-                  </li>
-                  <li>
-                    <a data-toggle="tab" href="#contact" class="contact-map">Contact</a>
-                  </li> -->
-                  <li class="active">
-                    <a data-toggle="tab" href="#edit">Edit Profile</a>
-                  </li>
-                </ul>
-              </div>
-              <!-- /panel-heading -->
-              <!-- <div class="panel-body">
-                <div class="tab-content">
-                  <div id="overview" class="tab-pane">
-                    <div class="row">
-                      <div class="col-md-6">
-                        <textarea rows="3" class="form-control" placeholder="Whats on your mind?"></textarea>
-                        <div class="grey-style">
-                          <div class="pull-left">
-                            <button class="btn btn-sm btn-theme"><i class="fa fa-camera"></i></button>
-                            <button class="btn btn-sm btn-theme"><i class="fa fa-map-marker"></i></button>
-                          </div>
-                          <div class="pull-right">
-                            <button class="btn btn-sm btn-theme03">POST</button>
-                          </div>
-                        </div>
-                        <div class="detailed mt">
-                          <h4>Recent Activity</h4>
-                          <div class="recent-activity">
-                            <div class="activity-icon bg-theme"><i class="fa fa-check"></i></div>
-                            <div class="activity-panel">
-                              <h5>1 HOUR AGO</h5>
-                              <p>Purchased: Dashio Admin Panel & Front-end theme.</p>
-                            </div>
-                            <div class="activity-icon bg-theme02"><i class="fa fa-trophy"></i></div>
-                            <div class="activity-panel">
-                              <h5>5 HOURS AGO</h5>
-                              <p>Task Completed. Resolved issue with Disk Space.</p>
-                            </div>
-                            <div class="activity-icon bg-theme04"><i class="fa fa-rocket"></i></div>
-                            <div class="activity-panel">
-                              <h5>3 DAYS AGO</h5>
-                              <p>Launched a new product: Flat Pack Heritage.</p>
-                            </div>
-                          </div> -->
-                          <!-- /recent-activity -->
-                        <!-- </div> -->
-                        <!-- /detailed -->
-                      <!-- </div> -->
-                      <!-- /col-md-6 -->
-                      <!-- <div class="col-md-6 detailed">
-                        <h4>User Stats</h4>
-                        <div class="row centered mt mb">
-                          <div class="col-sm-4">
-                            <h1><i class="fa fa-money"></i></h1>
-                            <h3>$22,980</h3>
-                            <h6>LIFETIME EARNINGS</h6>
-                          </div>
-                          <div class="col-sm-4">
-                            <h1><i class="fa fa-trophy"></i></h1>
-                            <h3>37</h3>
-                            <h6>COMPLETED TASKS</h6>
-                          </div>
-                          <div class="col-sm-4">
-                            <h1><i class="fa fa-shopping-cart"></i></h1>
-                            <h3>1980</h3>
-                            <h6>ITEMS SOLD</h6>
-                          </div>
-                        </div>
-                        <h4>Pending Tasks</h4>
-                        <div class="row centered">
-                          <div class="col-md-8 col-md-offset-2">
-                            <h5>Dashboard Update (40%)</h5>
-                            <div class="progress">
-                              <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                                <span class="sr-only">40% Complete (success)</span>
-                              </div>
-                            </div>
-                            <h5>Unanswered Messages (80%)</h5>
-                            <div class="progress">
-                              <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-                                <span class="sr-only">80% Complete (success)</span>
-                              </div>
-                            </div>
-                            <h5>Product Review (60%)</h5>
-                            <div class="progress">
-                              <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
-                                <span class="sr-only">60% Complete (success)</span>
-                              </div>
-                            </div>
-                            <h5>Friend Requests (90%)</h5>
-                            <div class="progress">
-                              <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 90%">
-                                <span class="sr-only">90% Complete (success)</span>
-                              </div>
-                            </div>
-                          </div> -->
-                          <!-- /col-md-8 -->
-                        <!-- </div> -->
-                        <!-- /row -->
-                      <!-- </div> -->
-                      <!-- /col-md-6 -->
-                    <!-- </div> -->
-                    <!-- /OVERVIEW -->
-                  <!-- </div> -->
-                  <!-- /tab-pane -->
-                  <!-- <div id="contact" class="tab-pane">
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div id="map"></div>
-                      </div> -->
-                      <!-- /col-md-6 -->
-                      <!-- <div class="col-md-6 detailed">
-                        <h4>Location</h4>
-                        <div class="col-md-8 col-md-offset-2 mt">
-                          <p>
-                            Postal Address<br/> PO BOX 12988, Sutter Ave<br/> Brownsville, New York.
-                          </p>
-                          <br>
-                          <p>
-                            Headquarters<br/> 844 Sutter Ave,<br/> 9003, New York.
-                          </p>
-                        </div>
-                        <h4>Contacts</h4>
-                        <div class="col-md-8 col-md-offset-2 mt">
-                          <p>
-                            Phone: +33 4898-4303<br/> Cell: 48 4389-4393<br/>
-                          </p>
-                          <br>
-                          <p>
-                            Email: hello@dashiotheme.com<br/> Skype: UseDashio<br/> Website: http://Alvarez.is
-                          </p>
-                        </div>
-                      </div> -->
-                      <!-- /col-md-6 -->
-                    <!-- </div> -->
-                    <!-- /row -->
-                  <!-- </div> -->
-                  <!-- /tab-pane -->
-                  <div id="edit" class="tab-pane active">
-                    <div class="row">
-                      <div class="col-lg-8 col-lg-offset-2 detailed">
-                        <h4 class="mb">Edit User Info</h4>
-                        <form role="form" class="form-horizontal">
-                          <!-- <div class="form-group">
-                            <label class="col-lg-2 control-label"> Avatar</label>
-                            <div class="col-lg-6">
-                              <input type="file" id="exampleInputFile" class="file-pos">
-                            </div>
-                          </div> -->
-                          <div class="form-group">
-                            <label class="col-lg-2 control-label">User Name</label>
-                            <div class="col-lg-6">
-                              <input type="text" placeholder=" " id="email" class="form-control">
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="col-lg-2 control-label">Email</label>
-                            <div class="col-lg-6">
-                              <input type="text" placeholder=" " id="email" class="form-control">
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="col-lg-2 control-label">Change Password</label>
-                            <div class="col-lg-10">
-                              <button class="btn btn-theme03" type="submit">Submit</button>
-                            </div>
-                          </div>
-                          <br>
-                          <div class="form-group">
-                            <div class="col-lg-offset-2 col-lg-10">
-                              <button class="btn btn-theme" type="submit">Save</button>
-                              <button class="btn btn-theme04" type="button">Cancel</button>
-                            </div>
-                          </div>
-                          <hr>
-                          <br>
-                          <div class="form-group">
-                            <label class="col-lg-2 control-label">Delete Account</label>
-                            <div class="col-lg-10">
-                              <button class="btn btn-theme04" type="button">Delete</button>
-                            </div>
-                          </div>
-                        </form>
-                      </div>
-                      <!-- /col-lg-8 -->
-                    </div>
-                    <!-- /row -->
-                  </div>
-                  <!-- /tab-pane -->
-                </div>
-                <!-- /tab-content -->
-              </div>
-              <!-- /panel-body -->
-            </div>
+      <!--main content start-->
+      <section id="main-content">
+        <section class="wrapper site-min-height">
+          <div class="row mt">
             <!-- /col-lg-12 -->
+            <div class="col-lg-12 mt">
+              <div class="row form-panel">
+                <div class="row">
+                  <div class="col-xs-8 col-xs-offset-2 detailed">
+                    <h4 class="mb">Edit User Info</h4>
+                    <form role="form" class="form-horizontal">
+                      <!-- <div class="form-group">
+                          <label class="col-lg-2 control-label"> Avatar</label>
+                          <div class="col-lg-6">
+                            <input type="file" id="exampleInputFile" class="file-pos">
+                          </div>
+                        </div> -->
+                      <!-- <div class="form-group">
+                          <label class="col-lg-2 control-label">User Name</label>
+                          <div class="col-lg-6">
+                            <input type="text" placeholder=" " id="email" class="form-control">
+                          </div>
+                        </div> -->
+                      <div class="">
+                        <div class="form-group">
+                          <label class="col-xs-4 col-lg-3 col-xl-2 control-label">
+                            <b>Change Email</b>
+                          </label>
+                          <div class="col-xs-8 col-lg-9 col-xl-10">
+                            <button class="btn btn-theme03" type="submit">
+                              Submit Request
+                            </button>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="col-xs-4 col-lg-3 col-xl-2 control-label">
+                            <b>Change Password</b>
+                          </label>
+                          <div class="col-xs-8 col-lg-9 col-xl-10">
+                            <button class="btn btn-theme03" type="submit">
+                              Submit Request
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      <br />
+                      <!-- <div class="form-group">
+                        <div class="col-lg-10">
+                          <button class="btn btn-theme" type="submit">
+                            Save
+                        </div>
+                      </div> -->
+                      <hr />
+                      <br />
+                      <div class="form-group">
+                        <label class="col-lg-2 control-label">
+                          <b>Delete Account</b>
+                        </label>
+                        <div class="col-lg-10">
+                          <button class="btn btn-theme04" type="button">
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <!-- /col-lg-8 -->
+                </div>
+                <!-- </div> -->
+              </div>
+              <!-- /col-lg-12 -->
+            </div>
+            <!-- /row -->
           </div>
-          <!-- /row -->
-        </div>
-        <!-- /container -->
+          <!-- /container -->
+        </section>
+        <!-- /wrapper -->
       </section>
-      <!-- /wrapper -->
-    </section>
-    <!-- /MAIN CONTENT -->
-    <!--main content end-->
-    <!--footer start-->
-    <footer class="site-footer">
-      <div class="text-center">
-        <p>
-          &copy; Copyrights <strong>Dashio</strong>. All Rights Reserved
-        </p>
-        <div class="credits">
-          <!--
+      <!-- /MAIN CONTENT -->
+      <!--main content end-->
+      <!--footer start-->
+      <footer class="site-footer">
+        <div class="text-center">
+          <p>&copy; Copyrights <strong>Dashio</strong>. All Rights Reserved</p>
+          <div class="credits">
+            <!--
             You are NOT allowed to delete the credit link to TemplateMag with free version.
             You can delete the credit link only if you bought the pro version.
             Buy the pro version with working PHP/AJAX contact form: https://templatemag.com/dashio-bootstrap-admin-template/
             Licensing information: https://templatemag.com/license/
           -->
-          Created with Dashio template by <a href="https://templatemag.com/">TemplateMag</a>
-        </div>
-        <a href="profile.html#" class="go-top">
-          <i class="fa fa-angle-up"></i>
+            Created with Dashio template by
+            <a href="https://templatemag.com/">TemplateMag</a>
+          </div>
+          <a href="profile.html#" class="go-top">
+            <i class="fa fa-angle-up"></i>
           </a>
-      </div>
-    </footer>
-    <!--footer end-->
+        </div>
+      </footer>
+      <!--footer end-->
 
-    <!-- Event Listeners From Sign In -->
+      <!-- Event Listeners From Sign In -->
+      <div id="sign-in"></div>
+      <div id="sign-up"></div>
+      <div id="password-reset"></div>
+      <div id="googleSignIn"></div>
+    </section>
     <div id="sign-in"></div>
     <div id="sign-up"></div>
     <div id="password-reset"></div>
-    <div id="googleSignIn"></div>
-
-  </section>
-  <div id="sign-in"></div>
-  <div id="sign-up"></div>
-  <div id="password-reset"></div>
-  <!-- js placed at the end of the document so the pages load faster -->
-  <script src="lib/jquery/jquery.min.js"></script>
-  <script src="lib/bootstrap/js/bootstrap.min.js"></script>
-  <script class="include" type="text/javascript" src="lib/jquery.dcjqaccordion.2.7.js"></script>
-  <script src="lib/jquery.scrollTo.min.js"></script>
-  <!-- <script src="lib/jquery.nicescroll.js" type="text/javascript"></script> -->
-  <!--common script for all pages-->
-  <script src="lib/common-scripts.js"></script>
-  <!--script for this page-->
-  <script src="https://www.gstatic.com/firebasejs/5.8.6/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/5.8.6/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/5.8.6/firebase-database.js"></script>
-  <script type="text/javascript" src="js/script.js"></script>
-  
-</body>
-
+    <!-- js placed at the end of the document so the pages load faster -->
+    <script src="lib/jquery/jquery.min.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+    <script
+      class="include"
+      type="text/javascript"
+      src="lib/jquery.dcjqaccordion.2.7.js"
+    ></script>
+    <script src="lib/jquery.scrollTo.min.js"></script>
+    <!-- <script src="lib/jquery.nicescroll.js" type="text/javascript"></script> -->
+    <!--common script for all pages-->
+    <script src="lib/common-scripts.js"></script>
+    <!--script for this page-->
+    <script src="https://www.gstatic.com/firebasejs/5.8.6/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.6/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.6/firebase-database.js"></script>
+    <script type="text/javascript" src="js/script.js"></script>
+  </body>
 </html>
