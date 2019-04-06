@@ -39,41 +39,71 @@ class _VehicleScreenState extends State<VehicleScreen> {
     FirebaseDatabase.instance.setPersistenceEnabled(true);
 
     _nameController = new TextEditingController(text: widget.vehicle.name);
-    _lastKnownOdoController = new TextEditingController(text: widget.vehicle.lastKnownOdometer.toString());
+    _lastKnownOdoController = new TextEditingController(
+        text: widget.vehicle.lastKnownOdometer.toString());
+  }
+
+  Widget _showNameTextBox() {
+    return TextField(
+        // name field
+        controller: _nameController,
+        decoration: InputDecoration(labelText: 'Name'),
+        style: TextStyle(
+          fontSize: 22.0,
+          color: Colors.black,
+        ));
+  }
+
+  Widget _showOdometerTextBox() {
+    return TextField(
+      // odometer field
+      controller: _lastKnownOdoController,
+      decoration: InputDecoration(labelText: 'Current Odometer Reading'),
+      style: TextStyle(
+        fontSize: 22.0,
+        color: Colors.black,
+      ),
+      keyboardType: TextInputType.number,
+    );
+  }
+
+  Widget _showAddVehicleButton() {
+    return Padding(
+      padding: EdgeInsets.all(15.0),
+      child: RaisedButton(
+        elevation: 5.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(60.0)),
+        color: Colors.green,
+        child: Text('Add vehicle',
+          style: TextStyle(fontSize: 20.0, color: Colors.white)),
+          onPressed: () {
+            vehicleReference.push().set({
+              'name': _nameController.text,
+              'lastKnownOdometer': _lastKnownOdoController,
+              'inUse': false,
+              'userID': widget.userID,
+            }).then((_) {
+              Navigator.pop(context);
+            });
+          },
+        )
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(title)),
-      body: Container(
-        margin: EdgeInsets.all(15.0),
-        alignment: Alignment.center,
-        child: Column(
-          children: <Widget>[
-            TextField(
-              // name field
-              controller: _nameController,
-              decoration: InputDecoration(labelText: 'Name'),
-              style: TextStyle(
-                fontSize: 22.0,
-                color: Colors.black,
-              )
-            ),
-              TextField(
-              // odometer field
-              controller: _lastKnownOdoController,
-              decoration: InputDecoration(labelText: 'Current Odometer Reading'),
-              style: TextStyle(
-                fontSize: 22.0,
-                color: Colors.black,
-              ),
-              keyboardType: TextInputType.number,
-              )
-          ],
-        )
-      )
-    );
+        appBar: AppBar(title: Text(title)),
+        body: Container(
+            margin: EdgeInsets.all(15.0),
+            alignment: Alignment.center,
+            child: Column(
+              children: <Widget>[
+                _showNameTextBox(),
+                _showOdometerTextBox(),
+                _showAddVehicleButton(),
+              ],
+            )));
   }
-  
 } // end of class _VehicleScreenState

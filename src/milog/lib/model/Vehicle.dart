@@ -29,7 +29,7 @@ class Vehicle {
     this._vehicleID = null;
     this._inUse = false;
     this._bluetoothMAC = null;
-    this._lastKnownOdometer = null;
+    this._lastKnownOdometer = 0;
     this._vehicleID = null;
   }
 
