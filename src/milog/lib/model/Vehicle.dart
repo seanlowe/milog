@@ -47,10 +47,10 @@ class Vehicle {
   Vehicle.fromSnapshot(DataSnapshot snapshot) :
     _name = snapshot.value['name'],
     _userID = snapshot.value['userID'],
-    //_vehicleID = snapshot.value['vehicleID'],
     _inUse = snapshot.value['inUse'],
-    //_bluetoothMAC = snapshot.value['bluetoothMAC'],
     _lastKnownOdometer = snapshot.value['lastKnownOdometer'];
+    //_vehicleID = snapshot.value['vehicleID'],
+    //_bluetoothMAC = snapshot.value['bluetoothMAC'],
 
   // check if mileage supplied by new trip is less than the last known odometer reading.
   bool checkOdoValid (int newTripOdo) {
