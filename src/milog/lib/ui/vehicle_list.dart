@@ -65,16 +65,18 @@ class _VehicleListState extends State<VehicleList> {
               Divider(
                 height: 5.0,
               ),
-              ListTile(
+              Container(
+                decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.blue, width: 2))),
+                child: ListTile(
                 title: Text(
-                  "title",
+                  _vehicleList[position].name,
                   style: TextStyle(
                     fontSize: 22.0,
                     color: Colors.black
                     ),
                 ),
                 subtitle: Text(
-                  "subtitle",
+                  "Odometer: " + _vehicleList[position].lastKnownOdometer.toString(),
                   style: TextStyle(
                     fontSize: 18.0,
                     fontStyle: FontStyle.italic,
@@ -84,6 +86,7 @@ class _VehicleListState extends State<VehicleList> {
                 // onLongPress -> delete
                 onTap: () => _navigateToVehicleAction(context, _vehicleList[position]),
                 onLongPress: () => _checkIfCanDel(context, _vehicleList[position], position),
+              )
               )
             ],
           );
