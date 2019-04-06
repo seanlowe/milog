@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:milog/services/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:milog/model/Trip.dart';
+import 'package:milog/model/Vehicle.dart';
 import 'package:milog/ui/log_screen.dart';
 import 'package:milog/ui/trip_action.dart';
 import 'package:milog/ui/vehicle_list.dart';
@@ -23,9 +24,11 @@ class ListViewLog extends StatefulWidget {
 class _ListViewLogState extends State<ListViewLog> {
   //List of Trips
   List<Trip> _tripList;
+  List<Vehicle> _vehicleList;
   bool tripInProgress;
 
   var tripsReference;
+  var vehicleReference;
 
   //The database reference
   final FirebaseDatabase _database = FirebaseDatabase.instance;
@@ -33,9 +36,11 @@ class _ListViewLogState extends State<ListViewLog> {
 
   StreamSubscription<Event> _onTripAddedSubscription;
   StreamSubscription<Event> _onTripChangedSubscription;
+  StreamSubscription<Event> _onVehicleAddedSub;
 
   //Query to get the User's trips
   Query _tripQuery;
+  Query _vehicleQuery;
 
   @override
   void initState() {
@@ -43,20 +48,28 @@ class _ListViewLogState extends State<ListViewLog> {
     tripInProgress = false;
 
     _tripList = new List();
+    _vehicleList = new List();
     _tripQuery = _database
         .reference()
         .child("Trips")
         .orderByChild("userID")
         .equalTo(widget.userId);
+    _vehicleQuery = _database
+      .reference()
+      .child("Vehicles")
+      .orderByChild("userID")
+      .equalTo(widget.userId);
 
     //Turns on Persistence
     FirebaseDatabase.instance.setPersistenceEnabled(true);
     tripsReference = _database.reference().child('Trips');
+    vehicleReference = _database.reference().child('Vehicles');
 
     //TODO: Need to add Listener for when the database data changes
     _onTripAddedSubscription = _tripQuery.onChildAdded.listen(_onLogAdded);
     _onTripChangedSubscription =
         _tripQuery.onChildChanged.listen(_onLogUpdated);
+    _onVehicleAddedSub = _vehicleQuery.onChildAdded.listen(_onVehicleAdded);
   }
 
   @override
@@ -184,14 +197,14 @@ class _ListViewLogState extends State<ListViewLog> {
               //Add the Drawer image here (user icon perhaps?)
             ),
           )),
-          ListTile(
-            title: Text('Trips'),
-            leading: new Icon(Icons.speaker_notes, color: Colors.blueAccent),
-            onTap: () {
-              //Since we're currently in ListViewLog, do nothing
-              Navigator.pop(context);
-            },
-          ),
+          // ListTile(
+          //   title: Text('Trips'),
+          //   leading: new Icon(Icons.speaker_notes, color: Colors.blueAccent),
+          //   onTap: () {
+          //     //Since we're currently in ListViewLog, do nothing
+          //     Navigator.pop(context);
+          //   },
+          // ),
           ListTile(
             title: Text('Account'),
             leading: new Icon(Icons.perm_identity, color: Colors.black),
@@ -249,8 +262,8 @@ class _ListViewLogState extends State<ListViewLog> {
   }
 
   void _onLogAdded(Event event) {
+    print("Entered _onLogAdded!");
     setState(() {
-      print("Entered _onLogAdded!");
       print("onLogAdded added a Trip to the _tripList list!");
       _tripList.add(new Trip.fromSnapshot(event.snapshot));
       isTripInProg();
@@ -265,6 +278,14 @@ class _ListViewLogState extends State<ListViewLog> {
       _tripList[_tripList.indexOf(oldLogValue)] =
           new Trip.fromSnapshot(event.snapshot);
       isTripInProg();
+    });
+  }
+
+  void _onVehicleAdded(Event event) {
+    print("Entered _onVehicleAdded");
+    setState(() {
+      _vehicleList.add(new Vehicle.fromSnapshot(event.snapshot));
+      // isVehicleInUse();
     });
   }
 
@@ -296,7 +317,7 @@ class _ListViewLogState extends State<ListViewLog> {
       context,
       //We want to update the Trip, so pass true
       MaterialPageRoute(
-          builder: (context) => LogScreen(widget.userId, trip, true)),
+          builder: (context) => LogScreen(_vehicleList, widget.userId, trip, true)),
     );
   }
 
@@ -309,6 +330,9 @@ class _ListViewLogState extends State<ListViewLog> {
   }
 
   void _createNewLog(BuildContext context) async {
+    for (int i = 0; i < _vehicleList.length; i++) {
+      print(_vehicleList[i].name.toString());
+    }
     //If there is a trip in progress
     if (tripInProgress) {
       _showDialogTripInProgress();
@@ -322,7 +346,7 @@ class _ListViewLogState extends State<ListViewLog> {
           context,
           MaterialPageRoute(
             builder: (context) =>
-                LogScreen(widget.userId, Trip.newTrip(), false),
+                LogScreen(_vehicleList, widget.userId, Trip.newTrip(), false),
           ));
     }
   }

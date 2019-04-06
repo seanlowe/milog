@@ -7,15 +7,16 @@ passed in to determine if we are adding or updating
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:milog/model/Trip.dart';
+import 'package:milog/model/Vehicle.dart';
 import 'package:intl/intl.dart';
 
 class LogScreen extends StatefulWidget {
   final Trip trip;
+  final List<Vehicle> _vehicleList;
   final String userId;
+  final bool update;  //Are we updating a trip?
 
-  //Are we updating a trip?
-  final bool update;
-  LogScreen(this.userId, this.trip, this.update);
+  LogScreen(this._vehicleList, this.userId, this.trip, this.update);
 
   @override
   State<StatefulWidget> createState() => new _LogScreenState();
@@ -26,6 +27,9 @@ class _LogScreenState extends State<LogScreen> {
   TextEditingController _vehicleController;
   TextEditingController _notesController;
   TextEditingController _odometerReading;
+
+  // for dropdown selector .. DONT TOUCH
+  Vehicle selected = null;
 
   var tripDatabase;
   var tripsReference;
@@ -57,6 +61,45 @@ class _LogScreenState extends State<LogScreen> {
     _vehicleController = new TextEditingController(text: widget.trip.vehicle);
     _odometerReading =
         new TextEditingController(text: widget.trip.endOdometer.toString());
+  }
+
+  // String _getVehicleName(Vehicle v) {
+  //   return v.name.toString();
+  // }
+
+  Widget _showVehicleDropdown() {
+    List<DropdownMenuItem<Vehicle>> _listVehicles = [];
+
+    // create array of DropdownMenuItems
+    // print(widget._vehicleList[1].name.toString());
+    _listVehicles = widget._vehicleList.map( (val) => new DropdownMenuItem<Vehicle>(
+      child: new Text(val.name.toString()), value: val,)).toList();
+
+    // print each item we got
+    // for (int i = 0; i < _listVehicles.length; i++) {
+    //   print("!!! " + _listVehicles[i].value.toString());
+    // }
+
+    return new Container(
+      decoration: BoxDecoration(border: Border(bottom: new BorderSide(color: Colors.grey, width: 1)),),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton(
+        value: selected,
+        items: _listVehicles,
+        iconSize: 35.0,
+        style: new TextStyle(
+          fontSize: 22.0,
+          color: Colors.black,
+        ),
+        hint: Text("Select a Vehicle"),
+        onChanged: (value) {
+          selected = value;
+          print("selected = " + selected.name + " | value = " + value.name);
+          setState(() { /* */ });
+        }
+      )
+      )
+    );
   }
 
   Widget _showPrimaryButton() {
@@ -137,7 +180,7 @@ class _LogScreenState extends State<LogScreen> {
         ));
   }
 
-  /*Determines whcih widget to show, if updating or viewing
+  /*Determines which widget to show, if updating or viewing
   the Trip information will be displayed on top. If we are
   adding a new trip, we don't have trip info so it will
   return a text with instructions.
@@ -290,7 +333,12 @@ class _LogScreenState extends State<LogScreen> {
           children: <Widget>[
             _selectTopWidget(),
             _showNotesTextBox(),
-            _showVehicleTextBox(),
+
+            (widget.update) ? _showVehicleTextBox() : _showVehicleDropdown(),
+            
+            // _showVehicleTextBox(),
+            // _showVehicleDropdown(),
+            
             _showOdometerTextBox(),
             //Optinal
             (widget.trip.startOdometer != 0) ? _showAddChargeButton() : null,
