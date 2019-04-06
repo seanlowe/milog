@@ -42,6 +42,7 @@ class Vehicle {
   int get lastKnownOdometer => _lastKnownOdometer;
 
   // Setters
+  set setInUse(bool value) => _inUse = value;
 
   // Database snapshot getters
   Vehicle.fromSnapshot(DataSnapshot snapshot) :

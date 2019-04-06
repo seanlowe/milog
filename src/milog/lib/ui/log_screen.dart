@@ -84,22 +84,28 @@ class _LogScreenState extends State<LogScreen> {
       decoration: BoxDecoration(border: Border(bottom: new BorderSide(color: Colors.grey, width: 1)),),
       child: DropdownButtonHideUnderline(
         child: DropdownButton(
-        value: selected,
-        items: _listVehicles,
-        iconSize: 35.0,
-        style: new TextStyle(
-          fontSize: 22.0,
-          color: Colors.black,
-        ),
-        hint: Text("Select a Vehicle"),
-        onChanged: (value) {
-          selected = value;
-          print("selected = " + selected.name + " | value = " + value.name);
-          setState(() { /* */ });
-        }
-      )
+          value: selected,
+          items: _listVehicles,
+          iconSize: 35.0,
+          style: new TextStyle(
+            fontSize: 22.0,
+            color: Colors.black,
+          ),
+          hint: Text("Select a Vehicle"),
+          onChanged: (value) {
+            selected = value;
+            print("selected = " + selected.name + " | value = " + value.name);
+            setState(() { /* */ });
+          }
+        )
       )
     );
+  }
+
+  void _setVehicleActive(Vehicle active) {
+    int index = widget._vehicleList.indexOf(selected);
+    widget._vehicleList[index].setInUse = true;
+    // widget._ve
   }
 
   Widget _showPrimaryButton() {
@@ -121,17 +127,18 @@ class _LogScreenState extends State<LogScreen> {
               if (widget.trip.tripID != null) {
                 updateTrip();
               } else {
-                double zero = 0.0;
-                //TODO: use push class/object instead
+                _setVehicleActive(selected);
+                // TODO: use push class/object instead
                 tripsReference.push().set({
                   'notes': _notesController.text,
-                  'vehicle': _vehicleController.text,
+                  // 'vehicle': _vehicleController.text,
+                  'vehicle': selected.name.toString(),
                   'startOdometer': int.parse(_odometerReading.text),
                   'startTime': ServerValue.timestamp,
                   'endTime': 0,
                   'endOdometer': 0,
                   'milesTraveled': 0,
-                  'totCharges': zero,
+                  'totCharges': 0.0,
                   'userID': widget.userId,
                   'inProgress': true,
                   'paused': false

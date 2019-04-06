@@ -307,7 +307,7 @@ class _ListViewLogState extends State<ListViewLog> {
     await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => VehicleList(widget.userId)),
+        builder: (context) => VehicleList(widget.userId, _vehicleQuery, _vehicleList)),
     );
     Navigator.pop(context);
   }
