@@ -74,7 +74,7 @@ class _VehicleScreenState extends State<VehicleScreen> {
         elevation: 5.0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(60.0)),
-        color: Colors.green,
+        color: Colors.blue,
         child: Text('Add vehicle',
           style: TextStyle(fontSize: 20.0, color: Colors.white)),
           onPressed: () {
