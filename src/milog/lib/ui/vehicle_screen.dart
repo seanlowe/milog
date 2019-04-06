@@ -39,8 +39,7 @@ class _VehicleScreenState extends State<VehicleScreen> {
     FirebaseDatabase.instance.setPersistenceEnabled(true);
 
     _nameController = new TextEditingController(text: widget.vehicle.name);
-    _lastKnownOdoController = new TextEditingController(
-        text: widget.vehicle.lastKnownOdometer.toString());
+    _lastKnownOdoController = new TextEditingController();
   }
 
   Widget _showNameTextBox() {
@@ -80,7 +79,7 @@ class _VehicleScreenState extends State<VehicleScreen> {
           onPressed: () {
             vehicleReference.push().set({
               'name': _nameController.text,
-              'lastKnownOdometer': _lastKnownOdoController,
+              'lastKnownOdometer': int.parse(_lastKnownOdoController.text.toString()),
               'inUse': false,
               'userID': widget.userID,
             }).then((_) {
