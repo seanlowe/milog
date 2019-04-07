@@ -201,12 +201,14 @@ async function generateTripTable(trips) {
   for (var i = 0; i < trips.length; i++) {
     let date = new Date(trips[i].startTime);
     // console.log(date.toLocaleDateString());
+    console.log("New Trip Object = " + trips[i].tripKey);
     dataSets.push([
       date.toLocaleDateString(),
       trips[i].notes,
       trips[i].vehicle,
       trips[i].milesTraveled,
-      '<div class="text-center"><a href="home.html#myDeleteModal" data-toggle="modal" id="deleteRow" class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></a> <a href="home.html#myUpdateModal" data-toggle="modal" id="editRow" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a></div>'
+      '<div class="text-center"><button data-toggle="modal" data-target="#myDeleteModal" id="deleteRow" class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></button> <button data-toggle="modal" data-target="#myUpdateModal" id="editRow" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></button></div>',
+      trips[i].tripKey
       
     ]);
   }
@@ -218,13 +220,13 @@ async function generateTripTable(trips) {
    */
   var oTable = $("#hidden-table-info").dataTable({
     aaData: dataSets,
-    aoColumnDefs: [
-      {
-        bSortable: false,
-        aTargets: [0]
-      }
-    ],
-    aaSorting: [[1, "asc"]]
+    // aoColumnDefs: [
+    //   {
+    //     bSortable: false,
+    //     aTargets: [0]
+    //   }
+    // ],
+    aaSorting: [[0, "desc"]]
   });
 
   /* Formating function for row details */
@@ -238,6 +240,64 @@ async function generateTripTable(trips) {
 
     return sOut;
   }
+
+
+  // Delete Trip Log
+  // $('#hidden-table-info tbody').on( 'click', 'tr', function () {
+  //   // oTable.$('tr.selected').addClass('selected');
+  //   var aData = oTable.fnGetData(this);
+  //   if ( $(this).hasClass('selected') ) {
+  //     $("#deleteLog").click(function() {
+  //       console.log("Row selected to Delete Vehicle: " + aData[2] + ": Date is: " + aData[0] + " Trip Key = " + aData[5]);
+  //       // table.row('.selected').remove().draw( false );
+  //       // tripsRef.child(aData[5]).remove();
+  //     });
+  //     // tripsRef.child(aData[5]).remove();
+  //     $(this).removeClass('selected');
+  //     // console.log("Row selected Vehicle - " + aData[2] + ": Date is: " + aData[0] + " Trip Key = " + aData[5]);
+  //   }
+  //   else {
+  //       oTable.$('tr.selected').removeClass('selected');
+  //       $(this).addClass('selected');
+  //   }
+  // });
+
+
+  // Update or Delete Trip Log
+  $('#hidden-table-info tbody').on( 'click', 'tr', function () {
+    // oTable.$('tr.selected').addClass('selected');
+    var aData = oTable.fnGetData(this);
+    console.log("Row selected - Vehicle: " + aData[2] + ": Date is: " + aData[0] + " Trip Key = " + aData[5]);
+    // if ( $(this).hasClass('selected') ) {
+    //   var start = document.getElementById("updateStartOdo");
+    //   var final = document.getElementById("updateEndOdo");
+    //   var notes = document.getElementById("updateNotes");
+    //   var fees = document.getElementById("updateFees");
+    //   notes.value = aData[1];
+    //   console.log("Notes = " + aData[1]);
+
+    //   // Listener for updating Trip Log
+    //   $("#updateLog").click(function() {
+        
+    //     // console.log("Row selected for Update - Vehicle: " + aData[2] + ": Date is: " + aData[0] + " Trip Key = " + aData[5]);
+    //   });
+
+    //   // Listener for deleting log
+    //   $("#deleteLog").click(function() {
+    //     // console.log("Row selected to Delete Vehicle: " + aData[2] + ": Date is: " + aData[0] + " Trip Key = " + aData[5]);
+    //     // table.row('.selected').remove().draw( false );
+    //     // tripsRef.child(aData[5]).remove();
+    //   });
+      
+    //   $(this).removeClass('selected');
+    //   // console.log("Row selected Vehicle - " + aData[2] + ": Date is: " + aData[0] + " Trip Key = " + aData[5]);
+    // }
+    // else {
+    //     oTable.$('tr.selected').removeClass('selected');
+    //     $(this).addClass('selected');
+    // }
+  });
+
 
   $(document).ready(function() {
     /*
@@ -288,8 +348,11 @@ function getTripData(snapshot, uid) {
   var tripArray = [];
   snapshot.forEach(function(childSnapshot) {
     var key = childSnapshot.key;
-    var value = childSnapshot.val();
 
+    var value = childSnapshot.val();
+    value.tripKey = key;
+    // console.log("New Trip Object = " + obj["vehicle"]);
+    
     if (value.userID == uid) {
       tripArray.push(value);
 
@@ -302,14 +365,10 @@ function getTripData(snapshot, uid) {
       $("#vehicleTable > tbody").append("<tr></tr>");
       $("#vehicleTable > tbody > tr:last-child").append(
         "<td>" +
-          value.startTime +
-          "</td><td>" +
-          value.notes +
-          "</td><td>" +
           value.vehicle +
-          '<td class="center">' +
+          '<td class="centered">' +
           value.milesTraveled +
-          "</td><td class=\"center\"><button class='btn btn-primary btn-xs'><i class='fa fa-pencil'></i></button>\n" +
+          "</td><td class=\"centered\"><button class='btn btn-primary btn-xs'><i class='fa fa-pencil'></i></button>\n" +
           "<button class='btn btn-danger btn-xs'><i class='fa fa-trash-o '></i></button> </td>"
       );
     }
@@ -323,7 +382,7 @@ function createLog() {
 }
 
 // Delete log
-function deleteLog() {
+function deleteLog(tripKey) {
 
 }
 

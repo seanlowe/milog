@@ -440,6 +440,16 @@ ul.sidebar-menu li a.active i {
     width: 100%;
 }
 
+.footer-wrapper {
+    display: inline-block;
+    margin-top: 60px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 15px;
+    padding-top: 0px;
+    width: 100%;
+}
+
 a.logo {
     font-size: 24px;
     color: #f2f2f2;
@@ -767,6 +777,10 @@ ul.top-menu > li > a:hover, ul.top-menu > li > a:focus {
 }
 
 .sidebar-closed #main-content {
+    margin-left: 0px;
+}
+
+.sidebar-closed .site-footer {
     margin-left: 0px;
 }
 
@@ -3348,6 +3362,10 @@ ul.chat-available-user li a:hover {
     background: #00a3bb;
     color: #fff;
     padding: 15px 0;
+    /* width: 100%;
+    position: absolute;
+    margin-left: 210px;
+    bottom: 0; */
 }
 
 .site-footer p {
@@ -3374,7 +3392,7 @@ ul.chat-available-user li a:hover {
 }
 
 .site-min-height {
-    min-height: 900px;
+    min-height: 800px;
 }
 
 
