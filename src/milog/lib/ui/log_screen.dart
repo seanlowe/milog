@@ -14,7 +14,7 @@ class LogScreen extends StatefulWidget {
   final Trip trip;
   final List<Vehicle> _vehicleList;
   final String userId;
-  final bool update;  // are we updating a trip?
+  final bool update; // are we updating a trip?
 
   LogScreen(this._vehicleList, this.userId, this.trip, this.update);
 
@@ -24,7 +24,7 @@ class LogScreen extends StatefulWidget {
 
 class _LogScreenState extends State<LogScreen> {
   // ----------------------------------------
-  /*         VARIABLE DECLARATIONS         */ 
+  /*         VARIABLE DECLARATIONS         */
   // ----------------------------------------
 
   // Every textbox needs a "controller"
@@ -33,7 +33,7 @@ class _LogScreenState extends State<LogScreen> {
   TextEditingController _odometerReading;
 
   // for dropdown selector .. DON'T TOUCH
-  // the dropdown is fragile . . . 
+  // the dropdown is fragile . . .
   Vehicle selected = null;
 
   var tripDatabase;
@@ -66,10 +66,10 @@ class _LogScreenState extends State<LogScreen> {
     // Create instances of the controller => A controller for an editable text field.
     // Remember to convert things to Strings if they are going into textboxes!
     // This happens at start... what's written in the TextBoxes
-    _notesController = new TextEditingController(text: widget.trip.notes);
-    _vehicleController = new TextEditingController(text: widget.trip.vehicle);
+    _notesController = new TextEditingController();
+    _vehicleController = new TextEditingController();
     _odometerReading =
-        new TextEditingController(text: widget.trip.endOdometer.toString());
+        new TextEditingController();
   }
 
   @override
@@ -97,10 +97,8 @@ class _LogScreenState extends State<LogScreen> {
     );
   }
 
-  
-
   // ----------------------------------------
-  /*     REDACTED / UN-NEEDED AT PRESENT   */ 
+  /*     REDACTED / UN-NEEDED AT PRESENT   */
   // ----------------------------------------
 
   // String _getVehicleName(Vehicle v) {
@@ -108,7 +106,7 @@ class _LogScreenState extends State<LogScreen> {
   // }
 
   // ----------------------------------------
-  /*              INPUT FIELDS             */ 
+  /*              INPUT FIELDS             */
   // ----------------------------------------
 
   // show a dropdown vehicle selector for new trips
@@ -117,8 +115,12 @@ class _LogScreenState extends State<LogScreen> {
 
     // create array of DropdownMenuItems
     // print(widget._vehicleList[1].name.toString());
-    _listVehicles = widget._vehicleList.map( (val) => new DropdownMenuItem<Vehicle>(
-      child: new Text(val.name.toString()), value: val,)).toList();
+    _listVehicles = widget._vehicleList
+        .map((val) => new DropdownMenuItem<Vehicle>(
+              child: new Text(val.name.toString()),
+              value: val,
+            ))
+        .toList();
 
     // print each item we got
     // for (int i = 0; i < _listVehicles.length; i++) {
@@ -126,25 +128,27 @@ class _LogScreenState extends State<LogScreen> {
     // }
 
     return new Container(
-      decoration: BoxDecoration(border: Border(bottom: new BorderSide(color: Colors.grey, width: 1)),),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton(
-          value: selected,
-          items: _listVehicles,
-          iconSize: 35.0,
-          style: new TextStyle(
-            fontSize: 22.0,
-            color: Colors.black,
-          ),
-          hint: Text("Select a Vehicle"),
-          onChanged: (value) {
-            selected = value;
-            print("selected = " + selected.name + " | value = " + value.name);
-            setState(() { /* */ });
-          }
-        )
-      )
-    );
+        decoration: BoxDecoration(
+          border: Border(bottom: new BorderSide(color: Colors.grey, width: 1)),
+        ),
+        child: DropdownButtonHideUnderline(
+            child: DropdownButton(
+                value: selected,
+                items: _listVehicles,
+                iconSize: 35.0,
+                style: new TextStyle(
+                  fontSize: 22.0,
+                  color: Colors.black,
+                ),
+                hint: Text("Select a Vehicle"),
+                onChanged: (value) {
+                  selected = value;
+                  print("selected = " +
+                      selected.name +
+                      " | value = " +
+                      value.name);
+                  setState(() {/* */});
+                })));
   }
 
   // show a textbox for vehicle field on existing trips
@@ -181,7 +185,7 @@ class _LogScreenState extends State<LogScreen> {
   }
 
   // ----------------------------------------
-  /*        BUTTONS & OTHER SHOWABLE       */ 
+  /*        BUTTONS & OTHER SHOWABLE       */
   // ----------------------------------------
 
   // Determines which widget to show, if updating or viewing
@@ -278,7 +282,7 @@ class _LogScreenState extends State<LogScreen> {
   }
 
   // ----------------------------------------
-  /*           TRIPLIST FUNCTIONS          */ 
+  /*           TRIPLIST FUNCTIONS          */
   // ----------------------------------------
 
   Widget _showPrimaryButton() {
@@ -300,24 +304,27 @@ class _LogScreenState extends State<LogScreen> {
               if (widget.trip.tripID != null) {
                 updateTrip();
               } else {
-                _setVehicleActive(selected);
-                // TODO: use push class/object instead
-                tripsReference.push().set({
-                  'notes': _notesController.text,
-                  // 'vehicle': _vehicleController.text,
-                  'vehicle': selected.name.toString(),
-                  'startOdometer': int.parse(_odometerReading.text),
-                  'startTime': ServerValue.timestamp,
-                  'endTime': 0,
-                  'endOdometer': 0,
-                  'milesTraveled': 0,
-                  'totCharges': 0.0,
-                  'userID': widget.userId,
-                  'inProgress': true,
-                  'paused': false
-                }).then((_) {
-                  Navigator.pop(context);
-                });
+                //We check if any fields are empty (true means there are empty fields)
+                if (!_checkEmptyFields()) {
+                  _setVehicleActive(selected);
+                  // TODO: use push class/object instead
+                  tripsReference.push().set({
+                    'notes': _notesController.text,
+                    // 'vehicle': _vehicleController.text,
+                    'vehicle': selected.name.toString(),
+                    'startOdometer': int.parse(_odometerReading.text),
+                    'startTime': ServerValue.timestamp,
+                    'endTime': 0,
+                    'endOdometer': 0,
+                    'milesTraveled': 0,
+                    'totCharges': 0.0,
+                    'userID': widget.userId,
+                    'inProgress': true,
+                    'paused': false
+                  }).then((_) {
+                    Navigator.pop(context);
+                  });
+                }
               }
             },
           ),
@@ -344,6 +351,59 @@ class _LogScreenState extends State<LogScreen> {
   void _setVehicleActive(Vehicle active) {
     int index = widget._vehicleList.indexOf(selected);
     widget._vehicleList[index].setInUse = true;
+  }
+
+  // Checks if fields are empty
+  bool _checkEmptyFields() {
+    bool result = false;
+    bool odoEmpty = _odometerReading.text.isEmpty;
+    bool notesEmpty = _notesController.text.isEmpty;
+    bool selectedVehicleEmpty = false;
+    if (selected == null) {
+      selectedVehicleEmpty = true;
+      result = true;
+    }
+
+    //If one of the fields are empty - call the dialog
+    if (odoEmpty || notesEmpty || selectedVehicleEmpty) {
+      _showDialogEmptyFields(odoEmpty, notesEmpty, selectedVehicleEmpty);
+    }
+
+    return result;
+  }
+
+  //Shows appropriate dialog when fields are empty
+  void _showDialogEmptyFields(bool odo, bool notes, bool vehicle) {
+    print("showDialogEmptyFields invoked");
+
+    String message = "Please fill in: ";
+    if (notes) {message += "\n *Note ";}
+    if (vehicle) {message += "\n *Vehicle";}
+    if (odo) {message += "\n *Odometer value";}
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Oops!",
+              style: TextStyle(fontSize: 18.0, color: Colors.red)),
+          content: Text(message,
+              style: TextStyle(fontSize: 18.0, color: Colors.black)),
+          actions: <Widget>[
+            //buttons at the bottom of the dialog
+            FlatButton(
+              child: Text(
+                "OK",
+                style: TextStyle(fontSize: 18.0, color: Colors.blueAccent),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   // Displays the information of the selected trip
@@ -374,10 +434,10 @@ class _LogScreenState extends State<LogScreen> {
   String getTripDate() {
     print("startTime timestamp in Class: " + widget.trip.startTime.toString());
     DateTime date =
-        new DateTime.fromMillisecondsSinceEpoch(widget.trip.startTime).toLocal();
+        new DateTime.fromMillisecondsSinceEpoch(widget.trip.startTime)
+            .toLocal();
     var formatter = new DateFormat('MM/dd/yyyy');
     String formatted = formatter.format(date);
     return formatted;
   }
-
 } // end of class _LogScreenState
