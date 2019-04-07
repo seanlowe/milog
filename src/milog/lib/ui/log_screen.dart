@@ -14,7 +14,7 @@ class LogScreen extends StatefulWidget {
   final Trip trip;
   final List<Vehicle> _vehicleList;
   final String userId;
-  final bool update;  //Are we updating a trip?
+  final bool update;  // are we updating a trip?
 
   LogScreen(this._vehicleList, this.userId, this.trip, this.update);
 
@@ -23,23 +23,32 @@ class LogScreen extends StatefulWidget {
 }
 
 class _LogScreenState extends State<LogScreen> {
-  //Every textbox needs a "controller"
+  // ----------------------------------------
+  /*         VARIABLE DECLARATIONS         */ 
+  // ----------------------------------------
+
+  // Every textbox needs a "controller"
   TextEditingController _vehicleController;
   TextEditingController _notesController;
   TextEditingController _odometerReading;
 
-  // for dropdown selector .. DONT TOUCH
+  // for dropdown selector .. DON'T TOUCH
+  // the dropdown is fragile . . . 
   Vehicle selected = null;
 
   var tripDatabase;
   var tripsReference;
 
-  //String set titles for LogScreen (this class)
+  // String set titles for LogScreen (this class)
   String strUpdateTitle = "View & Edit Trip";
   String strNewTripTitle = "New Trip";
   String title;
 
-  //When the "Activity Starts"
+  // ----------------------------------------
+  /* FUNCTION OVERRIDES / CLERICAL FUNCTIONS */
+  // ----------------------------------------
+
+  // When the Activity "Starts"
   @override
   void initState() {
     super.initState();
@@ -48,25 +57,61 @@ class _LogScreenState extends State<LogScreen> {
     tripDatabase = FirebaseDatabase.instance.reference();
     tripsReference = tripDatabase.child('Trips');
 
-    //Sets the appropriate title
+    // Sets the appropriate title
     title = widget.update ? strUpdateTitle : strNewTripTitle;
 
-    //Turns on Persistence
+    // Turns on Persistence
     FirebaseDatabase.instance.setPersistenceEnabled(true);
 
-    /*Create instances of the controller => A controller for an editable text field.
-    Remember to convert things to Strings if they are going into textboxes!
-    This happens at start... what's written in the TextBoxes */
+    // Create instances of the controller => A controller for an editable text field.
+    // Remember to convert things to Strings if they are going into textboxes!
+    // This happens at start... what's written in the TextBoxes
     _notesController = new TextEditingController(text: widget.trip.notes);
     _vehicleController = new TextEditingController(text: widget.trip.vehicle);
     _odometerReading =
         new TextEditingController(text: widget.trip.endOdometer.toString());
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(title)),
+      body: Container(
+        margin: EdgeInsets.all(15.0),
+        alignment: Alignment.topCenter,
+        child: new ListView(
+          // shrinkWrap makes it scrollable
+          shrinkWrap: true,
+          /* New discovery, to make widgets optional, look at code below */
+          children: <Widget>[
+            _selectTopWidget(),
+            _showNotesTextBox(),
+            (widget.update) ? _showVehicleTextBox() : _showVehicleDropdown(),
+            _showOdometerTextBox(),
+            // Optional
+            (widget.trip.startOdometer != 0) ? _showAddChargeButton() : null,
+            _showPrimaryButton(),
+          ].where((c) => c != null).toList(),
+        ),
+      ),
+    );
+  }
+
+  
+
+  // ----------------------------------------
+  /*     REDACTED / UN-NEEDED AT PRESENT   */ 
+  // ----------------------------------------
+
   // String _getVehicleName(Vehicle v) {
   //   return v.name.toString();
   // }
 
+  // ----------------------------------------
+  /*              INPUT FIELDS             */ 
+  // ----------------------------------------
+
+  // show a dropdown vehicle selector for new trips
   Widget _showVehicleDropdown() {
     List<DropdownMenuItem<Vehicle>> _listVehicles = [];
 
@@ -102,11 +147,139 @@ class _LogScreenState extends State<LogScreen> {
     );
   }
 
-  void _setVehicleActive(Vehicle active) {
-    int index = widget._vehicleList.indexOf(selected);
-    widget._vehicleList[index].setInUse = true;
-    // widget._ve
+  // show a textbox for vehicle field on existing trips
+  Widget _showVehicleTextBox() {
+    return TextField(
+        controller: _vehicleController,
+        decoration: InputDecoration(labelText: 'Vehicle'),
+        style: TextStyle(
+          fontSize: 22,
+          color: Colors.black,
+        ));
   }
+
+  Widget _showNotesTextBox() {
+    return TextField(
+        controller: _notesController,
+        decoration: InputDecoration(labelText: 'Notes'),
+        style: TextStyle(
+          fontSize: 22,
+          color: Colors.black,
+        ));
+  }
+
+  Widget _showOdometerTextBox() {
+    return TextField(
+      controller: _odometerReading,
+      decoration: InputDecoration(labelText: "Odometer Reading"),
+      style: TextStyle(
+        fontSize: 22,
+        color: Colors.black,
+      ),
+      keyboardType: TextInputType.number,
+    );
+  }
+
+  // ----------------------------------------
+  /*        BUTTONS & OTHER SHOWABLE       */ 
+  // ----------------------------------------
+
+  // Determines which widget to show, if updating or viewing
+  // the Trip information will be displayed on top. If we are
+  // adding a new trip, we don't have trip info so it will
+  // return a text with instructions.
+  Widget _selectTopWidget() {
+    if (widget.trip.startOdometer == 0) {
+      return _showAddIns();
+    } else {
+      return _showSelectedTrip();
+    }
+  }
+
+  // A little message when adding a trip
+  Widget _showAddIns() {
+    return Center(
+      child: Text('Almost ready to go!',
+          style: new TextStyle(fontSize: 24.0, color: Colors.black)),
+    );
+  }
+
+  //Button for adding charges when the trip is over
+  Widget _showAddChargeButton() {
+    print("User Pressed Toll Charge Button!");
+    return new Padding(
+        padding: EdgeInsets.all(15.0),
+        child: SizedBox(
+          height: 40.0,
+          child: RaisedButton(
+            elevation: 5.0,
+            shape: new RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(60.0)),
+            color: Colors.orange,
+            child: Text('Add Charges \$',
+                style: new TextStyle(fontSize: 20.0, color: Colors.white)),
+            onPressed: () {
+              _showDialogAddCharge();
+            },
+          ),
+        ));
+  }
+
+  // supporting function for _showAddChargeButton()
+  void _showDialogAddCharge() {
+    TextEditingController _chargeFieldControl = TextEditingController();
+    print("showDialogAddCharge invoked");
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text("Trip Charge",
+              style: TextStyle(fontSize: 18.0, color: Colors.black)),
+          content: TextField(
+            controller: _chargeFieldControl,
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            decoration: InputDecoration(hintText: "0.00"),
+          ),
+          actions: <Widget>[
+            // buttons at the bottom of the dialog
+            FlatButton(
+              child: Text(
+                "Add",
+                style: TextStyle(fontSize: 18.0, color: Colors.green),
+              ),
+              onPressed: () {
+                double newChargeAmt =
+                    double.parse(_chargeFieldControl.text.toString());
+                print("Got: " + newChargeAmt.toString() + " from user.");
+                // Set it in the trip object
+                widget.trip.addCharge(newChargeAmt);
+                // Set it in DB as well
+                tripsReference
+                    .child(widget.trip.tripID)
+                    .child('totCharges')
+                    .set(widget.trip.totCharges);
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text(
+                "Cancel",
+                style: TextStyle(fontSize: 18.0, color: Colors.red),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // ----------------------------------------
+  /*           TRIPLIST FUNCTIONS          */ 
+  // ----------------------------------------
 
   Widget _showPrimaryButton() {
     return new Padding(
@@ -151,6 +324,7 @@ class _LogScreenState extends State<LogScreen> {
         ));
   }
 
+  // supporting function for _showPrimaryButton()
   void updateTrip() {
     tripsReference
         .child(widget.trip.tripID)
@@ -166,61 +340,13 @@ class _LogScreenState extends State<LogScreen> {
     Navigator.pop(context);
   }
 
-  Widget _showNotesTextBox() {
-    return TextField(
-        controller: _notesController,
-        decoration: InputDecoration(labelText: 'Notes'),
-        style: TextStyle(
-          fontSize: 22,
-          color: Colors.black,
-        ));
+  // supporting function for _showPrimaryButton()
+  void _setVehicleActive(Vehicle active) {
+    int index = widget._vehicleList.indexOf(selected);
+    widget._vehicleList[index].setInUse = true;
   }
 
-  //TODO: Make this a drop down box!
-  Widget _showVehicleTextBox() {
-    return TextField(
-        controller: _vehicleController,
-        decoration: InputDecoration(labelText: 'Vehicle'),
-        style: TextStyle(
-          fontSize: 22,
-          color: Colors.black,
-        ));
-  }
-
-  /*Determines which widget to show, if updating or viewing
-  the Trip information will be displayed on top. If we are
-  adding a new trip, we don't have trip info so it will
-  return a text with instructions.
-  */
-  Widget _selectTopWidget() {
-    if (widget.trip.startOdometer == 0) {
-      return _showAddIns();
-    } else {
-      return _showSelectedTrip();
-    }
-  }
-
-  //A little message when adding a trip
-  Widget _showAddIns() {
-    return Center(
-      child: Text('Almost ready to go!',
-          style: new TextStyle(fontSize: 24.0, color: Colors.black)),
-    );
-  }
-
-  Widget _showOdometerTextBox() {
-    return TextField(
-      controller: _odometerReading,
-      decoration: InputDecoration(labelText: "Odometer Reading"),
-      style: TextStyle(
-        fontSize: 22,
-        color: Colors.black,
-      ),
-      keyboardType: TextInputType.number,
-    );
-  }
-
-  //Displays the information of the selected trip
+  // Displays the information of the selected trip
   Widget _showSelectedTrip() {
     return Container(
         margin: EdgeInsets.all(15.0),
@@ -244,81 +370,9 @@ class _LogScreenState extends State<LogScreen> {
         ]));
   }
 
-  //Button for adding charges when the trip is over
-  Widget _showAddChargeButton() {
-    print("User Pressed Toll Charge Button!");
-    return new Padding(
-        padding: EdgeInsets.all(15.0),
-        child: SizedBox(
-          height: 40.0,
-          child: RaisedButton(
-            elevation: 5.0,
-            shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(60.0)),
-            color: Colors.orange,
-            child: Text('Add Charges \$',
-                style: new TextStyle(fontSize: 20.0, color: Colors.white)),
-            onPressed: () {
-              _showDialogAddCharge();
-            },
-          ),
-        ));
-  }
-
-  void _showDialogAddCharge() {
-    TextEditingController _chargeFieldControl = TextEditingController();
-    print("showDialogAddCharge invoked");
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: Text("Trip Charge",
-              style: TextStyle(fontSize: 18.0, color: Colors.black)),
-          content: TextField(
-            controller: _chargeFieldControl,
-            keyboardType: TextInputType.numberWithOptions(decimal: true),
-            decoration: InputDecoration(hintText: "0.00"),
-          ),
-          actions: <Widget>[
-            //buttons at the bottom of the dialog
-            FlatButton(
-              child: Text(
-                "Add",
-                style: TextStyle(fontSize: 18.0, color: Colors.green),
-              ),
-              onPressed: () {
-                double newChargeAmt =
-                    double.parse(_chargeFieldControl.text.toString());
-                print("Got: " + newChargeAmt.toString() + " from user.");
-                //Set it in the trip object
-                widget.trip.addCharge(newChargeAmt);
-                //Set it in DB as well
-                tripsReference
-                    .child(widget.trip.tripID)
-                    .child('totCharges')
-                    .set(widget.trip.totCharges);
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: Text(
-                "Cancel",
-                style: TextStyle(fontSize: 18.0, color: Colors.red),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
+  // supporting function for _showSelectedTrip()
   String getTripDate() {
     print("startTime timestamp in Class: " + widget.trip.startTime.toString());
-    
     DateTime date =
         new DateTime.fromMillisecondsSinceEpoch(widget.trip.startTime).toLocal();
     var formatter = new DateFormat('MM/dd/yyyy');
@@ -326,33 +380,4 @@ class _LogScreenState extends State<LogScreen> {
     return formatted;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(title)),
-      body: Container(
-        margin: EdgeInsets.all(15.0),
-        alignment: Alignment.topCenter,
-        child: new ListView(
-          //shrinkWrap makes it scrollable
-          shrinkWrap: true,
-          /*New discovery, to make widgets optional, look at code below*/
-          children: <Widget>[
-            _selectTopWidget(),
-            _showNotesTextBox(),
-
-            (widget.update) ? _showVehicleTextBox() : _showVehicleDropdown(),
-            
-            // _showVehicleTextBox(),
-            // _showVehicleDropdown(),
-            
-            _showOdometerTextBox(),
-            //Optinal
-            (widget.trip.startOdometer != 0) ? _showAddChargeButton() : null,
-            _showPrimaryButton(),
-          ].where((c) => c != null).toList(),
-        ),
-      ),
-    );
-  }
-}
+} // end of class _LogScreenState
