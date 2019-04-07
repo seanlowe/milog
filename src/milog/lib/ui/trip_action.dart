@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:milog/model/Trip.dart';
+import 'package:milog/model/Vehicle.dart';
 import 'package:intl/intl.dart';
 
 // This class handles pausing, resuming and ending trips
@@ -8,8 +9,10 @@ import 'package:intl/intl.dart';
 class TripAction extends StatefulWidget {
   final Trip trip;
   final String userId;
+  // Query _vehicleQuery;
+  List<Vehicle> _vehicleList;
 
-  TripAction(this.userId, this.trip);
+  TripAction(this.userId, this.trip, this._vehicleList);
 
   @override
   State<StatefulWidget> createState() => new _TripScreenActionState();
@@ -22,6 +25,7 @@ class _TripScreenActionState extends State<TripAction> {
 
   var tripDatabase;
   var tripsReference;
+  var vehicleReference;
   // TextEditing for the odometer input
   TextEditingController _odometerReadingDiag;
 
@@ -37,6 +41,7 @@ class _TripScreenActionState extends State<TripAction> {
 
     tripDatabase = FirebaseDatabase.instance.reference();
     tripsReference = tripDatabase.child('Trips');
+    vehicleReference = tripDatabase.child('Vehicles');
     _odometerReadingDiag = new TextEditingController();
 
     // Turns on Persistence
@@ -334,6 +339,7 @@ class _TripScreenActionState extends State<TripAction> {
       // End the trip - set inProgress and paused to false just in case
       tripsReference.child(widget.trip.tripID).child("inProgress").set(false);
       tripsReference.child(widget.trip.tripID).child("paused").set(false);
+      _setVehicleInactive(widget.trip.vehicle);
       Navigator.pop(context);
     } else {
       // Sets the end Odometer reading in the DB
@@ -356,9 +362,18 @@ class _TripScreenActionState extends State<TripAction> {
       // End the trip - set inProgress and paused to false just in case
       tripsReference.child(widget.trip.tripID).child("inProgress").set(false);
       tripsReference.child(widget.trip.tripID).child("paused").set(false);
-      // TODO: Edit class to have _vehicleList and _vehicleReference passed in
-      // and set whatever the active vehicle is to dormant again
+      _setVehicleInactive(widget.trip.vehicle);
       Navigator.pop(context);
+    }
+  }
+
+  // supporting function of processOdoMiles
+  void _setVehicleInactive(String active) {
+    for (int i = 0; i < widget._vehicleList.length; i++) {
+      if (widget._vehicleList[i].name.toString() == active) {
+        widget._vehicleList[i].setInUse = false;
+        vehicleReference.child(widget._vehicleList[i].vehicleID).child('inUse').set(false);
+      } 
     }
   }
   

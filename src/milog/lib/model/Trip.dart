@@ -3,7 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 class Trip {
   String _userID;
   String _tripID; //The trip key
-  String _carID; //The car key
+  String _vehicleID; //The car key
   int _startOdometer; //The start odometer reading
   int _endOdometer; //The end odometer reading
   int _milesTraveled; //The delta miles
@@ -18,7 +18,7 @@ class Trip {
   Trip(
       this._userID,
       this._tripID,
-      this._carID,
+      this._vehicleID,
       this._startOdometer,
       this._endOdometer,
       this._milesTraveled,
@@ -34,7 +34,7 @@ class Trip {
   Trip.defaultTrip() {
     this._userID = "userID";
     this._tripID = "tripID";
-    this._carID = "carID";
+    this._vehicleID = "vehicleID";
     this._notes = "tripNotes";
     this._startTime = 0;
     this._endTime = 0;
@@ -51,7 +51,7 @@ class Trip {
   Trip.newTrip() {
     this._userID = null;
     this._tripID = null;
-    this._carID = null;
+    this._vehicleID = null;
     this._notes = " ";
     this._startTime = 0;
     this._endTime = 0;
@@ -67,7 +67,7 @@ class Trip {
   //Getters
   String get userID => _userID;
   String get tripID => _tripID;
-  String get carID => _carID;
+  String get vehicleID => _vehicleID;
   int get startOdometer => _startOdometer;
   int get endOdometer => _endOdometer;
   int get startTime => _startTime;
@@ -109,7 +109,7 @@ class Trip {
   Trip.fromSnapshot(DataSnapshot snapshot)
       : _tripID = snapshot.key,
         _userID = snapshot.value["userID"],
-        _carID = snapshot.value['carID'],
+        _vehicleID = snapshot.value['vehicleID'],
         _notes = snapshot.value['notes'].toString(),
         _startOdometer = snapshot.value['startOdometer'],
         _endOdometer = snapshot.value['endOdometer'],
@@ -125,7 +125,7 @@ class Trip {
     return {
       "tripID": tripID,
       "userID": userID,
-      "carID": carID,
+      "vehicleID": vehicleID,
       "notes": notes,
       "paused": paused,
       "inProgress": inProgress,

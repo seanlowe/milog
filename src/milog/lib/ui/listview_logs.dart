@@ -190,7 +190,7 @@ class _ListViewLogState extends State<ListViewLog> {
       context,
       // We want to update the Trip, so pass true
       MaterialPageRoute(
-          builder: (context) => LogScreen(_vehicleList, widget.userId, trip, true)),
+          builder: (context) => LogScreen(_vehicleList, _vehicleQuery, widget.userId, trip, true)),
     );
   }
 
@@ -198,7 +198,7 @@ class _ListViewLogState extends State<ListViewLog> {
     await Navigator.push(
       context,
       // We're not updating the Trip, so don't pass in true
-      MaterialPageRoute(builder: (context) => TripAction(widget.userId, trip)),
+      MaterialPageRoute(builder: (context) => TripAction(widget.userId, trip, _vehicleList)),
     );
   }
 
@@ -272,26 +272,61 @@ class _ListViewLogState extends State<ListViewLog> {
   }
 
   // function used to create a log
-  void _createNewLog(BuildContext context) async {
-    for (int i = 0; i < _vehicleList.length; i++) {
-      print(_vehicleList[i].name.toString());
+  void _createNewLog(BuildContext context) async { 
+    if (!_checkEmptyVehicleList()) {
+      // for (int i = 0; i < _vehicleList.length; i++) {
+      //   print(_vehicleList[i].name.toString());
+      // }
+      // If there is a trip in progress
+      if (tripInProgress) {
+        _showDialogTripInProgress();
+      } else {
+        /*
+        Mobile apps typically reveal their contents via full-screen elements called "screens" or "pages". 
+        In Flutter these elements are called routes and they're managed by a Navigator widget. 
+        The navigator manages a stack of Route objects and provides methods for managing the stack, like Navigator.push and Navigator.pop.
+        */
+        await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  LogScreen(_vehicleList, _vehicleQuery, widget.userId, Trip.newTrip(), false),
+            ));
+      }
     }
-    // If there is a trip in progress
-    if (tripInProgress) {
-      _showDialogTripInProgress();
-    } else {
-      /*
-      Mobile apps typically reveal their contents via full-screen elements called "screens" or "pages". 
-      In Flutter these elements are called routes and they're managed by a Navigator widget. 
-      The navigator manages a stack of Route objects and provides methods for managing the stack, like Navigator.push and Navigator.pop.
-      */
-      await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) =>
-                LogScreen(_vehicleList, widget.userId, Trip.newTrip(), false),
-          ));
+  }
+
+  bool _checkEmptyVehicleList() {
+    bool result = false;
+    if (_vehicleList.isEmpty) {
+      result = true;
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Oops!",
+                style: TextStyle(fontSize: 18.0, color: Colors.red)),
+            content: Text("Please Add A Vehicle",
+                style: TextStyle(fontSize: 18.0, color: Colors.black)),
+            actions: <Widget>[
+              // buttons at the bottom of the dialog
+              FlatButton(
+                child: Text(
+                  "Add Vehicle",
+                  style: TextStyle(fontSize: 18.0, color: Colors.blueAccent),
+                ),
+                onPressed: () {
+                  _navigateToVehicles(context);
+                  result = false;
+                  // Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
     }
+    return result;
   }
 
   // Dialog that shows a trip is in progress

@@ -8,15 +8,17 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:milog/model/Trip.dart';
 import 'package:milog/model/Vehicle.dart';
+import 'package:milog/ui/vehicle_list.dart';
 import 'package:intl/intl.dart';
 
 class LogScreen extends StatefulWidget {
   final Trip trip;
   final List<Vehicle> _vehicleList;
+  final Query _vehicleQuery;
   final String userId;
   final bool update; // are we updating a trip?
 
-  LogScreen(this._vehicleList, this.userId, this.trip, this.update);
+  LogScreen(this._vehicleList, this._vehicleQuery, this.userId, this.trip, this.update);
 
   @override
   State<StatefulWidget> createState() => new _LogScreenState();
@@ -38,6 +40,7 @@ class _LogScreenState extends State<LogScreen> {
 
   var tripDatabase;
   var tripsReference;
+  var vehicleReference;
 
   // String set titles for LogScreen (this class)
   String strUpdateTitle = "View & Edit Trip";
@@ -56,6 +59,7 @@ class _LogScreenState extends State<LogScreen> {
 
     tripDatabase = FirebaseDatabase.instance.reference();
     tripsReference = tripDatabase.child('Trips');
+    vehicleReference = tripDatabase.child('Vehicles');
 
     // Sets the appropriate title
     title = widget.update ? strUpdateTitle : strNewTripTitle;
@@ -288,6 +292,15 @@ class _LogScreenState extends State<LogScreen> {
     );
   }
 
+  void _navigateToVehicles(BuildContext context) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => VehicleList(widget.userId, widget._vehicleQuery, widget._vehicleList)),
+    );
+    Navigator.pop(context);
+  }
+
   // ----------------------------------------
   /*           TRIPLIST FUNCTIONS          */
   // ----------------------------------------
@@ -311,7 +324,7 @@ class _LogScreenState extends State<LogScreen> {
               if (widget.trip.tripID != null) {
                 updateTrip();
               } else {
-                //We check if any fields are empty (true means there are empty fields)
+                // We check if any fields are empty (true means there are empty fields)
                 if (!_checkEmptyFields()) {
                   _setVehicleActive(selected);
                   // TODO: use push class/object instead
@@ -326,6 +339,7 @@ class _LogScreenState extends State<LogScreen> {
                     'milesTraveled': 0,
                     'totCharges': 0.0,
                     'userID': widget.userId,
+                    'vehicleID': selected.vehicleID,
                     'inProgress': true,
                     'paused': false
                   }).then((_) {
@@ -358,7 +372,10 @@ class _LogScreenState extends State<LogScreen> {
   void _setVehicleActive(Vehicle active) {
     int index = widget._vehicleList.indexOf(selected);
     widget._vehicleList[index].setInUse = true;
+    vehicleReference.child(selected.vehicleID).child('inUse').set(true);
   }
+
+  
 
   // Checks if fields are empty
   bool _checkEmptyFields() {

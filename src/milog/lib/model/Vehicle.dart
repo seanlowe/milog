@@ -46,11 +46,11 @@ class Vehicle {
 
   // Database snapshot getters
   Vehicle.fromSnapshot(DataSnapshot snapshot) :
+    _vehicleID = snapshot.key,
     _name = snapshot.value['name'],
     _userID = snapshot.value['userID'],
     _inUse = snapshot.value['inUse'],
     _lastKnownOdometer = snapshot.value['lastKnownOdometer'];
-    //_vehicleID = snapshot.value['vehicleID'],
     //_bluetoothMAC = snapshot.value['bluetoothMAC'],
 
   // check if mileage supplied by new trip is less than the last known odometer reading.
