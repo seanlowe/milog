@@ -20,6 +20,9 @@ class VehicleScreen extends StatefulWidget {
 }
 
 class _VehicleScreenState extends State<VehicleScreen> {
+  // ----------------------------------------
+  /*         VARIABLE DECLARATIONS         */ 
+  // ----------------------------------------
   // every textbox needs a "controller"
   TextEditingController _nameController;
   TextEditingController _lastKnownOdoController;
@@ -28,6 +31,10 @@ class _VehicleScreenState extends State<VehicleScreen> {
   var vehicleReference;
 
   String title = "New Vehicle";
+
+  // ----------------------------------------
+  /* FUNCTION OVERRIDES / CLERICAL FUNCTIONS */
+  // ----------------------------------------
 
   @override
   void initState() {
@@ -41,6 +48,26 @@ class _VehicleScreenState extends State<VehicleScreen> {
     _nameController = new TextEditingController(text: widget.vehicle.name);
     _lastKnownOdoController = new TextEditingController();
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(title: Text(title)),
+        body: Container(
+            margin: EdgeInsets.all(15.0),
+            alignment: Alignment.center,
+            child: Column(
+              children: <Widget>[
+                _showNameTextBox(),
+                _showOdometerTextBox(),
+                _showAddVehicleButton(),
+              ],
+            )));
+  }
+
+  // ----------------------------------------
+  /*              INPUT FIELDS             */ 
+  // ----------------------------------------
 
   Widget _showNameTextBox() {
     return TextField(
@@ -90,19 +117,4 @@ class _VehicleScreenState extends State<VehicleScreen> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(title: Text(title)),
-        body: Container(
-            margin: EdgeInsets.all(15.0),
-            alignment: Alignment.center,
-            child: Column(
-              children: <Widget>[
-                _showNameTextBox(),
-                _showOdometerTextBox(),
-                _showAddVehicleButton(),
-              ],
-            )));
-  }
 } // end of class _VehicleScreenState

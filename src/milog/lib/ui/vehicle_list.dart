@@ -21,7 +21,10 @@ class VehicleList extends StatefulWidget {
 
 
 class _VehicleListState extends State<VehicleList> {
-  // variables
+  // ----------------------------------------
+  /*         VARIABLE DECLARATIONS         */ 
+  // ----------------------------------------
+
   var vehicleReference;
 
   final FirebaseDatabase _database = FirebaseDatabase.instance;
@@ -29,6 +32,9 @@ class _VehicleListState extends State<VehicleList> {
   StreamSubscription<Event> _onVehicleAddedSub;
   StreamSubscription<Event> _onVehicleChangedSub;
 
+  // ----------------------------------------
+  /* FUNCTION OVERRIDES / CLERICAL FUNCTIONS */
+  // ----------------------------------------
 
   @override
   void initState() {
@@ -49,6 +55,127 @@ class _VehicleListState extends State<VehicleList> {
     super.dispose();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Vehicles")),
+      body: Scaffold(
+        body: Center(
+          child:_showVehicleList(),
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () => _createNewVehicle(context),
+        ),
+      ),
+    );
+  }
+
+  // ----------------------------------------
+  /*         NAVIGATION FUNCTIONS          */
+  // ----------------------------------------
+
+  void _navigateToVehicleAction(BuildContext context, Vehicle vehicle) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => VehicleAction(widget.userID, vehicle)),
+    );
+  }
+
+  // ----------------------------------------
+  /*  ADD / DELETE & SUPPORTING FUNCTIONS  */
+  // ----------------------------------------
+
+  // check to make sure we can't delete a vehicle that's currently in use
+  void _checkIfCanDel(BuildContext context, Vehicle vehicle, int position) {
+    if (!vehicle.inUse) {
+      _showConfimDelDialog(context, vehicle, position);
+    }
+  }
+
+  // supporting function to _checkIfCanDel
+  // show confirmation dialogue to delete vehicle
+  void _showConfimDelDialog(BuildContext context, Vehicle vehicle, int position) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text("Delete Vehicle",
+              style: TextStyle(fontSize: 18.0, color: Colors.red)),
+          content: Text("Are you sure you want to delete this vehicle?",
+              style: TextStyle(fontSize: 18.0, color: Colors.black)),
+          actions: <Widget>[
+            // buttons at the bottom of the dialog
+            FlatButton(
+              child: Text(
+                "Yes",
+                style: TextStyle(
+                  fontSize: 18.0, 
+                  color: Colors.red
+                ),
+              ),
+              onPressed: () {
+                _deleteVehicle(context, vehicle, position);
+                Navigator.of(context).pop();
+              },
+            ),
+             FlatButton(
+              child: Text(
+                "No",
+                style: TextStyle(
+                  fontSize: 18.0, 
+                  color: Colors.black
+                ),
+              ),
+              onPressed: () =>  Navigator.of(context).pop()
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // function used to delete a vehicle
+  void _deleteVehicle(BuildContext context, Vehicle vehicle, int position) async {
+    await vehicleReference.child(vehicle.vehicleID).remove().then((_) {
+      setState(() {
+        widget._vehicleList.removeAt(position);
+      });
+    });
+  }
+
+  // function used to create a vehicle
+  void _createNewVehicle(BuildContext context) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => VehicleScreen(widget.userID, Vehicle.newVehicle()),
+      ));
+  }
+
+  // ----------------------------------------
+  /*    DATABASE SUBSCRIPTION FUNCTIONS    */
+  // ----------------------------------------
+
+  void _onVehicleAdded(Event event) {
+    print("activated onVehicleAdded");
+    setState(() {
+      widget._vehicleList.add(new Vehicle.fromSnapshot(event.snapshot));
+    });
+  }
+
+  void _onVehicleUpdated(Event event) {
+    var oldVehicleValue = widget._vehicleList.singleWhere((vehicle) => vehicle.vehicleID == event.snapshot.key);
+    setState(() {
+      widget._vehicleList[widget._vehicleList.indexOf(oldVehicleValue)] = new Vehicle.fromSnapshot(event.snapshot);
+    });
+  }
+
+  // ----------------------------------------
+  /*         VEHICLELIST FUNCTIONS         */
+  // ----------------------------------------
+
+  // TODO: Split children widgets into separate functions
   Widget _showVehicleList() {
     if (widget._vehicleList.length > 0) {
       return ListView.builder(
@@ -101,105 +228,5 @@ class _VehicleListState extends State<VehicleList> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Vehicles")),
-      body: Scaffold(
-        body: Center(
-          child:_showVehicleList(),
-        ),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () => _createNewVehicle(context),
-        ),
-      ),
-    );
-  }
-
-  void _onVehicleAdded(Event event) {
-    print("activated onVehicleAdded");
-    setState(() {
-      widget._vehicleList.add(new Vehicle.fromSnapshot(event.snapshot));
-    });
-  }
-
-  void _onVehicleUpdated(Event event) {
-    var oldVehicleValue = widget._vehicleList.singleWhere((vehicle) => vehicle.vehicleID == event.snapshot.key);
-    setState(() {
-      widget._vehicleList[widget._vehicleList.indexOf(oldVehicleValue)] = new Vehicle.fromSnapshot(event.snapshot);
-    });
-  }
-
-  void _checkIfCanDel(BuildContext context, Vehicle vehicle, int position) {
-    if (!vehicle.inUse) {
-      _showConfimDelDialog(context, vehicle, position);
-    }
-  }
-
-  // show confirmation dialogue to delete vehicle
-  void _showConfimDelDialog(BuildContext context, Vehicle vehicle, int position) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: Text("Delete Vehicle",
-              style: TextStyle(fontSize: 18.0, color: Colors.red)),
-          content: Text("Are you sure you want to delete this vehicle?",
-              style: TextStyle(fontSize: 18.0, color: Colors.black)),
-          actions: <Widget>[
-            // buttons at the bottom of the dialog
-            FlatButton(
-              child: Text(
-                "Yes",
-                style: TextStyle(
-                  fontSize: 18.0, 
-                  color: Colors.red
-                ),
-              ),
-              onPressed: () {
-                _deleteVehicle(context, vehicle, position);
-                Navigator.of(context).pop();
-              },
-            ),
-             FlatButton(
-              child: Text(
-                "No",
-                style: TextStyle(
-                  fontSize: 18.0, 
-                  color: Colors.black
-                ),
-              ),
-              onPressed: () =>  Navigator.of(context).pop()
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-
-  void _deleteVehicle(BuildContext context, Vehicle vehicle, int position) async {
-    await vehicleReference.child(vehicle.vehicleID).remove().then((_) {
-      setState(() {
-        widget._vehicleList.removeAt(position);
-      });
-    });
-  }
-
-  void _navigateToVehicleAction(BuildContext context, Vehicle vehicle) async {
-    await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => VehicleAction(widget.userID, vehicle)),
-    );
-  }
-
-  void _createNewVehicle(BuildContext context) async {
-    await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => VehicleScreen(widget.userID, Vehicle.newVehicle()),
-      ));
-  }
 
 } // end of class _VehicleListState

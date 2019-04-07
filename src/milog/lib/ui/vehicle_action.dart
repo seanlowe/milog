@@ -19,12 +19,20 @@ class VehicleAction extends StatefulWidget {
 }
 
 class _VehicleActionState extends State<VehicleAction> {
+  // ----------------------------------------
+  /*         VARIABLE DECLARATIONS         */ 
+  // ----------------------------------------
+
   TextEditingController _nameController;
 
   var vehicleDatabase;
   var vehicleReference;
 
   String title = "Update Vehicle";
+
+  // ----------------------------------------
+  /* FUNCTION OVERRIDES / CLERICAL FUNCTIONS */
+  // ----------------------------------------
 
   @override
   void initState() {

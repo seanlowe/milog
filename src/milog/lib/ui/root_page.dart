@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:milog/ui/login_signup_page.dart';
 import 'package:milog/services/authentication.dart';
+import 'package:milog/ui/login_signup_page.dart';
 import 'package:milog/ui/listview_logs.dart';
 
 class RootPage extends StatefulWidget {
@@ -9,29 +9,34 @@ class RootPage extends StatefulWidget {
   final BaseAuth auth;
 
   @override
-  /*State is information that (1) can be read synchronously when the widget is built and 
-  (2) might change during the lifetime of the widget.*/
+  // State is information that 
+  // (1) can be read synchronously when the widget is built, and 
+  // (2) might change during the lifetime of the widget.
 
-  //This is the state of the RootPage
+  // This is the state of the RootPage
   State<StatefulWidget> createState() => new _RootPageState();
 }
 
-//Status flags
+// Authentication Status Flags
 enum AuthStatus {
-  //Don't know if logged in (loading)
-  NOT_DETERMINED,
-  //Not logged in
-  NOT_LOGGED_IN,
-  //User logged in and verfied email
-  LOGGED_IN,
-  //User logged in, but did not verify email
-  LOGGED_IN_NOT_VER,
+  NOT_DETERMINED, // Don't know if logged in (loading)
+  NOT_LOGGED_IN, // Not logged in
+  LOGGED_IN, // User is logged in and email is verified
+  LOGGED_IN_NOT_VER, // User logged in, but did not verify email
 }
 
 class _RootPageState extends State<RootPage> {
+  // ----------------------------------------
+  /*         VARIABLE DECLARATIONS         */ 
+  // ----------------------------------------
+
   AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
   String _userId = "";
   bool _isEmailVerified = false;
+
+  // ----------------------------------------
+  /* FUNCTION OVERRIDES / CLERICAL FUNCTIONS */
+  // ----------------------------------------
 
   @override
   void initState() {
@@ -45,53 +50,6 @@ class _RootPageState extends State<RootPage> {
             user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
       });
     });
-  }
-
-  //Check if user verfied email
-  void _checkEmailVerification() async {
-    //await waits for the function to return
-    _isEmailVerified = await widget.auth.isEmailVerified();
-  }
-
-  /*Changed this to async (due to the check if verified email... not sure if this is the right approach)
-  This is done to make sure checkEmailVerification returns
-  Without async, the user has to click twice (seems that checkEmailVerification takes longer than this thread)*/
-  void _onLoggedIn() async { 
-    await _checkEmailVerification();
-    widget.auth.getCurrentUser().then((user) {
-      setState(() {
-        _userId = user.uid.toString();
-      });
-    });
-    if (_isEmailVerified == false) {
-      //If user did not* verify email
-      setState(() {
-        authStatus = AuthStatus.LOGGED_IN_NOT_VER;
-        _showVerifyEmailDialog();
-      });
-    } else {
-      //If user did* verify email
-      setState(() {
-        authStatus = AuthStatus.LOGGED_IN;
-      });
-    }
-  }
-
-  //Sets state to NOT_LOGGED_IN
-  void _onSignedOut() {
-    setState(() {
-      authStatus = AuthStatus.NOT_LOGGED_IN;
-      _userId = "";
-    });
-  }
-
-  Widget _buildWaitingScreen() {
-    return Scaffold(
-      body: Container(
-        alignment: Alignment.center,
-        child: CircularProgressIndicator(),
-      ),
-    );
   }
 
   @override
@@ -134,31 +92,62 @@ class _RootPageState extends State<RootPage> {
     }
   }
 
-  void _resentVerifyEmail() {
-    widget.auth.sendEmailVerification();
-    _showVerifyEmailSentDialog();
+  Widget _buildWaitingScreen() {
+    return Scaffold(
+      body: Container(
+        alignment: Alignment.center,
+        child: CircularProgressIndicator(),
+      ),
+    );
   }
 
-  void _showVerifyEmailSentDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: new Text("Verify your account"),
-          content:
-              new Text("Link to verify account has been sent to your email"),
-          actions: <Widget>[
-            new FlatButton(
-              child: new Text("Dismiss"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
+  // ----------------------------------------
+  /*           LOG IN / SIGN OUT           */ 
+  // ----------------------------------------
+
+  // Changed this to async (due to the check if verified email... 
+  // not sure if this is the right approach)
+  // This is done to make sure checkEmailVerification returns
+  // Without async, the user has to click twice 
+  // (seems that checkEmailVerification takes longer than this thread)
+  void _onLoggedIn() async { 
+    await _checkEmailVerification();
+    widget.auth.getCurrentUser().then((user) {
+      setState(() {
+        _userId = user.uid.toString();
+      });
+    });
+    if (_isEmailVerified == false) {
+      // if user did not* verify email
+      setState(() {
+        authStatus = AuthStatus.LOGGED_IN_NOT_VER;
+        _showVerifyEmailDialog();
+      });
+    } else {
+      // if user did* verify email
+      setState(() {
+        authStatus = AuthStatus.LOGGED_IN;
+      });
+    }
+  }
+
+  // Sets state to NOT_LOGGED_IN
+  void _onSignedOut() {
+    setState(() {
+      authStatus = AuthStatus.NOT_LOGGED_IN;
+      _userId = "";
+    });
+  }
+
+  // ----------------------------------------
+  /*       AUTHENTICATION FUNCTIONS        */ 
+  // ----------------------------------------
+
+  // supporting function of _onLoggedIn()
+  // Check if the user verfied their email
+  void _checkEmailVerification() async {
+    // await waits for the function to return
+    _isEmailVerified = await widget.auth.isEmailVerified();
   }
 
   void _showVerifyEmailDialog() {
@@ -188,4 +177,34 @@ class _RootPageState extends State<RootPage> {
       },
     );
   }
-}
+
+  // supporting function of _showVerifyEmailDialog()
+  void _resentVerifyEmail() {
+    widget.auth.sendEmailVerification();
+    _showVerifyEmailSentDialog();
+  }
+
+  // supporting function of _resentVerifyEmail()
+  void _showVerifyEmailSentDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Verify your account"),
+          content:
+              new Text("Link to verify account has been sent to your email"),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("Dismiss"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+} // end of class _RootPageState

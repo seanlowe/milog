@@ -3,7 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:milog/model/Trip.dart';
 import 'package:intl/intl.dart';
 
-//This class handles pausing, resuming and ending trips
+// This class handles pausing, resuming and ending trips
 
 class TripAction extends StatefulWidget {
   final Trip trip;
@@ -16,12 +16,20 @@ class TripAction extends StatefulWidget {
 }
 
 class _TripScreenActionState extends State<TripAction> {
+  // ----------------------------------------
+  /*         VARIABLE DECLARATIONS         */ 
+  // ----------------------------------------
+
   var tripDatabase;
   var tripsReference;
-  //TextEditing for the odometer input
+  // TextEditing for the odometer input
   TextEditingController _odometerReadingDiag;
 
-  //When the "Activity Starts"
+  // ----------------------------------------
+  /* FUNCTION OVERRIDES / CLERICAL FUNCTIONS */
+  // ----------------------------------------
+
+  // When the Activity "Starts"
   @override
   void initState() {
     print("Entered TripAction (via navigator");
@@ -31,7 +39,7 @@ class _TripScreenActionState extends State<TripAction> {
     tripsReference = tripDatabase.child('Trips');
     _odometerReadingDiag = new TextEditingController();
 
-    //Turns on Persistence
+    // Turns on Persistence
     FirebaseDatabase.instance.setPersistenceEnabled(true);
 
     _odometerReadingDiag.text = "";
@@ -58,18 +66,11 @@ class _TripScreenActionState extends State<TripAction> {
     );
   }
 
-  String getTripDate() {
-    print("startTime timestamp in Class: " + widget.trip.startTime.toString());
+  // ----------------------------------------
+  /*           CONTENT BUILDING            */
+  // ----------------------------------------
 
-    DateTime date =
-        new DateTime.fromMillisecondsSinceEpoch(widget.trip.startTime)
-            .toLocal();
-    var formatter = new DateFormat('MM/dd/yyyy');
-    String formatted = formatter.format(date);
-    return formatted;
-  }
-
-  //Displays the information of the selected trip
+  // Displays the information of the selected trip
   Widget _showSelectedTrip() {
     return Container(
         margin: EdgeInsets.all(15.0),
@@ -93,202 +94,6 @@ class _TripScreenActionState extends State<TripAction> {
         ]));
   }
 
-  void setPausedOrResume() {
-    if (!widget.trip.paused) {
-      //Pause the trip
-      print("Selected trip paused set to true");
-      tripsReference.child(widget.trip.tripID).child("paused").set(true);
-      widget.trip.setpaused = true;
-    } else {
-      //Resume the trip
-      print("Selected trip paused set to false");
-      tripsReference.child(widget.trip.tripID).child("paused").set(false);
-      widget.trip.setpaused = false;
-    }
-  }
-
-  /*Check if the user entered something in the Odometer TextField
-  If there is something, it pops to the main screen.
-  End the trip by setting the endOdometer and invoke calculation
-  */
-  void processOdoMiles() {
-    /*If trip is not paused and the odometer text field is empty */
-    if (_odometerReadingDiag.text.isEmpty && !widget.trip.paused) {
-      print("User did not put a Odometer value! -> aborting");
-      _showDialogEmptyOdo();
-      /*If trip is paused and odometer text field is empty */
-    } else if (_odometerReadingDiag.text.isEmpty && widget.trip.paused) {
-      print("Trip is paused and Odo text field is empty -> ending trip");
-      widget.trip.endPausedTrip();
-      //Sets endOdometer in DB
-      tripsReference
-          .child(widget.trip.tripID)
-          .child("endOdometer")
-          .set(widget.trip.endOdometer);
-      //Sets endTime via Server timestamp
-      tripsReference
-          .child(widget.trip.tripID)
-          .child("endTime")
-          .set(ServerValue.timestamp);
-      //End the trip - set inProgress and paused to false just in case
-      tripsReference.child(widget.trip.tripID).child("inProgress").set(false);
-      tripsReference.child(widget.trip.tripID).child("paused").set(false);
-      Navigator.pop(context);
-    } else {
-      //Sets the end Odometer reading in the DB
-      widget.trip.setEndOdo(int.parse(_odometerReadingDiag.text));
-      //Sets endOdometer in DB
-      tripsReference
-          .child(widget.trip.tripID)
-          .child("endOdometer")
-          .set(int.parse(_odometerReadingDiag.text));
-      //Sets milesTraveled in DB
-      tripsReference
-          .child(widget.trip.tripID)
-          .child("milesTraveled")
-          .set(widget.trip.milesTraveled);
-      //Sets endTime via Server timestamp
-      tripsReference
-          .child(widget.trip.tripID)
-          .child("endTime")
-          .set(ServerValue.timestamp);
-      //End the trip - set inProgress and paused to false just in case
-      tripsReference.child(widget.trip.tripID).child("inProgress").set(false);
-      tripsReference.child(widget.trip.tripID).child("paused").set(false);
-      Navigator.pop(context);
-    }
-  }
-
-  //When user presses pause or resume
-  //TODO: Check user input!
-  void processPause() {
-    if (_odometerReadingDiag.text.isEmpty) {
-      _showDialogEmptyOdo();
-    } else {
-      if (widget.trip.paused) {
-        //Trip is paused
-        print("#1 RAN!");
-        widget.trip.resumeTrip(int.parse(_odometerReadingDiag.text));
-        print("In trip, miles traveled = " +
-            widget.trip.milesTraveled.toString());
-        tripsReference
-            .child(widget.trip.tripID)
-            .child("startOdometer")
-            .set(widget.trip.startOdometer);
-      } else {
-        print("#2 RAN!");
-        //Trip is not paused
-        widget.trip.pauseTrip(int.parse(_odometerReadingDiag.text));
-        tripsReference
-            .child(widget.trip.tripID)
-            .child("milesTraveled")
-            .set(widget.trip.milesTraveled);
-        tripsReference
-            .child(widget.trip.tripID)
-            .child("startOdometer")
-            .set(widget.trip.startOdometer);
-      }
-      //Update the trip paused bool
-      setPausedOrResume();
-      Navigator.pop(context);
-    }
-  }
-
-  Widget _showOdoTextField() {
-    return Container(
-        margin: EdgeInsets.all(15.0),
-        alignment: Alignment.center,
-        child: TextField(
-          controller: _odometerReadingDiag,
-          decoration: InputDecoration(labelText: "Odometer Reading"),
-          style: TextStyle(
-            fontSize: 22,
-            color: Colors.black,
-          ),
-          keyboardType: TextInputType.number,
-        ));
-  }
-
-  //Dialog when Odometer field is empty
-  void _showDialogEmptyOdo() {
-    print("showDialogEmptyOdo invoked");
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: Text("Oops!",
-              style: TextStyle(fontSize: 18.0, color: Colors.black)),
-          content: Text("Please enter your Odometer mileage",
-              style: TextStyle(fontSize: 18.0, color: Colors.black)),
-          actions: <Widget>[
-            //buttons at the bottom of the dialog
-            FlatButton(
-              child: Text(
-                "Ok",
-                style: TextStyle(fontSize: 18.0, color: Colors.blueAccent),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _showDialogAddCharge() {
-    TextEditingController _chargeFieldControl = TextEditingController();
-    print("showDialogAddCharge invoked");
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: Text("Trip Charge",
-              style: TextStyle(fontSize: 18.0, color: Colors.black)),
-          content: TextField(
-            controller: _chargeFieldControl,
-            keyboardType: TextInputType.numberWithOptions(decimal: true),
-            decoration: InputDecoration(hintText: "0.00"),
-          ),
-          actions: <Widget>[
-            //buttons at the bottom of the dialog
-            FlatButton(
-              child: Text(
-                "Add",
-                style: TextStyle(fontSize: 18.0, color: Colors.green),
-              ),
-              onPressed: () {
-                double newChargeAmt =
-                    double.parse(_chargeFieldControl.text.toString());
-                print("Got: " + newChargeAmt.toString() + " from user.");
-                //Set it in the trip object
-                widget.trip.addCharge(newChargeAmt);
-                //Set it in DB as well
-                tripsReference
-                    .child(widget.trip.tripID)
-                    .child('totCharges')
-                    .set(widget.trip.totCharges);
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: Text(
-                "Cancel",
-                style: TextStyle(fontSize: 18.0, color: Colors.red),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   Widget _showPauseResumeButton() {
     return new Padding(
         padding: EdgeInsets.all(15.0),
@@ -305,7 +110,7 @@ class _TripScreenActionState extends State<TripAction> {
                 : Text('Pause Trip',
                     style: new TextStyle(fontSize: 20.0, color: Colors.black)),
             onPressed: () {
-              //We are setting isPaused in Trip to true in DB
+              // We are setting isPaused in Trip to true in DB
               processPause();
             },
           ),
@@ -351,4 +156,223 @@ class _TripScreenActionState extends State<TripAction> {
           ),
         ));
   }
-}
+
+  Widget _showOdoTextField() {
+    return Container(
+        margin: EdgeInsets.all(15.0),
+        alignment: Alignment.center,
+        child: TextField(
+          controller: _odometerReadingDiag,
+          decoration: InputDecoration(labelText: "Odometer Reading"),
+          style: TextStyle(
+            fontSize: 22,
+            color: Colors.black,
+          ),
+          keyboardType: TextInputType.number,
+        ));
+  }
+
+  // supporting function of _showSelectedTrip()
+  String getTripDate() {
+    print("startTime timestamp in Class: " + widget.trip.startTime.toString());
+
+    DateTime date =
+        new DateTime.fromMillisecondsSinceEpoch(widget.trip.startTime)
+            .toLocal();
+    var formatter = new DateFormat('MM/dd/yyyy');
+    String formatted = formatter.format(date);
+    return formatted;
+  }
+
+  // ----------------------------------------
+  /*       TRIP PROCESSING FUNCTIONS       */
+  // ----------------------------------------
+
+  // supporting function of _showPauseResumeButton()
+  // When user presses pause or resume
+  // TODO: Check user input!
+  void processPause() {
+    if (_odometerReadingDiag.text.isEmpty) {
+      _showDialogEmptyOdo();
+    } else {
+      if (widget.trip.paused) {
+        // Trip is paused
+        print("#1 RAN!");
+        widget.trip.resumeTrip(int.parse(_odometerReadingDiag.text));
+        print("In trip, miles traveled = " +
+            widget.trip.milesTraveled.toString());
+        tripsReference
+            .child(widget.trip.tripID)
+            .child("startOdometer")
+            .set(widget.trip.startOdometer);
+      } else {
+        print("#2 RAN!");
+        // Trip is not paused
+        widget.trip.pauseTrip(int.parse(_odometerReadingDiag.text));
+        tripsReference
+            .child(widget.trip.tripID)
+            .child("milesTraveled")
+            .set(widget.trip.milesTraveled);
+        tripsReference
+            .child(widget.trip.tripID)
+            .child("startOdometer")
+            .set(widget.trip.startOdometer);
+      }
+      // Update the trip paused bool
+      setPausedOrResume();
+      Navigator.pop(context);
+    }
+  }
+
+  // supporting function for processPause() & processOdoMiles()
+  // Dialog when Odometer field is empty
+  void _showDialogEmptyOdo() {
+    print("showDialogEmptyOdo invoked");
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text("Oops!",
+              style: TextStyle(fontSize: 18.0, color: Colors.black)),
+          content: Text("Please enter your Odometer mileage",
+              style: TextStyle(fontSize: 18.0, color: Colors.black)),
+          actions: <Widget>[
+            // buttons at the bottom of the dialog
+            FlatButton(
+              child: Text(
+                "Ok",
+                style: TextStyle(fontSize: 18.0, color: Colors.blueAccent),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // supporting function for processPause()
+  void setPausedOrResume() {
+    if (!widget.trip.paused) {
+      // Pause the trip
+      print("Selected trip paused set to true");
+      tripsReference.child(widget.trip.tripID).child("paused").set(true);
+      widget.trip.setpaused = true;
+    } else {
+      // Resume the trip
+      print("Selected trip paused set to false");
+      tripsReference.child(widget.trip.tripID).child("paused").set(false);
+      widget.trip.setpaused = false;
+    }
+  }
+
+  // supporting function of _showEndTripButton()
+  // Check if the user entered something in the Odometer TextField
+  // If there is something, it pops to the main screen.
+  // End the trip by setting the endOdometer and invoke calculation
+  void processOdoMiles() {
+    // If trip is not paused and the odometer text field is empty
+    if (_odometerReadingDiag.text.isEmpty && !widget.trip.paused) {
+      print("User did not put a Odometer value! -> aborting");
+      _showDialogEmptyOdo();
+      // If trip is paused and odometer text field is empty
+    } else if (_odometerReadingDiag.text.isEmpty && widget.trip.paused) {
+      print("Trip is paused and Odo text field is empty -> ending trip");
+      widget.trip.endPausedTrip();
+      // Sets endOdometer in DB
+      tripsReference
+          .child(widget.trip.tripID)
+          .child("endOdometer")
+          .set(widget.trip.endOdometer);
+      // Sets endTime via Server timestamp
+      tripsReference
+          .child(widget.trip.tripID)
+          .child("endTime")
+          .set(ServerValue.timestamp);
+      // End the trip - set inProgress and paused to false just in case
+      tripsReference.child(widget.trip.tripID).child("inProgress").set(false);
+      tripsReference.child(widget.trip.tripID).child("paused").set(false);
+      Navigator.pop(context);
+    } else {
+      // Sets the end Odometer reading in the DB
+      widget.trip.setEndOdo(int.parse(_odometerReadingDiag.text));
+      // Sets endOdometer in DB
+      tripsReference
+          .child(widget.trip.tripID)
+          .child("endOdometer")
+          .set(int.parse(_odometerReadingDiag.text));
+      // Sets milesTraveled in DB
+      tripsReference
+          .child(widget.trip.tripID)
+          .child("milesTraveled")
+          .set(widget.trip.milesTraveled);
+      // Sets endTime via Server timestamp
+      tripsReference
+          .child(widget.trip.tripID)
+          .child("endTime")
+          .set(ServerValue.timestamp);
+      // End the trip - set inProgress and paused to false just in case
+      tripsReference.child(widget.trip.tripID).child("inProgress").set(false);
+      tripsReference.child(widget.trip.tripID).child("paused").set(false);
+      // TODO: Edit class to have _vehicleList and _vehicleReference passed in
+      // and set whatever the active vehicle is to dormant again
+      Navigator.pop(context);
+    }
+  }
+  
+  // supporting function of _showAddChargeButton()
+  void _showDialogAddCharge() {
+    TextEditingController _chargeFieldControl = TextEditingController();
+    print("showDialogAddCharge invoked");
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text("Trip Charge",
+              style: TextStyle(fontSize: 18.0, color: Colors.black)),
+          content: TextField(
+            controller: _chargeFieldControl,
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            decoration: InputDecoration(hintText: "0.00"),
+          ),
+          actions: <Widget>[
+            // buttons at the bottom of the dialog
+            FlatButton(
+              child: Text(
+                "Add",
+                style: TextStyle(fontSize: 18.0, color: Colors.green),
+              ),
+              onPressed: () {
+                double newChargeAmt =
+                    double.parse(_chargeFieldControl.text.toString());
+                print("Got: " + newChargeAmt.toString() + " from user.");
+                // Set it in the trip object
+                widget.trip.addCharge(newChargeAmt);
+                // Set it in DB as well
+                tripsReference
+                    .child(widget.trip.tripID)
+                    .child('totCharges')
+                    .set(widget.trip.totCharges);
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text(
+                "Cancel",
+                style: TextStyle(fontSize: 18.0, color: Colors.red),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+} // end of class _TripScreenActionState
