@@ -113,17 +113,19 @@ class _ListViewLogState extends State<ListViewLog> {
   // main source of navigation throughout the app
   Widget _showDrawer(BuildContext context) {
     return Drawer(
+      elevation: 12.0,
       child: ListView(
         // Important: Remove any padding from the ListView.
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
+            decoration: BoxDecoration(color: Colors.blueAccent[400]),
               child: Container(
             child: Text(
-              'Main Menu',
+              '\n\n\nMain Menu',
               style: TextStyle(
-                fontSize: 24.0,
-                color: Colors.black,
+                fontSize: 26.0,
+                color: Colors.white,
               ),
             ),
             margin: const EdgeInsets.only(bottom: 10.0),
@@ -139,40 +141,37 @@ class _ListViewLogState extends State<ListViewLog> {
               // Add the Drawer image here (user icon perhaps?)
             ),
           )),
-          // ListTile(
-          //   title: Text('Trips'),
-          //   leading: new Icon(Icons.speaker_notes, color: Colors.blueAccent),
-          //   onTap: () {
-          //     //Since we're currently in ListViewLog, do nothing
-          //     Navigator.pop(context);
-          //   },
-          // ),
-          ListTile(
-            title: Text('Account'),
-            leading: new Icon(Icons.perm_identity, color: Colors.black),
-            onTap: () {
-              _navigateToUserScreen();
-              // Update the state of the app
-              // ...
-              // Then close the drawer
-              // Navigator.pop(context);
-            },
+          Container(
+            child: Column(
+              children: <Widget>[
+                ListTile(
+                  title: Text('Account'),
+                  leading: new Icon(Icons.perm_identity, color: Colors.black),
+                  // trailing: Container(decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.blue,)))),
+                  onTap: () {
+                    _navigateToUserScreen();
+                  }, 
+                ),
+                ListTile(
+                  title: Text('Vehicles'),
+                  leading: new Icon(Icons.directions_car, color: Colors.blue),
+                  onTap: () {
+                    _navigateToVehicles(context);
+                  },
+                ),
+                ListTile(
+                  leading: new Icon(Icons.exit_to_app, color: Colors.red[300]),
+                  title: Text('Sign Out'),
+                  onTap: () {
+                    _signOut();
+                    Navigator.pop(context);
+                  },
+                ),
+                // End of container -> column -> children
+              ],
+            )
           ),
-          ListTile(
-            title: Text('Vehicles'),
-            leading: new Icon(Icons.directions_car, color: Colors.blue),
-            onTap: () {
-              _navigateToVehicles(context);
-            },
-          ),
-          ListTile(
-            leading: new Icon(Icons.exit_to_app, color: Colors.red[300]),
-            title: Text('Sign Out'),
-            onTap: () {
-              _signOut();
-              Navigator.pop(context);
-            },
-          ),
+          
         ],
       ),
     );
