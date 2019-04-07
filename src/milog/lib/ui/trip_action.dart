@@ -99,6 +99,7 @@ class _TripScreenActionState extends State<TripAction> {
         ]));
   }
 
+  // TODO probably need to check if miles is >= starting odo here as well
   Widget _showPauseResumeButton() {
     return new Padding(
         padding: EdgeInsets.all(15.0),

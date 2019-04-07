@@ -8,7 +8,7 @@ import 'package:milog/ui/vehicle_action.dart';
 class VehicleList extends StatefulWidget {
   final String userID;
   List<Vehicle> _vehicleList;
-  Query _vehicleQuery;
+  final Query _vehicleQuery;
 
   //final Vehicle vehicle;
 
@@ -29,7 +29,7 @@ class _VehicleListState extends State<VehicleList> {
 
   final FirebaseDatabase _database = FirebaseDatabase.instance;
   
-  StreamSubscription<Event> _onVehicleAddedSub;
+  // StreamSubscription<Event> _onVehicleAddedSub;
   StreamSubscription<Event> _onVehicleChangedSub;
 
   // ----------------------------------------
@@ -44,13 +44,13 @@ class _VehicleListState extends State<VehicleList> {
     FirebaseDatabase.instance.setPersistenceEnabled(true);
     vehicleReference = _database.reference().child('Vehicles');
 
-    //_onVehicleAddedSub = widget._vehicleQuery.onChildAdded.listen(_onVehicleAdded);
+    // _onVehicleAddedSub = widget._vehicleQuery.onChildAdded.listen(_onVehicleAdded);
     _onVehicleChangedSub = widget._vehicleQuery.onChildChanged.listen(_onVehicleUpdated);
   }
 
   @override
   void dispose() {
-    //_onVehicleAddedSub.cancel();
+    // _onVehicleAddedSub.cancel();
     _onVehicleChangedSub.cancel();
     super.dispose();
   }
@@ -157,12 +157,12 @@ class _VehicleListState extends State<VehicleList> {
   /*    DATABASE SUBSCRIPTION FUNCTIONS    */
   // ----------------------------------------
 
-  void _onVehicleAdded(Event event) {
-    print("activated onVehicleAdded");
-    setState(() {
-      widget._vehicleList.add(new Vehicle.fromSnapshot(event.snapshot));
-    });
-  }
+  // void _onVehicleAdded(Event event) {
+  //   print("activated onVehicleAdded");
+  //   setState(() {
+  //     widget._vehicleList.add(new Vehicle.fromSnapshot(event.snapshot));
+  //   });
+  // }
 
   void _onVehicleUpdated(Event event) {
     var oldVehicleValue = widget._vehicleList.singleWhere((vehicle) => vehicle.vehicleID == event.snapshot.key);
@@ -175,7 +175,37 @@ class _VehicleListState extends State<VehicleList> {
   /*         VEHICLELIST FUNCTIONS         */
   // ----------------------------------------
 
-  // TODO: Split children widgets into separate functions
+  // supporting function of _showVehicleList()
+  Widget _showVehicles(var position) {
+    return Container( 
+      decoration: 
+        (widget._vehicleList[position].inUse)
+            ? new BoxDecoration(color: Colors.yellow[300], border: new Border(bottom: BorderSide(color: Colors.blue, width: 2)))
+            : new BoxDecoration(color: Colors.white, border: new Border(bottom: BorderSide(color: Colors.blue, width: 2))),
+      child: ListTile(
+        title: Text(
+          widget._vehicleList[position].name,
+          style: TextStyle(
+            fontSize: 22.0,
+            color: Colors.black
+          ),
+        ),
+        subtitle: Text(
+          // "Odometer: " + widget._vehicleList[position].lastKnownOdometer.toString(),
+          "bool -> " + widget._vehicleList[position].inUse.toString(),
+          style: TextStyle(
+            fontSize: 18.0,
+            fontStyle: FontStyle.italic,
+          ),
+        ),
+      // onTap -> update
+      // onLongPress -> delete
+      onTap: () => _navigateToVehicleAction(context, widget._vehicleList[position]),
+      onLongPress: () => _checkIfCanDel(context, widget._vehicleList[position], position),
+      )
+    );
+  }
+
   Widget _showVehicleList() {
     if (widget._vehicleList.length > 0) {
       return ListView.builder(
@@ -185,36 +215,8 @@ class _VehicleListState extends State<VehicleList> {
           return Column(
             children: <Widget>[
               Divider(height: 5.0),
-              Divider(
-                height: 5.0,
-              ),
-              Container( 
-                decoration: 
-                  (widget._vehicleList[position].inUse)
-                      ? new BoxDecoration(color: Colors.yellow[300], border: new Border(bottom: BorderSide(color: Colors.blue, width: 2)))
-                      : new BoxDecoration(color: Colors.white, border: new Border(bottom: BorderSide(color: Colors.blue, width: 2))),
-                child: ListTile(
-                title: Text(
-                  widget._vehicleList[position].name,
-                  style: TextStyle(
-                    fontSize: 22.0,
-                    color: Colors.black
-                    ),
-                ),
-                subtitle: Text(
-                  // "Odometer: " + widget._vehicleList[position].lastKnownOdometer.toString(),
-                  "bool -> " + widget._vehicleList[position].inUse.toString(),
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontStyle: FontStyle.italic,
-                  ),
-                ),
-                // onTap -> update
-                // onLongPress -> delete
-                onTap: () => _navigateToVehicleAction(context, widget._vehicleList[position]),
-                onLongPress: () => _checkIfCanDel(context, widget._vehicleList[position], position),
-              )
-              )
+              Divider(height: 5.0),
+              _showVehicles(position),
             ],
           );
         });

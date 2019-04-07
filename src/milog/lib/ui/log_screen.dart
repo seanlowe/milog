@@ -154,6 +154,7 @@ class _LogScreenState extends State<LogScreen> {
                 hint: Text("Select a Vehicle"),
                 onChanged: (value) {
                   selected = value;
+                  _odometerReading.text = selected.lastKnownOdometer.toString();
                   print("selected = " +
                       selected.name +
                       " | value = " +
