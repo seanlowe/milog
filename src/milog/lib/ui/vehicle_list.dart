@@ -7,10 +7,13 @@ import 'package:milog/ui/vehicle_action.dart';
 
 class VehicleList extends StatefulWidget {
   final String userID;
+  List<Vehicle> _vehicleList;
+  Query _vehicleQuery;
+
   //final Vehicle vehicle;
 
   //VehicleList(this.userID, this.vehicle);
-  VehicleList(this.userID);
+  VehicleList(this.userID, this._vehicleQuery, this._vehicleList);
 
   @override
   _VehicleListState createState() => new _VehicleListState();
@@ -20,8 +23,6 @@ class VehicleList extends StatefulWidget {
 class _VehicleListState extends State<VehicleList> {
   // variables
   var vehicleReference;
-  List<Vehicle> _vehicleList;
-  Query _vehicleQuery;
 
   final FirebaseDatabase _database = FirebaseDatabase.instance;
   
@@ -32,31 +33,26 @@ class _VehicleListState extends State<VehicleList> {
   @override
   void initState() {
     super.initState();
-    _vehicleList = new List();
-    _vehicleQuery = _database
-      .reference()
-      .child("Vehicles")
-      .orderByChild("userID")
-      .equalTo(widget.userID);
+    // widget._vehicleList = [];
 
-      FirebaseDatabase.instance.setPersistenceEnabled(true);
-      vehicleReference = _database.reference().child('Vehicles');
+    FirebaseDatabase.instance.setPersistenceEnabled(true);
+    vehicleReference = _database.reference().child('Vehicles');
 
-      _onVehicleAddedSub = _vehicleQuery.onChildAdded.listen(_onVehicleAdded);
-      _onVehicleChangedSub = _vehicleQuery.onChildChanged.listen(_onVehicleUpdated);
+    //_onVehicleAddedSub = widget._vehicleQuery.onChildAdded.listen(_onVehicleAdded);
+    _onVehicleChangedSub = widget._vehicleQuery.onChildChanged.listen(_onVehicleUpdated);
   }
 
   @override
   void dispose() {
-    _onVehicleAddedSub.cancel();
+    //_onVehicleAddedSub.cancel();
     _onVehicleChangedSub.cancel();
     super.dispose();
   }
 
   Widget _showVehicleList() {
-    if (_vehicleList.length > 0) {
+    if (widget._vehicleList.length > 0) {
       return ListView.builder(
-        itemCount: _vehicleList.length,
+        itemCount: widget._vehicleList.length,
         padding: const EdgeInsets.all(15.0),
         itemBuilder: (context, position) {
           return Column(
@@ -65,18 +61,22 @@ class _VehicleListState extends State<VehicleList> {
               Divider(
                 height: 5.0,
               ),
-              Container(
-                decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.blue, width: 2))),
+              Container( 
+                decoration: 
+                  (widget._vehicleList[position].inUse)
+                      ? new BoxDecoration(color: Colors.yellow[300], border: new Border(bottom: BorderSide(color: Colors.blue, width: 2)))
+                      : new BoxDecoration(color: Colors.white, border: new Border(bottom: BorderSide(color: Colors.blue, width: 2))),
                 child: ListTile(
                 title: Text(
-                  _vehicleList[position].name,
+                  widget._vehicleList[position].name,
                   style: TextStyle(
                     fontSize: 22.0,
                     color: Colors.black
                     ),
                 ),
                 subtitle: Text(
-                  "Odometer: " + _vehicleList[position].lastKnownOdometer.toString(),
+                  // "Odometer: " + widget._vehicleList[position].lastKnownOdometer.toString(),
+                  "bool -> " + widget._vehicleList[position].inUse.toString(),
                   style: TextStyle(
                     fontSize: 18.0,
                     fontStyle: FontStyle.italic,
@@ -84,8 +84,8 @@ class _VehicleListState extends State<VehicleList> {
                 ),
                 // onTap -> update
                 // onLongPress -> delete
-                onTap: () => _navigateToVehicleAction(context, _vehicleList[position]),
-                onLongPress: () => _checkIfCanDel(context, _vehicleList[position], position),
+                onTap: () => _navigateToVehicleAction(context, widget._vehicleList[position]),
+                onLongPress: () => _checkIfCanDel(context, widget._vehicleList[position], position),
               )
               )
             ],
@@ -118,17 +118,16 @@ class _VehicleListState extends State<VehicleList> {
   }
 
   void _onVehicleAdded(Event event) {
+    print("activated onVehicleAdded");
     setState(() {
-      _vehicleList.add(new Vehicle.fromSnapshot(event.snapshot));
-      // isVehicleInUse();
+      widget._vehicleList.add(new Vehicle.fromSnapshot(event.snapshot));
     });
   }
 
   void _onVehicleUpdated(Event event) {
-    var oldVehicleValue = _vehicleList.singleWhere((vehicle) => vehicle.vehicleID == event.snapshot.key);
+    var oldVehicleValue = widget._vehicleList.singleWhere((vehicle) => vehicle.vehicleID == event.snapshot.key);
     setState(() {
-      _vehicleList[_vehicleList.indexOf(oldVehicleValue)] = new Vehicle.fromSnapshot(event.snapshot);
-      // isVehicleInUse();
+      widget._vehicleList[widget._vehicleList.indexOf(oldVehicleValue)] = new Vehicle.fromSnapshot(event.snapshot);
     });
   }
 
@@ -184,7 +183,7 @@ class _VehicleListState extends State<VehicleList> {
   void _deleteVehicle(BuildContext context, Vehicle vehicle, int position) async {
     await vehicleReference.child(vehicle.vehicleID).remove().then((_) {
       setState(() {
-        _vehicleList.removeAt(position);
+        widget._vehicleList.removeAt(position);
       });
     });
   }
@@ -202,15 +201,5 @@ class _VehicleListState extends State<VehicleList> {
       MaterialPageRoute(builder: (context) => VehicleScreen(widget.userID, Vehicle.newVehicle()),
       ));
   }
-
-  // checks if the vehicle is currently being used in a trip
-  // void isVehicleInUse() {
-  //   bool inUse = false;
-  //   for (Vehicle v in _vehicleList) {
-  //     if (v.inUse) {
-  //       inUse = true;
-  //     }
-  //   }
-  // }
 
 } // end of class _VehicleListState

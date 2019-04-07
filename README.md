@@ -11,8 +11,8 @@ app aims to give companies and their employees a convenient way to log trip mile
 # Developers
 <ul>
   <li>James (JR) Mathson <a href="https://github.com/sonofmath" target="_blank">GitHub</a></li> 
-  <li>Jesus Velasquez <a href="https://github.com/chewy913" target="_blank">GitHub</a></li>
   <li>Riad (Ray) Shash <a href="https://github.com/Blackbird002" target="_blank">GitHub</a></li>
+  <li>Jesus Velasquez <a href="https://github.com/chewy913" target="_blank">GitHub</a></li>
   <li>Robert Dunski <a href="https://github.com/rdunski" target="_blank">GitHub</a></li>
   <li>Sean Lowe <a href="https://github.com/seanlowe" target="_blank">GitHub</a></li>
 </ul>
