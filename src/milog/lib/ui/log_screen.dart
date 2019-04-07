@@ -139,28 +139,31 @@ class _LogScreenState extends State<LogScreen> {
     // }
 
     return new Container(
-        decoration: BoxDecoration(
-          border: Border(bottom: new BorderSide(color: Colors.grey, width: 1)),
-        ),
-        child: DropdownButtonHideUnderline(
-            child: DropdownButton(
-                value: selected,
-                items: _listVehicles,
-                iconSize: 35.0,
-                style: new TextStyle(
-                  fontSize: 22.0,
-                  color: Colors.black,
-                ),
-                hint: Text("Select a Vehicle"),
-                onChanged: (value) {
-                  selected = value;
-                  _odometerReading.text = selected.lastKnownOdometer.toString();
-                  print("selected = " +
-                      selected.name +
-                      " | value = " +
-                      value.name);
-                  setState(() {/* */});
-                })));
+      decoration: BoxDecoration(
+        border: Border(bottom: new BorderSide(color: Colors.grey, width: 1)),
+      ),
+      child: DropdownButtonHideUnderline(
+          child: DropdownButton(
+            value: selected,
+            items: _listVehicles,
+            iconSize: 35.0,
+            style: new TextStyle(
+              fontSize: 22.0,
+              color: Colors.black,
+            ),
+            hint: Text("Select a Vehicle"),
+            onChanged: (value) {
+              selected = value;
+              _odometerReading.text = selected.lastKnownOdometer.toString();
+              print("selected = " +
+                  selected.name +
+                  " | value = " +
+                  value.name);
+              setState(() {/* */});
+            }
+          )
+        )
+    );
   }
 
   // show a textbox for vehicle field on existing trips
