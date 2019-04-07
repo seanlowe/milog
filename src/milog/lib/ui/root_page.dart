@@ -19,9 +19,9 @@ class RootPage extends StatefulWidget {
 
 // Authentication Status Flags
 enum AuthStatus {
-  NOT_DETERMINED, // Don't know if logged in (loading)
-  NOT_LOGGED_IN, // Not logged in
-  LOGGED_IN, // User is logged in and email is verified
+  NOT_DETERMINED,    // Don't know if logged in (loading)
+  NOT_LOGGED_IN,     // Not logged in
+  LOGGED_IN,         // User is logged in and email is verified
   LOGGED_IN_NOT_VER, // User logged in, but did not verify email
 }
 

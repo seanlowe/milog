@@ -4,6 +4,7 @@ import 'package:milog/services/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:milog/model/Trip.dart';
 import 'package:milog/model/Vehicle.dart';
+import 'package:milog/ui/user_screen.dart';
 import 'package:milog/ui/log_screen.dart';
 import 'package:milog/ui/trip_action.dart';
 import 'package:milog/ui/vehicle_list.dart';
@@ -150,10 +151,11 @@ class _ListViewLogState extends State<ListViewLog> {
             title: Text('Account'),
             leading: new Icon(Icons.perm_identity, color: Colors.black),
             onTap: () {
+              _navigateToUserScreen();
               // Update the state of the app
               // ...
               // Then close the drawer
-              Navigator.pop(context);
+              // Navigator.pop(context);
             },
           ),
           ListTile(
@@ -200,6 +202,14 @@ class _ListViewLogState extends State<ListViewLog> {
       // We're not updating the Trip, so don't pass in true
       MaterialPageRoute(builder: (context) => TripAction(widget.userId, trip, _vehicleList)),
     );
+  }
+
+  void _navigateToUserScreen() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => UserScreen()),
+    );
+    Navigator.pop(context);
   }
 
   // Signs out the user
