@@ -70,6 +70,13 @@ class _LogScreenState extends State<LogScreen> {
     _vehicleController = new TextEditingController();
     _odometerReading =
         new TextEditingController();
+
+    //Only adds the info in the textboxes when were are doing update
+    if(widget.update){
+      _notesController.text = widget.trip.notes.toString();
+      _vehicleController.text = widget.trip.vehicle.toString();
+      _odometerReading.text = widget.trip.endOdometer.toString();
+    }
   }
 
   @override
