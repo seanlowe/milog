@@ -116,9 +116,9 @@ class Trip {
         _milesTraveled = snapshot.value['milesTraveled'],
         _inProgress = snapshot.value['inProgress'],
         _paused = snapshot.value['paused'],
-        _startTime = snapshot.value['startTime'].toInt(),
-        _endTime = snapshot.value['endTime'].toInt(),
-        _vehicle = snapshot.value['vehicle'],
+        _startTime = snapshot.value['startTime'],
+        _endTime = snapshot.value['endTime'],
+        _vehicle = snapshot.value['vehicle'].toString(),
         _totCharges = snapshot.value['totCharges'].toDouble();
 
   toJson() {

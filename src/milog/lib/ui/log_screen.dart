@@ -309,7 +309,7 @@ class _LogScreenState extends State<LogScreen> {
                   _setVehicleActive(selected);
                   // TODO: use push class/object instead
                   tripsReference.push().set({
-                    'notes': _notesController.text,
+                    'notes': _notesController.text.toString(),
                     // 'vehicle': _vehicleController.text,
                     'vehicle': selected.name.toString(),
                     'startOdometer': int.parse(_odometerReading.text),

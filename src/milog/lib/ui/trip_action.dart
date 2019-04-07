@@ -131,7 +131,8 @@ class _TripScreenActionState extends State<TripAction> {
             child: Text('END TRIP',
                 style: new TextStyle(fontSize: 20.0, color: Colors.black)),
             onPressed: () {
-              processOdoMiles();
+               if(!_isOdoLessThanStart())
+                processOdoMiles();
             },
           ),
         ));
@@ -222,6 +223,44 @@ class _TripScreenActionState extends State<TripAction> {
       setPausedOrResume();
       Navigator.pop(context);
     }
+  }
+
+  // Returns true if entered Odo value is < starting Odometer value 
+  bool _isOdoLessThanStart(){
+    bool result = false;
+    bool emptyOdo = _odometerReadingDiag.text.isEmpty;
+    if(!emptyOdo){
+      int odoVal = int.parse(_odometerReadingDiag.text.toString());
+      if(odoVal < widget.trip.startOdometer){
+        result = true;
+
+        showDialog(
+        context: context,
+        builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text("Oops!",
+              style: TextStyle(fontSize: 18.0, color: Colors.red)),
+          content: Text("You entered an Odometer value less than your starting value.",
+              style: TextStyle(fontSize: 18.0, color: Colors.black)),
+          actions: <Widget>[
+            // buttons at the bottom of the dialog
+            FlatButton(
+              child: Text(
+                "Ok",
+                style: TextStyle(fontSize: 18.0, color: Colors.blueAccent),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+          );
+        },
+        );
+      }
+    }
+    return result;
   }
 
   // supporting function for processPause() & processOdoMiles()
