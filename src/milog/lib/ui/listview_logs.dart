@@ -84,6 +84,7 @@ class _ListViewLogState extends State<ListViewLog> {
   void dispose() {
     _onTripAddedSubscription.cancel();
     _onTripChangedSubscription.cancel();
+    _onVehicleAddedSub.cancel();
     super.dispose();
   }
 
