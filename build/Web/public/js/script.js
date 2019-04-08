@@ -87,7 +87,9 @@ function handleSignIn() {
       var errorMessage = error.message;
       // [START_EXCLUDE]
       if (errorCode === "auth/wrong-password") {
-        alert("Wrong password.");
+        var warning = document.getElementById('warning-field');
+        warning.style.display = 'block';
+        warning.innerHTML = 'Wrong Password';
       } else {
         alert(errorMessage);
       }
@@ -289,7 +291,7 @@ function getTripData(snapshot, uid) {
     snapshot.forEach(function(childSnapshot) {
       var key = childSnapshot.key;
       var value = childSnapshot.val();
-      
+
       if(value.userID == uid) {
         tripArray.push(value);
         // console.log(value);
@@ -344,7 +346,7 @@ function initApp() {
     } else {
       // User is signed out.
       alert("No one is signed in");
-      
+
     }
   });
   // [END authstatelistener]
