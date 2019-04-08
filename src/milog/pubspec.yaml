@@ -23,6 +23,8 @@ dependencies:
   # google_sign_in: ^3.2.4
   flutter_launcher_icons: ^0.7.0
 
+  intl: ^0.15.8
+
   
 
   rxdart: 0.20.0
