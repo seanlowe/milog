@@ -74,6 +74,9 @@ class _LogScreenState extends State<LogScreen> {
     _vehicleController = new TextEditingController();
     _odometerReading =
         new TextEditingController();
+    
+    // make sure odometerReading has some value in it regardless
+    _odometerReading.text = "0";
 
     //Only adds the info in the textboxes when were are doing update
     if(widget.update){
@@ -336,7 +339,7 @@ class _LogScreenState extends State<LogScreen> {
                     'notes': _notesController.text.toString(),
                     // 'vehicle': _vehicleController.text,
                     'vehicle': selected.name.toString(),
-                    'startOdometer': int.parse(_odometerReading.text),
+                    'startOdometer': int.parse(_odometerReading.text.toString()),
                     'startTime': ServerValue.timestamp,
                     'endTime': 0,
                     'endOdometer': 0,
@@ -384,30 +387,33 @@ class _LogScreenState extends State<LogScreen> {
   // Checks if fields are empty
   bool _checkEmptyFields() {
     bool result = false;
-    bool odoEmpty = _odometerReading.text.isEmpty;
+    bool odoEmpty = false;
+    if (_odometerReading.text.toString() == "0" || _odometerReading.text.toString() == "") { odoEmpty = true; }
     bool notesEmpty = _notesController.text.isEmpty;
     bool selectedVehicleEmpty = false;
+    // bool odoValueNotValid = selected.checkOdoValid(int.parse(_odometerReading.text.toString()));
     if (selected == null) {
       selectedVehicleEmpty = true;
       result = true;
     }
 
-    //If one of the fields are empty - call the dialog
-    if (odoEmpty || notesEmpty || selectedVehicleEmpty) {
+    // If one of the fields are empty - call the dialog
+    // or if the odo is less than selected vehicles's lastKnownOdometer
+    if (notesEmpty || odoEmpty || selectedVehicleEmpty) {
       _showDialogEmptyFields(odoEmpty, notesEmpty, selectedVehicleEmpty);
     }
 
     return result;
   }
 
-  //Shows appropriate dialog when fields are empty
+  // Shows appropriate dialog when fields are empty
   void _showDialogEmptyFields(bool odo, bool notes, bool vehicle) {
     print("showDialogEmptyFields invoked");
 
     String message = "Please fill in: ";
-    if (notes) {message += "\n *Note ";}
-    if (vehicle) {message += "\n *Vehicle";}
-    if (odo) {message += "\n *Odometer value";}
+    if (notes) { message += "\n *Note "; }
+    if (vehicle) { message += "\n *Vehicle"; }
+    if (odo) { message += "\n *Odometer value"; }
 
     showDialog(
       context: context,
