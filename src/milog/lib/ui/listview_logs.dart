@@ -45,6 +45,7 @@ class _ListViewLogState extends State<ListViewLog> {
   StreamSubscription<Event> _onTripAddedSubscription;
   StreamSubscription<Event> _onTripChangedSubscription;
   StreamSubscription<Event> _onVehicleAddedSub;
+  StreamSubscription<Event> _onVehicleChangedSub;
 
   // ----------------------------------------
   /* FUNCTION OVERRIDES / CLERICAL FUNCTIONS */
@@ -74,10 +75,15 @@ class _ListViewLogState extends State<ListViewLog> {
     vehicleReference = _database.reference().child('Vehicles');
 
     //TODO: Need to add Listener for when the database data changes
+
+    //Listeners for Trip List
     _onTripAddedSubscription = _tripQuery.onChildAdded.listen(_onLogAdded);
     _onTripChangedSubscription =
         _tripQuery.onChildChanged.listen(_onLogUpdated);
+
+    //Listeners for Vehicle List
     _onVehicleAddedSub = _vehicleQuery.onChildAdded.listen(_onVehicleAdded);
+    _onVehicleChangedSub = _vehicleQuery.onChildChanged.listen(_onVehicleUpdated);
   }
 
   @override
@@ -85,6 +91,7 @@ class _ListViewLogState extends State<ListViewLog> {
     _onTripAddedSubscription.cancel();
     _onTripChangedSubscription.cancel();
     _onVehicleAddedSub.cancel();
+    _onVehicleChangedSub.cancel();
     super.dispose();
   }
 
@@ -376,6 +383,13 @@ class _ListViewLogState extends State<ListViewLog> {
     print("Entered _onVehicleAdded");
     setState(() {
       _vehicleList.add(new Vehicle.fromSnapshot(event.snapshot));
+    });
+  }
+
+   void _onVehicleUpdated(Event event) {
+    var oldVehicleValue = _vehicleList.singleWhere((vehicle) => vehicle.vehicleID == event.snapshot.key);
+    setState(() {
+      _vehicleList[_vehicleList.indexOf(oldVehicleValue)] = new Vehicle.fromSnapshot(event.snapshot);
     });
   }
 
