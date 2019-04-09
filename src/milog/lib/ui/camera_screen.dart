@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:milog/main.dart';
 
 class CameraScreen extends StatefulWidget {
   @override
@@ -20,12 +21,11 @@ class _CameraScreenState extends State<CameraScreen> {
   String imagePath;
   Image processImage;
   File imageFile;
-  List<CameraDescription> cameras;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
     controller = CameraController(cameras[0], ResolutionPreset.medium);
     controller.initialize().then((_) {
@@ -35,6 +35,7 @@ class _CameraScreenState extends State<CameraScreen> {
       setState(() {});
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -174,6 +175,9 @@ class CameraApp extends StatelessWidget {
     );
   }
 }
+
+
+//List<CameraDescription> cameras;
 
 /*
 Future<void> main() async {
