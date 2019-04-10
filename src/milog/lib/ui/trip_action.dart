@@ -117,7 +117,8 @@ class _TripScreenActionState extends State<TripAction> {
                     style: new TextStyle(fontSize: 20.0, color: Colors.black)),
             onPressed: () {
               // We are setting isPaused in Trip to true in DB
-              processPause();
+              if(!_isOdoLessThanStart())
+                processPause();
             },
           ),
         ));
@@ -204,10 +205,9 @@ class _TripScreenActionState extends State<TripAction> {
       int newOdo = int.parse(_odometerReadingDiag.text.toString());
       // widget._vehicleList.where((v) => v.vehicleID == widget.trip.vehicleID).first;
       // TODO check if odo is >= lastKnownOdo
-      if (_checkOdo(newOdo)) {
         if (widget.trip.paused) {
           // Trip is paused
-          print("#1 RAN!");
+          
           widget.trip.resumeTrip(newOdo);
           print("In trip, miles traveled = " +
               widget.trip.milesTraveled.toString());
@@ -231,10 +231,6 @@ class _TripScreenActionState extends State<TripAction> {
         // Update the trip paused bool
         setPausedOrResume();
         Navigator.pop(context);
-      }
-      else {
-        print("trip_action -> _checkOdo returned false");
-      }
     }
   }
 
@@ -385,6 +381,7 @@ class _TripScreenActionState extends State<TripAction> {
       if (widget._vehicleList[i].name.toString() == active) {
         widget._vehicleList[i].setInUse = false;
         vehicleReference.child(widget._vehicleList[i].vehicleID).child('inUse').set(false);
+        vehicleReference.child(widget._vehicleList[i].vehicleID).child('lastKnownOdometer').set(widget.trip.endOdometer);
       } 
     }
   }

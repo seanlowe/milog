@@ -427,7 +427,8 @@ class _LogScreenState extends State<LogScreen> {
           title: Text("Oops!",
               style: TextStyle(fontSize: 18.0, color: Colors.red)),
           content: Text(
-              "The Mileage you entered is less than the last known odometer for" + selected.name.toString(),
+              "The Mileage you entered is less than the last known odometer for your" + selected.name.toString()
+              + ".\n \nYour last known odometer was " + selected.lastKnownOdometer.toString() + " miles.",
               style: TextStyle(fontSize: 18.0, color: Colors.black)),
           actions: <Widget>[
             FlatButton(
