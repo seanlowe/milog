@@ -410,7 +410,7 @@ class _LogScreenState extends State<LogScreen> {
     bool result = widget._vehicleList[widget._vehicleList.indexOf(selected)]
         .checkOdoValid(int.parse(_odometerReading.text.toString()));
 
-    if(!result){
+    if (!result) {
       _showDialogInvalidOdometer();
     }
 
@@ -427,8 +427,11 @@ class _LogScreenState extends State<LogScreen> {
           title: Text("Oops!",
               style: TextStyle(fontSize: 18.0, color: Colors.red)),
           content: Text(
-              "The Mileage you entered is less than the last known odometer for your" + selected.name.toString()
-              + ".\n \nYour last known odometer was " + selected.lastKnownOdometer.toString() + " miles.",
+              "The Mileage you entered is less than the last known odometer for your" +
+                  selected.name.toString() +
+                  ".\n \nYour last known odometer was " +
+                  selected.lastKnownOdometer.toString() +
+                  " miles.",
               style: TextStyle(fontSize: 18.0, color: Colors.black)),
           actions: <Widget>[
             FlatButton(
@@ -484,6 +487,7 @@ class _LogScreenState extends State<LogScreen> {
 
   // Displays the information of the selected trip
   Widget _showSelectedTrip() {
+    final formatCurrency = new NumberFormat.simpleCurrency();
     return Container(
         margin: EdgeInsets.all(15.0),
         decoration: BoxDecoration(
@@ -498,6 +502,9 @@ class _LogScreenState extends State<LogScreen> {
               textAlign: TextAlign.left,
               style: new TextStyle(fontSize: 20.0, color: Colors.black)),
           Text("Miles Traveled: " + widget.trip.milesTraveled.toString(),
+              textAlign: TextAlign.left,
+              style: new TextStyle(fontSize: 20.0, color: Colors.black)),
+          Text("Fees: "+ "${formatCurrency.format(widget.trip.totCharges)}",
               textAlign: TextAlign.left,
               style: new TextStyle(fontSize: 20.0, color: Colors.black)),
           Text("Date: " + getTripDate(),

@@ -191,8 +191,8 @@ class _VehicleListState extends State<VehicleList> {
           ),
         ),
         subtitle: Text(
-          // "Odometer: " + widget._vehicleList[position].lastKnownOdometer.toString(),
-          "bool -> " + widget._vehicleList[position].inUse.toString(),
+          "Last known Odometer: " + widget._vehicleList[position].lastKnownOdometer.toString(),
+          //"bool -> " + widget._vehicleList[position].inUse.toString(),
           style: TextStyle(
             fontSize: 18.0,
             fontStyle: FontStyle.italic,
