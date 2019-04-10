@@ -18,7 +18,8 @@ class LogScreen extends StatefulWidget {
   final String userId;
   final bool update; // are we updating a trip?
 
-  LogScreen(this._vehicleList, this._vehicleQuery, this.userId, this.trip, this.update);
+  LogScreen(this._vehicleList, this._vehicleQuery, this.userId, this.trip,
+      this.update);
 
   @override
   State<StatefulWidget> createState() => new _LogScreenState();
@@ -72,14 +73,13 @@ class _LogScreenState extends State<LogScreen> {
     // This happens at start... what's written in the TextBoxes
     _notesController = new TextEditingController();
     _vehicleController = new TextEditingController();
-    _odometerReading =
-        new TextEditingController();
-    
+    _odometerReading = new TextEditingController();
+
     // make sure odometerReading has some value in it regardless
     _odometerReading.text = "0";
 
     //Only adds the info in the textboxes when were are doing update
-    if(widget.update){
+    if (widget.update) {
       _notesController.text = widget.trip.notes.toString();
       _vehicleController.text = widget.trip.vehicle.toString();
       _odometerReading.text = widget.trip.endOdometer.toString();
@@ -142,31 +142,28 @@ class _LogScreenState extends State<LogScreen> {
     // }
 
     return new Container(
-      decoration: BoxDecoration(
-        border: Border(bottom: new BorderSide(color: Colors.grey, width: 1)),
-      ),
-      child: DropdownButtonHideUnderline(
-          child: DropdownButton(
-            value: selected,
-            items: _listVehicles,
-            iconSize: 35.0,
-            style: new TextStyle(
-              fontSize: 22.0,
-              color: Colors.black,
-            ),
-            hint: Text("Select a Vehicle"),
-            onChanged: (value) {
-              selected = value;
-              _odometerReading.text = selected.lastKnownOdometer.toString();
-              print("selected = " +
-                  selected.name +
-                  " | value = " +
-                  value.name);
-              setState(() {/* */});
-            }
-          )
-        )
-    );
+        decoration: BoxDecoration(
+          border: Border(bottom: new BorderSide(color: Colors.grey, width: 1)),
+        ),
+        child: DropdownButtonHideUnderline(
+            child: DropdownButton(
+                value: selected,
+                items: _listVehicles,
+                iconSize: 35.0,
+                style: new TextStyle(
+                  fontSize: 22.0,
+                  color: Colors.black,
+                ),
+                hint: Text("Select a Vehicle"),
+                onChanged: (value) {
+                  selected = value;
+                  _odometerReading.text = selected.lastKnownOdometer.toString();
+                  print("selected = " +
+                      selected.name +
+                      " | value = " +
+                      value.name);
+                  setState(() {/* */});
+                })));
   }
 
   // show a textbox for vehicle field on existing trips
@@ -303,7 +300,8 @@ class _LogScreenState extends State<LogScreen> {
     await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => VehicleList(widget.userId, widget._vehicleQuery, widget._vehicleList)),
+          builder: (context) => VehicleList(
+              widget.userId, widget._vehicleQuery, widget._vehicleList)),
     );
     Navigator.pop(context);
   }
@@ -333,25 +331,28 @@ class _LogScreenState extends State<LogScreen> {
               } else {
                 // We check if any fields are empty (true means there are empty fields)
                 if (!_checkEmptyFields()) {
-                  _setVehicleActive(selected);
-                  // TODO: use push class/object instead
-                  tripsReference.push().set({
-                    'notes': _notesController.text.toString(),
-                    // 'vehicle': _vehicleController.text,
-                    'vehicle': selected.name.toString(),
-                    'startOdometer': int.parse(_odometerReading.text.toString()),
-                    'startTime': ServerValue.timestamp,
-                    'endTime': 0,
-                    'endOdometer': 0,
-                    'milesTraveled': 0,
-                    'totCharges': 0.0,
-                    'userID': widget.userId,
-                    'vehicleID': selected.vehicleID,
-                    'inProgress': true,
-                    'paused': false
-                  }).then((_) {
-                    Navigator.pop(context);
-                  });
+                  if (_checkOdo()) {
+                    _setVehicleActive(selected);
+                    // TODO: use push class/object instead
+                    tripsReference.push().set({
+                      'notes': _notesController.text.toString(),
+                      // 'vehicle': _vehicleController.text,
+                      'vehicle': selected.name.toString(),
+                      'startOdometer':
+                          int.parse(_odometerReading.text.toString()),
+                      'startTime': ServerValue.timestamp,
+                      'endTime': 0,
+                      'endOdometer': 0,
+                      'milesTraveled': 0,
+                      'totCharges': 0.0,
+                      'userID': widget.userId,
+                      'vehicleID': selected.vehicleID,
+                      'inProgress': true,
+                      'paused': false
+                    }).then((_) {
+                      Navigator.pop(context);
+                    });
+                  }
                 }
               }
             },
@@ -382,59 +383,57 @@ class _LogScreenState extends State<LogScreen> {
     vehicleReference.child(selected.vehicleID).child('inUse').set(true);
   }
 
-  
-
   // Checks if fields are empty
-  // also checks if mileage entered into odo field is >= vehicle's lastKnownOdo
   bool _checkEmptyFields() {
     bool result = false;
     bool odoEmpty = false;
-    bool odoTooSmall = _checkOdo(int.parse(_odometerReading.text.toString()));
-    if (_odometerReading.text.toString() == "0" || _odometerReading.text.toString() == "") { odoEmpty = true; }
+    if (_odometerReading.text.toString() == "0" ||
+        _odometerReading.text.toString() == "") {
+      odoEmpty = true;
+    }
     bool notesEmpty = _notesController.text.isEmpty;
     bool selectedVehicleEmpty = false;
-    // bool odoValueNotValid = selected.checkOdoValid(int.parse(_odometerReading.text.toString()));
     if (selected == null) {
       selectedVehicleEmpty = true;
       result = true;
     }
 
     // If one of the fields are empty - call the dialog
-    // or if the odo is less than selected vehicles's lastKnownOdometer
-    if (notesEmpty || odoEmpty || selectedVehicleEmpty || odoTooSmall) {
-      (odoTooSmall) ? _showDialogInvalidOdometer() : _showDialogEmptyFields(odoEmpty, notesEmpty, selectedVehicleEmpty);
-      
-      // if (odoTooSmall) {
-      //   _showDialogInvalidOdometer();
-      // } 
-      // else {
-      //   _showDialogEmptyFields(odoEmpty, notesEmpty, selectedVehicleEmpty);
-      // }
+    if (notesEmpty || odoEmpty || selectedVehicleEmpty) {
+      _showDialogEmptyFields(odoEmpty, notesEmpty, selectedVehicleEmpty);
     }
 
     return result;
   }
 
-  bool _checkOdo(int newOdo) {
-    return widget._vehicleList[widget._vehicleList.indexOf(selected)].checkOdoValid(newOdo);
+  bool _checkOdo() {
+    bool result = widget._vehicleList[widget._vehicleList.indexOf(selected)]
+        .checkOdoValid(int.parse(_odometerReading.text.toString()));
+
+    if(!result){
+      _showDialogInvalidOdometer();
+    }
+
+    return result;
     // return widget._vehicleList[widget._vehicleList.indexOf(widget._vehicleList.where((v) => v.vehicleID == widget.trip.vehicleID).elementAt(0))].checkOdoValid(newOdo);
   }
 
   void _showDialogInvalidOdometer() {
-    var name = selected.name.toString();
+    print("_showDialogInvalidOdometer() invoked");
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Oops!",
-            style: TextStyle(fontSize: 18.0, color: Colors.red)),
-          content: Text("The Mileage you entered is less than the last known odometer for$name",
-            style: TextStyle(fontSize: 18.0, color: Colors.black)),
+              style: TextStyle(fontSize: 18.0, color: Colors.red)),
+          content: Text(
+              "The Mileage you entered is less than the last known odometer for" + selected.name.toString(),
+              style: TextStyle(fontSize: 18.0, color: Colors.black)),
           actions: <Widget>[
             FlatButton(
               child: Text("OK",
-                style: TextStyle(fontSize: 18.0, color: Colors.blueAccent)),
-                onPressed: () => Navigator.of(context).pop(),
+                  style: TextStyle(fontSize: 18.0, color: Colors.blueAccent)),
+              onPressed: () => Navigator.of(context).pop(),
             )
           ],
         );
@@ -447,9 +446,15 @@ class _LogScreenState extends State<LogScreen> {
     print("showDialogEmptyFields invoked");
 
     String message = "Please fill in: ";
-    if (notes) { message += "\n *Note "; }
-    if (vehicle) { message += "\n *Vehicle"; }
-    if (odo) { message += "\n *Odometer value"; }
+    if (notes) {
+      message += "\n *Note ";
+    }
+    if (vehicle) {
+      message += "\n *Vehicle";
+    }
+    if (odo) {
+      message += "\n *Odometer value";
+    }
 
     showDialog(
       context: context,
