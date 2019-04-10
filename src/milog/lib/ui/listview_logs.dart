@@ -34,7 +34,7 @@ class _ListViewLogState extends State<ListViewLog> {
   var tripsReference;
   var vehicleReference;
 
-  //Query to get the User's trips & vehicles
+  // Query to get the User's trips & vehicles
   Query _tripQuery;
   Query _vehicleQuery;
 

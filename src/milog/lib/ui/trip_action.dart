@@ -197,38 +197,49 @@ class _TripScreenActionState extends State<TripAction> {
 
   // supporting function of _showPauseResumeButton()
   // When user presses pause or resume
-  // TODO: Check user input!
   void processPause() {
     if (_odometerReadingDiag.text.isEmpty) {
       _showDialogEmptyOdo();
     } else {
-      if (widget.trip.paused) {
-        // Trip is paused
-        print("#1 RAN!");
-        widget.trip.resumeTrip(int.parse(_odometerReadingDiag.text));
-        print("In trip, miles traveled = " +
-            widget.trip.milesTraveled.toString());
-        tripsReference
-            .child(widget.trip.tripID)
-            .child("startOdometer")
-            .set(widget.trip.startOdometer);
-      } else {
-        print("#2 RAN!");
-        // Trip is not paused
-        widget.trip.pauseTrip(int.parse(_odometerReadingDiag.text));
-        tripsReference
-            .child(widget.trip.tripID)
-            .child("milesTraveled")
-            .set(widget.trip.milesTraveled);
-        tripsReference
-            .child(widget.trip.tripID)
-            .child("startOdometer")
-            .set(widget.trip.startOdometer);
+      int newOdo = int.parse(_odometerReadingDiag.text.toString());
+      // widget._vehicleList.where((v) => v.vehicleID == widget.trip.vehicleID).first;
+      // TODO check if odo is >= lastKnownOdo
+      if (_checkOdo(newOdo)) {
+        if (widget.trip.paused) {
+          // Trip is paused
+          print("#1 RAN!");
+          widget.trip.resumeTrip(newOdo);
+          print("In trip, miles traveled = " +
+              widget.trip.milesTraveled.toString());
+          tripsReference
+              .child(widget.trip.tripID)
+              .child("startOdometer")
+              .set(widget.trip.startOdometer);
+        } else {
+          print("#2 RAN!");
+          // Trip is not paused
+          widget.trip.pauseTrip(newOdo);
+          tripsReference
+              .child(widget.trip.tripID)
+              .child("milesTraveled")
+              .set(widget.trip.milesTraveled);
+          tripsReference
+              .child(widget.trip.tripID)
+              .child("startOdometer")
+              .set(widget.trip.startOdometer);
+        }
+        // Update the trip paused bool
+        setPausedOrResume();
+        Navigator.pop(context);
       }
-      // Update the trip paused bool
-      setPausedOrResume();
-      Navigator.pop(context);
+      else {
+        print("trip_action -> _checkOdo returned false");
+      }
     }
+  }
+
+  bool _checkOdo(int newOdo) {
+    return widget._vehicleList[widget._vehicleList.indexOf(widget._vehicleList.where((v) => v.vehicleID == widget.trip.vehicleID).elementAt(0))].checkOdoValid(newOdo);
   }
 
   // Returns true if entered Odo value is < starting Odometer value 
