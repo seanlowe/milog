@@ -385,9 +385,11 @@ class _LogScreenState extends State<LogScreen> {
   
 
   // Checks if fields are empty
+  // also checks if mileage entered into odo field is >= vehicle's lastKnownOdo
   bool _checkEmptyFields() {
     bool result = false;
     bool odoEmpty = false;
+    bool odoTooSmall = _checkOdo(int.parse(_odometerReading.text.toString()));
     if (_odometerReading.text.toString() == "0" || _odometerReading.text.toString() == "") { odoEmpty = true; }
     bool notesEmpty = _notesController.text.isEmpty;
     bool selectedVehicleEmpty = false;
@@ -399,11 +401,16 @@ class _LogScreenState extends State<LogScreen> {
 
     // If one of the fields are empty - call the dialog
     // or if the odo is less than selected vehicles's lastKnownOdometer
-    if (notesEmpty || odoEmpty || selectedVehicleEmpty) {
+    if (notesEmpty || odoEmpty || selectedVehicleEmpty || odoTooSmall) {
       _showDialogEmptyFields(odoEmpty, notesEmpty, selectedVehicleEmpty);
     }
 
     return result;
+  }
+
+  bool _checkOdo(int newOdo) {
+    return widget._vehicleList[widget._vehicleList.indexOf(selected)].checkOdoValid(newOdo);
+    // return widget._vehicleList[widget._vehicleList.indexOf(widget._vehicleList.where((v) => v.vehicleID == widget.trip.vehicleID).elementAt(0))].checkOdoValid(newOdo);
   }
 
   // Shows appropriate dialog when fields are empty
