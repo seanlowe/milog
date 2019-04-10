@@ -10,7 +10,6 @@ firebase.initializeApp(config);
 // Database references
 var tripsRef = firebase.database().ref("Trips");
 var vehicleRef = firebase.database().ref("Vehicles");
-var usersRef = firebase.database().ref("Users");
 
 // function writeUserData() {
 //   var database = firebase.database();
@@ -57,7 +56,7 @@ function handleSignOut() {
 
 
 
-async function generateTripTable(trips) {
+async function generateTripTable(trips, vehicles, userId) {
   // console.log(trips[0]);
   var dataSets = [];
   var totalMiles = 0;
@@ -77,13 +76,14 @@ async function generateTripTable(trips) {
       '<div class="text-center"><button data-toggle="modal" data-target="#myDeleteModal" id="deleteRow" class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></button> <button data-toggle="modal" data-target="#myUpdateModal" id="editRow" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></button></div>',
       trips[i].tripKey,
       trips[i].startOdometer,
-      trips[i].endOdometer
+      trips[i].endOdometer,
+      trips[i].startTime
     ]);
   }
 
   console.log("Total miles logged = " + totalMiles);
   console.log("Total Charges = $" + totalCharges);
-  console.log(dataSets);
+  // console.log(dataSets);
 
   /*
    * Initialse DataTables, with no sorting on the 'details' column
@@ -149,6 +149,7 @@ async function generateTripTable(trips) {
       // oTable.$('tr.selected').removeClass('selected');
       // table.row('.selected').remove().draw( false );
       tripsRef.child(id).remove();
+      location.reload();
     });
 
   });
@@ -156,6 +157,101 @@ async function generateTripTable(trips) {
 
 
   $(document).ready(function() {
+    // --------------------------- //
+    // Generate Vehicle Drop Down  //
+    // --------------------------- //
+    var list = document.getElementById("vehicle-list");
+    for(var i = 0; i < vehicles.length; i++) {
+      var option = document.createElement('option');
+      option.setAttribute("id", i);
+      option.value = option.innerHTML = vehicles[i].name;
+      list.appendChild(option);
+    }    
+    // console.log(document.getElementById(1).innerHTML);
+
+    // ------------------ //
+    //  CREATE NEW TRIP
+    // ------------------ //
+    $("#createLog").on('click', function() {
+      var tripDate = Date.now();
+      console.log(tripDate);
+      var tripVehicle;
+      for(var i = 0; i < vehicles.length; i++) {
+        if(document.getElementById(i).selected) {
+          tripVehicle = document.getElementById(i).innerHTML;
+        }
+      }
+      // var tripVehicle = document.getElementById('vehicle').value;
+      var totMileage = document.getElementById('totalMileage').value;
+      var startMileage = document.getElementById('initialOdo').value;
+      var finalMileage = document.getElementById('finalOdo').value;
+      var tripNotes = document.getElementById('tripNotes').value;
+      var tripFees = document.getElementById('tripFees').value;
+
+      // Make sure user enters mileage or odometer readings
+      if (totMileage == "" && startMileage == "" && finalMileage == "" || tripNotes == ""
+          || tripVehicle == "") {
+        alert("Must enter required fields");
+      } else if (totMileage == "" && startMileage != "" && finalMileage == "") {
+        alert("Must enter Final Odometer Reading");
+      } else if (totMileage == "" && startMileage == "" && finalMileage != ""){
+        alert("Must enter Starting Odometer Reading");
+      } else if (totMileage == "" && startMileage != "" && finalMileage != "" && startMileage > finalMileage){
+        alert("Final odometer reading must be greater than the Starting odometer reading");
+      } else {
+        var totalMiles;
+        var fees;
+        if(totMileage != "") {
+          totalMiles = totMileage;
+          
+        } else {
+          totalMiles = finalMileage - startMileage;
+        }
+        totalMiles = parseInt(totalMiles);
+        if(tripFees == "") {
+          fees = 0;
+        } else {
+          fees = parseFloat(tripFees);
+        }
+        console.log("Trip Date = " + tripDate, "Vehicle: " + tripVehicle, "Total Mileage: " + totalMiles, " Starting Odometer: " + startMileage, " Final Odometer: " + finalMileage, " Notes: " + tripNotes, " Fees: " + fees);
+        tripsRef.push({
+          endOdometer: finalMileage,
+          endTime: 0,
+          inProgress: false,
+          milesTraveled: totalMiles,
+          notes: tripNotes,
+          paused: false,
+          startOdometer: startMileage,
+          startTime: tripDate,
+          totCharges: fees,
+          userID: userId,
+          vehicle: tripVehicle
+        });
+        location.reload();
+        // document.getElementById('tripDate').value = "";
+        document.getElementById('totalMileage').value = "";
+        document.getElementById('initialOdo').value = "";
+        document.getElementById('finalOdo').value = "";
+        document.getElementById('tripNotes').value = "";
+        document.getElementById('tripFees').value = "";
+      }
+
+    });
+
+    tripsRef.on('child_added', function(data) {
+      // addCommentElement(postElement, data.key, data.val().text, data.val().author);
+      console.log(tripsRef.key);
+    });
+    
+    tripsRef.on('child_changed', function(data) {
+      // setCommentValues(postElement, data.key, data.val().text, data.val().author);
+      console.log("Trip Updated");
+    });
+    
+    tripsRef.on('child_removed', function(data) {
+      // deleteComment(postElement, data.key);
+      console.log("Trip Deleted");
+    });
   //   /*
   //    * Insert a 'details' column to the table
   //    */
@@ -229,173 +325,173 @@ function getVehicleData(snapshot, uid) {
   return vehicleArray;
 }
 
-function generateVehicleTable(vehicles, userId) {
-  var dataSets = [];
-  for(var i = 0; i < vehicles.length; i++) {
-    dataSets.push([
-      vehicles[i].name,
-      vehicles[i].lastKnownOdometer,
-      '<div class="text-center"><button data-toggle="modal" data-target="#myDeleteModal" id="deleteRow" class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></button> <button data-toggle="modal" data-target="#myUpdateModal" id="editRow" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></button></div>',
-      vehicles[i].vehicleKey
+// function generateVehicleTable(vehicles, userId) {
+//   // var dataSets = [];
+//   // for(var i = 0; i < vehicles.length; i++) {
+//   //   dataSets.push([
+//   //     vehicles[i].name,
+//   //     vehicles[i].lastKnownOdometer,
+//   //     '<div class="text-center"><button data-toggle="modal" data-target="#myDeleteModal" id="deleteRow" class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></button> <button data-toggle="modal" data-target="#myUpdateModal" id="editRow" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></button></div>',
+//   //     vehicles[i].vehicleKey
       
-    ]);
+//   //   ]);
     
-  }
+//   // }
 
-  console.log(dataSets);
+//   // console.log(dataSets);
 
-  for(var i = 0; i < dataSets.length; i++) {
-    $("#vehicleTable > tbody").append("<tr></tr>");
-      $("#vehicleTable > tbody > tr:last-child").append(
-        "<td>" +
-          vehicles[i].name +
-          '</td><td class="centered">' +
-          vehicles[i].lastKnownOdometer +
-          "</td><td class=\"centered\"><button class='btn btn-primary btn-xs' data-toggle='modal' data-target='#updateVehicleModal'><i class='fa fa-pencil'></i></button>\n" +
-          "<button class='btn btn-danger btn-xs' data-toggle='modal' data-target='#deleteVehicleModal'><i class='fa fa-trash-o '></i></button> </td>" +
-          "<td style='display: none'>" + vehicles[i].vehicleKey +  "</td>"
-      );
-  }
+//   // for(var i = 0; i < dataSets.length; i++) {
+//   //   $("#vehicleTable > tbody").append("<tr></tr>");
+//   //     $("#vehicleTable > tbody > tr:last-child").append(
+//   //       "<td>" +
+//   //         vehicles[i].name +
+//   //         '</td><td class="centered">' +
+//   //         vehicles[i].lastKnownOdometer +
+//   //         "</td><td class=\"centered\"><button class='btn btn-primary btn-xs' data-toggle='modal' data-target='#updateVehicleModal'><i class='fa fa-pencil'></i></button>\n" +
+//   //         "<button class='btn btn-danger btn-xs' data-toggle='modal' data-target='#deleteVehicleModal'><i class='fa fa-trash-o '></i></button> </td>" +
+//   //         "<td style='display: none'>" + vehicles[i].vehicleKey +  "</td>"
+//   //     );
+//   // }
 
-  $(document).ready(function() {
-    // ---------------------------------- //
-    // SELECTING ROW TO UPDATE OR DELETE  //
-    // ---------------------------------- //
-    $('#vehicleTable tbody tr').on( 'click', function () {
-      var name = this.cells[0].innerHTML;
-      var id = this.cells[3].innerHTML;
+//   $(document).ready(function() {
+//     // ---------------------------------- //
+//     // SELECTING ROW TO UPDATE OR DELETE  //
+//     // ---------------------------------- //
+//     // $('#vehicleTable tbody tr').on( 'click', function () {
+//     //   var name = this.cells[0].innerHTML;
+//     //   var id = this.cells[3].innerHTML;
 
-      var newName = document.getElementById("newVehicleName");
-      newName.placeholder = name;
-      var title = document.getElementById("nameTitle");
-      title.innerHTML = name;
-      var deleteTitle = document.getElementById("nameTitleDelete");
-      deleteTitle.innerHTML = name;
-      console.log("Row " + this.rowIndex + " has been clicked and the Name is " + name);
-      // console.log("Name = " + this.cells[0].innerHTML + " Vehicle Id: " + this.cells[3].innerHTML);
-      // UPDATING VEHICLE
-      $("#updateVehicle").on('click', function() {
-        console.log("Vehicle to be Updated: " + name + ": ID = " + id);
+//     //   var newName = document.getElementById("newVehicleName");
+//     //   newName.placeholder = name;
+//     //   var title = document.getElementById("nameTitle");
+//     //   title.innerHTML = name;
+//     //   var deleteTitle = document.getElementById("nameTitleDelete");
+//     //   deleteTitle.innerHTML = name;
+//     //   console.log("Row " + this.rowIndex + " has been clicked and the Name is " + name);
+//     //   // console.log("Name = " + this.cells[0].innerHTML + " Vehicle Id: " + this.cells[3].innerHTML);
+//     //   // UPDATING VEHICLE
+//     //   $("#updateVehicle").on('click', function() {
+//     //     console.log("Vehicle to be Updated: " + name + ": ID = " + id);
 
-      });
-      // DELETING VEHICLE
-      $("#deleteVehicle").on('click', function() {
-        console.log("Vehicle to be Deleted: " + name + ": ID = " + id);
-      });
-    });
+//     //   });
+//     //   // DELETING VEHICLE
+//     //   $("#deleteVehicle").on('click', function() {
+//     //     console.log("Vehicle to be Deleted: " + name + ": ID = " + id);
+//     //   });
+//     // });
 
-    // --------------------------- //
-    // Generate Vehicle Drop Down  //
-    // --------------------------- //
-    var list = document.getElementById("vehicle-list");
-    for(var i = 0; i < vehicles.length; i++) {
-      var option = document.createElement('option');
-      option.setAttribute("id", i);
-      option.value = option.innerHTML = vehicles[i].name;
-      list.appendChild(option);
-    }    
-    // console.log(document.getElementById(1).innerHTML);
+//     // --------------------------- //
+//     // Generate Vehicle Drop Down  //
+//     // --------------------------- //
+//     var list = document.getElementById("vehicle-list");
+//     for(var i = 0; i < vehicles.length; i++) {
+//       var option = document.createElement('option');
+//       option.setAttribute("id", i);
+//       option.value = option.innerHTML = vehicles[i].name;
+//       list.appendChild(option);
+//     }    
+//     // console.log(document.getElementById(1).innerHTML);
 
-    // ------------------ //
-    //  CREATE NEW TRIP
-    // ------------------ //
-    $("#createLog").on('click', function() {
-      var tripDate = document.getElementById('tripDate').value;
-      var tripVehicle;
-      for(var i = 0; i < vehicles.length; i++) {
-        if(document.getElementById(i).selected) {
-          tripVehicle = document.getElementById(i).innerHTML;
-        }
-      }
-      // var tripVehicle = document.getElementById('vehicle').value;
-      var totMileage = document.getElementById('totalMileage').value;
-      var startMileage = document.getElementById('initialOdo').value;
-      var finalMileage = document.getElementById('finalOdo').value;
-      var tripNotes = document.getElementById('tripNotes').value;
-      var tripFees = document.getElementById('tripFees').value;
+//     // ------------------ //
+//     //  CREATE NEW TRIP
+//     // ------------------ //
+//     $("#createLog").on('click', function() {
+//       var tripDate = document.getElementById('tripDate').value;
+//       var tripVehicle;
+//       for(var i = 0; i < vehicles.length; i++) {
+//         if(document.getElementById(i).selected) {
+//           tripVehicle = document.getElementById(i).innerHTML;
+//         }
+//       }
+//       // var tripVehicle = document.getElementById('vehicle').value;
+//       var totMileage = document.getElementById('totalMileage').value;
+//       var startMileage = document.getElementById('initialOdo').value;
+//       var finalMileage = document.getElementById('finalOdo').value;
+//       var tripNotes = document.getElementById('tripNotes').value;
+//       var tripFees = document.getElementById('tripFees').value;
 
-      // Make sure user enters mileage or odometer readings
-      if (totMileage == "" && startMileage == "" && finalMileage == "" || tripNotes == ""
-          || tripDate == "" || tripVehicle == "") {
-        alert("Must enter required fields");
-      } else if (totMileage == "" && startMileage != "" && finalMileage == "") {
-        alert("Must enter Final Odometer Reading");
-      } else if (totMileage == "" && startMileage == "" && finalMileage != ""){
-        alert("Must enter Starting Odometer Reading");
-      } else if (totMileage == "" && startMileage != "" && finalMileage != "" && startMileage > finalMileage){
-        alert("Final odometer reading must be greater than the Starting odometer reading");
-      } else {
-        var totalMiles;
-        var fees;
-        if(totMileage != "") {
-          totalMiles = totMileage;
+//       // Make sure user enters mileage or odometer readings
+//       if (totMileage == "" && startMileage == "" && finalMileage == "" || tripNotes == ""
+//           || tripDate == "" || tripVehicle == "") {
+//         alert("Must enter required fields");
+//       } else if (totMileage == "" && startMileage != "" && finalMileage == "") {
+//         alert("Must enter Final Odometer Reading");
+//       } else if (totMileage == "" && startMileage == "" && finalMileage != ""){
+//         alert("Must enter Starting Odometer Reading");
+//       } else if (totMileage == "" && startMileage != "" && finalMileage != "" && startMileage > finalMileage){
+//         alert("Final odometer reading must be greater than the Starting odometer reading");
+//       } else {
+//         var totalMiles;
+//         var fees;
+//         if(totMileage != "") {
+//           totalMiles = totMileage;
           
-        } else {
-          totalMiles = finalMileage - startMileage;
-        }
-        totalMiles = parseInt(totalMiles);
-        if(tripFees == "") {
-          fees = 0;
-        } else {
-          fees = parseFloat(tripFees);
-        }
-        tripDate = tripDate.split("-");
-        var thisdate = tripDate[0] + "/" + tripDate[1] + "/" + tripDate[2];
-        console.log(thisdate);
-        var date = new Date(thisdate).getTime();
-        console.log("Trip Date = " + date, "Vehicle: " + tripVehicle, "Total Mileage: " + totalMiles, " Starting Odometer: " + startMileage, " Final Odometer: " + finalMileage, " Notes: " + tripNotes, " Fees: " + fees);
-        tripsRef.push({
-          endOdometer: finalMileage,
-          endTime: 0,
-          inProgress: false,
-          milesTraveled: totalMiles,
-          notes: tripNotes,
-          paused: false,
-          startOdometer: startMileage,
-          startTime: date,
-          totCharges: fees,
-          userID: userId,
-          vehicle: tripVehicle
-        });
-        document.getElementById('tripDate').value = "";
-        document.getElementById('totalMileage').value = "";
-        document.getElementById('initialOdo').value = "";
-        document.getElementById('finalOdo').value = "";
-        document.getElementById('tripNotes').value = "";
-        document.getElementById('tripFees').value = "";
-      }
+//         } else {
+//           totalMiles = finalMileage - startMileage;
+//         }
+//         totalMiles = parseInt(totalMiles);
+//         if(tripFees == "") {
+//           fees = 0;
+//         } else {
+//           fees = parseFloat(tripFees);
+//         }
+//         tripDate = tripDate.split("-");
+//         var thisdate = tripDate[0] + "/" + tripDate[1] + "/" + tripDate[2];
+//         console.log(thisdate);
+//         var date = new Date(thisdate).getTime();
+//         console.log("Trip Date = " + date, "Vehicle: " + tripVehicle, "Total Mileage: " + totalMiles, " Starting Odometer: " + startMileage, " Final Odometer: " + finalMileage, " Notes: " + tripNotes, " Fees: " + fees);
+//         tripsRef.push({
+//           endOdometer: finalMileage,
+//           endTime: 0,
+//           inProgress: false,
+//           milesTraveled: totalMiles,
+//           notes: tripNotes,
+//           paused: false,
+//           startOdometer: startMileage,
+//           startTime: date,
+//           totCharges: fees,
+//           userID: userId,
+//           vehicle: tripVehicle
+//         });
+//         document.getElementById('tripDate').value = "";
+//         document.getElementById('totalMileage').value = "";
+//         document.getElementById('initialOdo').value = "";
+//         document.getElementById('finalOdo').value = "";
+//         document.getElementById('tripNotes').value = "";
+//         document.getElementById('tripFees').value = "";
+//       }
 
-    });
+//     });
 
-    $("#addVehicle").on('click', function() {
-      var vehicleName = document.getElementById("vehicleName").value;
-      console.log(vehicleName);
-      // vehicleRef.push({
-      //   inUse: false,
-      //   lastKnownOdometer: 0,
-      //   name: vehicleName,
-      //   userID: userID
-      // });
-    });
+//     // $("#addVehicle").on('click', function() {
+//     //   var vehicleName = document.getElementById("vehicleName").value;
+//     //   console.log(vehicleName);
+//     //   // vehicleRef.push({
+//     //   //   inUse: false,
+//     //   //   lastKnownOdometer: 0,
+//     //   //   name: vehicleName,
+//     //   //   userID: userID
+//     //   // });
+//     // });
 
-    vehicleRef.on('child_added', function(data) {
-      // addCommentElement(postElement, data.key, data.val().text, data.val().author);
+//     // vehicleRef.on('child_added', function(data) {
+//     //   // addCommentElement(postElement, data.key, data.val().text, data.val().author);
 
-      console.log("Vehicle added");
-    });
+//     //   console.log("Vehicle added");
+//     // });
     
-    vehicleRef.on('child_changed', function(data) {
-      // setCommentValues(postElement, data.key, data.val().text, data.val().author);
-      console.log("Vehicle Updated");
-    });
+//     // vehicleRef.on('child_changed', function(data) {
+//     //   // setCommentValues(postElement, data.key, data.val().text, data.val().author);
+//     //   console.log("Vehicle Updated");
+//     // });
     
-    vehicleRef.on('child_removed', function(data) {
-      // deleteComment(postElement, data.key);
-      console.log("Vehicle Deleted");
-    });
+//     // vehicleRef.on('child_removed', function(data) {
+//     //   // deleteComment(postElement, data.key);
+//     //   console.log("Vehicle Deleted");
+//     // });
 
-  });
-}
+//   });
+// }
 
 
 
@@ -408,41 +504,35 @@ function initApp() {
   // Listening for auth state changes.
   // [START authstatelistener]
   firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
+    if (user.emailVerified == true) {
+      console.log(user.emailVerified);
       // User is signed in.
       document.getElementById("userEmail").textContent = user.email;
 
       var tripArray = [];
+      var vehicleArray = [];
       // Getting users trip data
       tripsRef.once("value").then(function(snapshot) {
         tripArray = getTripData(snapshot, user.uid);
         console.log("Trip array length = " + tripArray.length);
-        generateTripTable(tripArray);
+        vehicleRef.once("value").then(function(snapshot) {
+          vehicleArray = getVehicleData(snapshot, user.uid);
+          console.log("Vehicle array length = " + vehicleArray.length)
+          // generateVehicleTable(vehicleArray, user.uid);
+          generateTripTable(tripArray, vehicleArray, user.uid);
+        });
       });
 
-      var vehicleArray = [];
-      // Getting users Vehicle Data
-      vehicleRef.once("value").then(function(snapshot) {
-        vehicleArray = getVehicleData(snapshot, user.uid);
-        console.log("Vehicle array length = " + vehicleArray.length)
-        generateVehicleTable(vehicleArray, user.uid);
-      });
 
       // alert(user.email + " is signed in");
     } else {
       // User is signed out.
-      alert("No one is signed in");
+      // alert("No one is signed in");
       window.location.href = "login.html";
     }
   });
   // [END authstatelistener]
 
-  // document
-  //   .getElementById("changeEmail")
-  //   .addEventListener("click", changeEmail, false);
-  // document
-  //   .getElementById("resetPassword")
-  //   .addEventListener("click", changeEmail, false);
   document
     .getElementById("sign-out")
     .addEventListener("click", handleSignOut, false);

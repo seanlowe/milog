@@ -81,7 +81,7 @@
             <li class="mt">
               <a href="home.html">
                 <i class="fa fa-dashboard"></i>
-                <span>Logs</span>
+                <span>Trip Logs</span>
               </a>
             </li>
             <li class="sub-menu">
@@ -113,6 +113,54 @@
         </div>
       </aside>
       <!--sidebar end-->
+
+      <!-- Modal - Delete Account -->
+      <div
+        aria-hidden="true"
+        aria-labelledby="myModalLabel"
+        role="dialog"
+        tabindex="-1"
+        id="myDeleteModal"
+        class="modal fade"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+              >
+                &times;
+              </button>
+              <h4 class="modal-title">Delete Account</h4>
+            </div>
+            <div class="modal-body text-center">
+              <h3>Confirm You Want to Delete Account</h3>
+              <h5>This action will permanently delete the account and all data will be lost.</h5>
+              <br />
+            </div>
+            <div class="modal-footer">
+              <button
+                data-dismiss="modal"
+                class="btn btn-default"
+                type="button"
+              >
+                Cancel
+              </button>
+              <input
+                id="deleteAcct"
+                class="btn btn-theme04"
+                data-dismiss="modal"
+                type="submit"
+                value="Confirm"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End Delete Account modal -->
       <!-- **********************************************************************************************************************************************************
         MAIN CONTENT
         *********************************************************************************************************************************************************** -->
@@ -126,7 +174,7 @@
                 <div class="row">
                   <div class="col-xs-8 col-xs-offset-2 detailed">
                     <h4 class="mb">Update User Info</h4>
-                    <form role="form" class="form-horizontal">
+                    <div role="form" class="form-horizontal">
                       <!-- <div class="form-group">
                           <label class="col-lg-2 control-label"> Avatar</label>
                           <div class="col-lg-6">
@@ -145,7 +193,7 @@
                             <b>Change Email</b>
                           </label>
                           <div class="col-lg-6">
-                            <input type="email" placeholder="new email" id="newEmail" class="form-control">
+                            <input type="email" placeholder="new email" id="newEmail" required class="form-control">
                           </div>
                           <div class="col-xs-8 col-lg-9 col-xl-10">
                             <button id="changeEmail" class="btn btn-theme03" type="submit">
@@ -165,12 +213,6 @@
                         </div>
                       </div>
                       <br />
-                      <!-- <div class="form-group">
-                        <div class="col-lg-10">
-                          <button class="btn btn-theme" type="submit">
-                            Save
-                        </div>
-                      </div> -->
                       <hr />
                       <br />
                       <div class="form-group">
@@ -178,12 +220,10 @@
                           <b>Delete Account</b>
                         </label>
                         <div class="col-lg-10">
-                          <button class="btn btn-theme04" type="button">
-                            Delete
-                          </button>
+                          <a href="profile.html#myDeleteModal" data-toggle="modal" class="btn btn-theme04" type="button">Delete</a>
                         </div>
                       </div>
-                    </form>
+                    </div>
                   </div>
                   <!-- /col-lg-8 -->
                 </div>
@@ -237,9 +277,9 @@
     <script src="lib/common-scripts.js"></script>
 
     <!--Firebase Stuff-->
-    <script src="https://www.gstatic.com/firebasejs/5.8.6/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.8.6/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.8.6/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-database.js"></script>
     <script type="text/javascript" src="js/profile.js"></script>
   </body>
 </html>

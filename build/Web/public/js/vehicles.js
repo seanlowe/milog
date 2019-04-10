@@ -8,8 +8,7 @@ var config = {
   firebase.initializeApp(config);
   
   // Database references
-  var vehicleRef = firebase.database().ref("Vehicles");
-  var userRef;
+  var vehicleRef = firebase.database().ref();
 
   function handleSignOut() {
     // alert("Logout has been pressed");
@@ -19,12 +18,13 @@ var config = {
 
   function getVehicleData(uid) {
     var vehicleArray = [];
-    vehicleRef.once('value').then(function(snapshot) {
+    var Query = vehicleRef.child("Vehicles").orderByChild("userID").equalTo(uid);
+    Query.once('value').then(function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
         var key = childSnapshot.key;
     
         var value = childSnapshot.val();
-        //   console.log(key);
+        //   console.log(value.name);
         value.vehicleKey = key;
         if (value.userID ==  uid) {
             vehicleArray.push(value);
@@ -43,6 +43,7 @@ var config = {
     vehicles = await getVehicleData(userId);
     var dataSets = [];
     for(var i = 0; i < vehicles.length; i++) {
+        console.log(vehicles[i].name);
       dataSets.push([
         vehicles[i].name,
         vehicles[i].lastKnownOdometer,
@@ -53,15 +54,15 @@ var config = {
       
     }
   
-    console.log(dataSets);
+    console.log(dataSets[0]);
   
     for(var i = 0; i < dataSets.length; i++) {
       $("#vehicleTable > tbody").append("<tr></tr>");
         $("#vehicleTable > tbody > tr:last-child").append(
           "<td>" +
             vehicles[i].name +
-            '</td><td class="centered">' +
-            vehicles[i].lastKnownOdometer +
+            // '</td><td class="centered">' +
+            // vehicles[i].lastKnownOdometer +
             "</td><td class=\"centered\"><button class='btn btn-primary btn-xs' data-toggle='modal' data-target='#updateVehicleModal'><i class='fa fa-pencil'></i></button>\n" +
             "<button class='btn btn-danger btn-xs' data-toggle='modal' data-target='#deleteVehicleModal'><i class='fa fa-trash-o '></i></button> </td>" +
             "<td style='display: none'>" + vehicles[i].vehicleKey +  "</td>"
@@ -69,72 +70,161 @@ var config = {
     }
   
     $(document).ready(function() {
-      // ---------------------------------- //
-      // SELECTING ROW TO UPDATE OR DELETE  //
-      // ---------------------------------- //
-      var id;
-      var odo;
-      var name;
-      var newName;
-      $('#vehicleTable tbody tr').on( 'click', function () {
-        name = this.cells[0].innerHTML;
-        odo = this.cells[1].innerHTML;
-        id = this.cells[3].innerHTML;
-  
-        newName = document.getElementById("newVehicleName");
-        newName.placeholder = name;
-        var title = document.getElementById("nameTitle");
-        title.innerHTML = name;
-        var deleteTitle = document.getElementById("nameTitleDelete");
-        deleteTitle.innerHTML = name;
-        console.log("Row " + this.rowIndex + " has been clicked and the Name is " + name + " and it's ID = " + id);
-        // console.log("Name = " + this.cells[0].innerHTML + " Vehicle Id: " + this.cells[3].innerHTML);
-        
-      });
-      // UPDATING VEHICLE
-      $("#updateVehicle").on('click', function() {
-        newName = document.getElementById("newVehicleName").value;
-        console.log(name + " to be Updated to " + newName + ": ID = " + id);
-        vehicleRef.child(id).update({
+
+        // var user = firebase.auth().currentUser;
+        // var userId = user.uid;
+        // ---------------------------------- //
+        // SELECTING ROW TO UPDATE OR DELETE  //
+        // ---------------------------------- //
+        var id;
+        var odo;
+        var name;
+        var newName;
+        $('#vehicleTable tbody tr').on( 'click', function () {
+          name = this.cells[0].innerHTML;
+          odo = this.cells[1].innerHTML;
+          id = this.cells[2].innerHTML;
+    
+          newName = document.getElementById("newVehicleName");
+          newName.placeholder = name;
+          var title = document.getElementById("nameTitle");
+          title.innerHTML = name;
+          var deleteTitle = document.getElementById("nameTitleDelete");
+          deleteTitle.innerHTML = name;
+          console.log("Row " + this.rowIndex + " has been clicked and the Name is " + name + " and it's ID = " + id);
+          // console.log("Name = " + this.cells[0].innerHTML + " Vehicle Id: " + this.cells[3].innerHTML);
+          
+        });
+    
+        // UPDATING VEHICLE
+        $("#updateVehicle").on('click', function() {
+          newName = document.getElementById("newVehicleName").value;
+          console.log(name + " to be Updated to " + newName + ": ID = " + id);
+          vehicleRef.child("Vehicles").child(id).update({
+              inUse: false,
+              lastKnownOdometer: 0,
+              name: newName,
+              userID: userId
+          });
+          location.reload();
+        });
+    
+        // DELETING VEHICLE
+        $("#deleteVehicle").on('click', function() {
+          console.log(name + " with ID = " + id + " was deleted");
+          vehicleRef.child("Vehicles").child(id).remove();
+          location.reload();
+        });
+    
+        // ADDING/CREATING A VEHICLE
+        $("#addVehicle").on('click', function() {
+          var vehicleName = document.getElementById("vehicleName").value;
+          console.log(vehicleName);
+          vehicleRef.child("Vehicles").push({
             inUse: false,
-            lastKnownOdometer: odo,
-            name: newName,
+            lastKnownOdometer: 0,
+            name: vehicleName,
             userID: userId
+          });
+          location.reload();
         });
+    
+        // vehicleRef.on('child_added', function(data) {
+        //   // addCommentElement(postElement, data.key, data.val().text, data.val().author);
+        //   console.log("Vehicle added");
+        // });
+        
+        // vehicleRef.on('child_changed', function(data) {
+        //   // setCommentValues(postElement, data.key, data.val().text, data.val().author);
+          
+        //   console.log("Vehicle Updated");
+        // });
+        
+        // vehicleRef.on('child_removed', function(data) {
+        //   // deleteComment(postElement, data.key);
+        // //   generateVehicleTable(userId);
+        //   console.log("Vehicle Deleted");
+        // });
+    
       });
-      // DELETING VEHICLE
-      $("#deleteVehicle").on('click', function() {
-        console.log(name + " with ID = " + id + " was deleted");
-        vehicleRef.child(id).remove();
-
-      });
-  
-      $("#addVehicle").on('click', function() {
-        var vehicleName = document.getElementById("vehicleName").value;
-        console.log(vehicleName);
-        vehicleRef.push({
-          inUse: false,
-          lastKnownOdometer: 0,
-          name: vehicleName,
-          userID: userId
-        });
-      });
-
-      
-      vehicleRef.on('child_changed', function(data) {
-        // setCommentValues(postElement, data.key, data.val().text, data.val().author);
-        // initApp();
-        console.log("Vehicle Updated");
-      });
-      
-      vehicleRef.on('child_removed', function(data) {
-        // deleteComment(postElement, data.key);
-        // initApp();
-        console.log("Vehicle Deleted");
-      });
-  
-    });
   }
+
+//   $(document).ready(function() {
+
+//     // var user = firebase.auth().currentUser;
+//     // var userId = user.uid;
+//     // ---------------------------------- //
+//     // SELECTING ROW TO UPDATE OR DELETE  //
+//     // ---------------------------------- //
+//     var id;
+//     var odo;
+//     var name;
+//     var newName;
+//     $('#vehicleTable tbody tr').on( 'click', function () {
+//       name = this.cells[0].innerHTML;
+//       odo = this.cells[1].innerHTML;
+//       id = this.cells[3].innerHTML;
+
+//       newName = document.getElementById("newVehicleName");
+//       newName.placeholder = name;
+//       var title = document.getElementById("nameTitle");
+//       title.innerHTML = name;
+//       var deleteTitle = document.getElementById("nameTitleDelete");
+//       deleteTitle.innerHTML = name;
+//       console.log("Row " + this.rowIndex + " has been clicked and the Name is " + name + " and it's ID = " + id);
+//       // console.log("Name = " + this.cells[0].innerHTML + " Vehicle Id: " + this.cells[3].innerHTML);
+      
+//     });
+
+//     // UPDATING VEHICLE
+//     $("#updateVehicle").on('click', function() {
+//       newName = document.getElementById("newVehicleName").value;
+//       console.log(name + " to be Updated to " + newName + ": ID = " + id);
+//       vehicleRef.child(id).update({
+//           inUse: false,
+//           lastKnownOdometer: odo,
+//           name: newName,
+//           userID: userId
+//       });
+//     });
+
+//     // DELETING VEHICLE
+//     $("#deleteVehicle").on('click', function() {
+//       console.log(name + " with ID = " + id + " was deleted");
+//       vehicleRef.child(id).remove();
+
+//     });
+
+//     // ADDING/CREATING A VEHICLE
+//     $("#addVehicle").on('click', function() {
+//       var vehicleName = document.getElementById("vehicleName").value;
+//       console.log(vehicleName);
+//       vehicleRef.push({
+//         inUse: false,
+//         lastKnownOdometer: 0,
+//         name: vehicleName,
+//         userID: userId
+//       });
+//     });
+
+//     vehicleRef.on('child_added', function(data) {
+//       // addCommentElement(postElement, data.key, data.val().text, data.val().author);
+//       console.log("Vehicle added");
+//     });
+    
+//     vehicleRef.on('child_changed', function(data) {
+//       // setCommentValues(postElement, data.key, data.val().text, data.val().author);
+      
+//       console.log("Vehicle Updated");
+//     });
+    
+//     vehicleRef.on('child_removed', function(data) {
+//       // deleteComment(postElement, data.key);
+//     //   generateVehicleTable(userId);
+//       console.log("Vehicle Deleted");
+//     });
+
+//   });
 
 
   function initApp() {

@@ -338,7 +338,7 @@ input:-webkit-autofill:focus {
 }
 
 .mainmenu-area .right-button {
-    /* position: absolute; */
+    position: absolute;
     right: 15px;
     top: 12px;
 }

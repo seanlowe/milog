@@ -91,6 +91,7 @@ function handleSignUp() {
   }
   // Sign up with email and pass.
   // [START createwithemail]
+  
   if(password == verifyPass) {
     firebase
     .auth()
@@ -154,16 +155,26 @@ function sendPasswordReset() {
 }
 
 function initApp() {
-  var user = firebase.auth().currentUser;
-  if (user) {
-    window.location.href = "home.html";
-  }
+  // var user = firebase.auth().currentUser;
+  // if (user) {
+  //   if(user.emailVerified == true) {
+  //     window.location.href = "home.html";
+  //     console.log(user.emailVerified);
+  //   } else {
+  //     alert("Please Verify Your Email");
+  //   }
+  // }
   // Listening for auth state changes.
   // [START authstatelistener]
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
       // User is signed in.
-      window.location.href = "home.html";
+      if(user.emailVerified == true) {
+        window.location.href = "home.html";
+      } else {
+        sendEmailVerification();
+        // location.reload();
+      }
     } else {
       // User is signed out.
       // alert("No one is signed in");
@@ -210,4 +221,5 @@ function initApp() {
 
 window.onload = function() {
   initApp();
+  
 };

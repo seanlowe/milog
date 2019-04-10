@@ -9,20 +9,29 @@ firebase.initializeApp(config);
 
 function changeEmail() {
     var user = firebase.auth().currentUser;
-    var newEmail = document.getElementById("newEmail").value;
-    alert(newEmail);
-    user.updateEmail("newEmail").then(function() {
-      // Update successful.
-      alert("email updated!");
-    }).catch(function(error) {
-      // An error happened.
-    });
+    var newEmail = "";
+    newEmail = document.getElementById("newEmail").value;
+    // alert(newEmail);
+    if(newEmail == ""){
+        alert("Must enter an email");
+    } else {
+        console.log(newEmail);
+        user.updateEmail(newEmail).then(function() {
+            // Update successful.
+            alert("email updated!");
+            location.reload();
+        }).catch(function(error) {
+            // An error happened.
+        });
+        location.reload();
+    }
+    
 }
 
 function sendPasswordReset() {
     // var email = document.getElementById("resetEmail").value;
     var user = firebase.auth().currentUser;
-    alert(user.email + " has changed password");
+    // alert(user.email + " has changed password");
     // [START sendpasswordemail]
     firebase
       .auth()
@@ -30,7 +39,8 @@ function sendPasswordReset() {
       .then(function() {
         // Password Reset Email Sent!
         // [START_EXCLUDE]
-        alert("Password Reset Email Sent!");
+        alert("Password Reset Email Sent To " + user.email);
+        location.reload();
         // [END_EXCLUDE]
       })
       .catch(function(error) {
@@ -53,20 +63,31 @@ function handleSignOut() {
     // alert("Logout has been pressed");
     firebase.auth().signOut();
     window.location.href = "login.html";
-  }
+}
   
-  /**
-   * Sends an email verification to the user.
-   */
-  function sendEmailVerification() {
-    firebase
-      .auth()
-      .currentUser.sendEmailVerification()
-      .then(function() {
-        // Email Verification sent!
-        alert("Email Verification Sent!");
-      });
-  }
+/**
+ * Sends an email verification to the user.
+ */
+function sendEmailVerification() {
+firebase
+    .auth()
+    .currentUser.sendEmailVerification()
+    .then(function() {
+    // Email Verification sent!
+    alert("Email Verification Sent!");
+    });
+}
+
+function deleteAccount() {
+    var user = firebase.auth().currentUser;
+
+    user.delete().then(function() {
+    // User deleted.
+        alert("Account has been successfully deleted");
+    }).catch(function(error) {
+    // An error happened.
+    });
+}
 
 function initApp() {
     // Listening for auth state changes.
@@ -74,12 +95,15 @@ function initApp() {
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
         // User is signed in.
+        if(user.emailVerified == false) {
+            window.location.href = "login.html";
+        }
         document.getElementById("userEmail").textContent = user.email;
   
         // alert(user.email + " is signed in");
       } else {
         // User is signed out.
-        alert("No one is signed in");
+        // alert("No one is signed in");
         window.location.href = "login.html";
       }
     });
@@ -91,6 +115,9 @@ function initApp() {
     document
       .getElementById("resetPassword")
       .addEventListener("click", sendPasswordReset, false);
+    document
+      .getElementById("deleteAcct")
+      .addEventListener("click", deleteAccount, false);
     document
       .getElementById("sign-out")
       .addEventListener("click", handleSignOut, false);

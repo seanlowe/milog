@@ -46,6 +46,14 @@
     height: 100px;
 }
 
+@media only screen and (min-width: 1280px){
+    .right-button {
+        /* overflow-y: auto;
+        max-height: 80vh; */
+        position: absolute;
+    }
+}
+
 /* Medium Layout: 1280px. */
 
 @media only screen and (min-width: 992px) and (max-width: 1280px) {
@@ -182,7 +190,7 @@
     .right-button {
         /* overflow-y: auto;
         max-height: 80vh; */
-        
+        text-align: center;
         position: relative;
     }
     .mainmenu-area #primary_menu ul.nav.navbar-nav li {
