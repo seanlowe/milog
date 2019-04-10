@@ -388,7 +388,7 @@ class _LogScreenState extends State<LogScreen> {
     bool result = false;
     bool odoEmpty = false;
     if (_odometerReading.text.toString() == "0" ||
-        _odometerReading.text.toString() == "") {
+        _odometerReading.text.isEmpty) {
       odoEmpty = true;
     }
     bool notesEmpty = _notesController.text.isEmpty;
@@ -401,6 +401,7 @@ class _LogScreenState extends State<LogScreen> {
     // If one of the fields are empty - call the dialog
     if (notesEmpty || odoEmpty || selectedVehicleEmpty) {
       _showDialogEmptyFields(odoEmpty, notesEmpty, selectedVehicleEmpty);
+      result = true;
     }
 
     return result;
