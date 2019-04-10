@@ -77,6 +77,11 @@
     .angle:after {
         height: 80px;
     }
+    .right-button {
+        /* overflow-y: auto;
+        max-height: 80vh; */
+        position: absolute;
+    }
 }
 
 /* Tablet Layout: 768px. */
@@ -106,6 +111,11 @@
     /* .testimonial-area {
         padding: 60px 0;
     } */
+    .right-button {
+        /* overflow-y: auto;
+        max-height: 80vh; */
+        position: absolute;
+    }
 
     .video-photo {
         margin-bottom: 60px;
@@ -168,6 +178,12 @@
     .mainmenu-area #primary_menu {
         overflow-y: auto;
         max-height: 80vh;
+    }
+    .right-button {
+        /* overflow-y: auto;
+        max-height: 80vh; */
+        
+        position: relative;
     }
     .mainmenu-area #primary_menu ul.nav.navbar-nav li {
         display: block;

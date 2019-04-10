@@ -50,7 +50,6 @@ function handleSignIn() {
     alert("Please enter a password.");
     return;
   }
-  alert("entered email");
   // Sign in with email and pass.
   // [START authwithemail]
   firebase
@@ -81,6 +80,7 @@ function handleSignIn() {
 function handleSignUp() {
   var email = document.getElementById("signup-Email").value;
   var password = document.getElementById("signup-Password").value;
+  var verifyPass = document.getElementById("verify-Password").value;
   if (email.length < 4) {
     alert("Please enter an email address.");
     return;
@@ -91,7 +91,8 @@ function handleSignUp() {
   }
   // Sign up with email and pass.
   // [START createwithemail]
-  firebase
+  if(password == verifyPass) {
+    firebase
     .auth()
     .createUserWithEmailAndPassword(email, password)
     .catch(function(error) {
@@ -108,6 +109,10 @@ function handleSignUp() {
       // [END_EXCLUDE]
     });
   // [END createwithemail]
+  } else {
+    throw "Passwords do not match"
+  }
+  
 }
 
 function sendEmailVerification() {
@@ -161,7 +166,7 @@ function initApp() {
       window.location.href = "home.html";
     } else {
       // User is signed out.
-      alert("No one is signed in");
+      // alert("No one is signed in");
     }
   });
   // [END authstatelistener]
@@ -179,6 +184,17 @@ function initApp() {
           event.preventDefault();
           // Trigger the button element with a click
           document.getElementById("sign-in").click();
+      }
+  });
+  document
+    .getElementById("verify-Password")
+    .addEventListener("keyup", function(event) {
+      // Number 13 is the "Enter" key on the keyboard
+      if (event.keyCode === 13) {
+          // Cancel the default action, if needed
+          event.preventDefault();
+          // Trigger the button element with a click
+          document.getElementById("sign-up").click();
       }
   });
   document

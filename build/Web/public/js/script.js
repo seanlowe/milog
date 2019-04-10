@@ -12,98 +12,27 @@ var tripsRef = firebase.database().ref("Trips");
 var vehicleRef = firebase.database().ref("Vehicles");
 var usersRef = firebase.database().ref("Users");
 
-// function googleSignIn() {
-//   var provider = new firebase.auth.GoogleAuthProvider();
-
+// function writeUserData() {
+//   var database = firebase.database();
+//   var dat = document.getElementById("data").value;
 //   firebase
-//     .auth()
-//     .signInWithPopup(provider)
-//     .then(function(result) {
-//       // This gives you a Google Access Token. You can use it to access the Google API.
-//       var token = result.credential.accessToken;
-//       // The signed-in user info.
-//       var user = result.user;
-//       // ...
-//     })
-//     .catch(function(error) {
-//       // Handle Errors here.
-//       var errorCode = error.code;
-//       var errorMessage = error.message;
-//       // The email of the user's account used.
-//       var email = error.email;
-//       // The firebase.auth.AuthCredential type that was used.
-//       var credential = error.credential;
-//       // ...
+//     .database()
+//     .ref()
+//     .on("value", function(snapshot) {
+//       document.getElementById("firebase-status").textContent = JSON.stringify(
+//         snapshot.val(),
+//         null,
+//         2
+//       );
 //     });
-
-//   firebase.auth().onAuthStateChanged(function(user) {
-//     if (user) {
-//       window.location.href = "home.html";
-//     }
-//   });
-// }
-
-function writeUserData() {
-  var database = firebase.database();
-  var dat = document.getElementById("data").value;
-  firebase
-    .database()
-    .ref()
-    .on("value", function(snapshot) {
-      document.getElementById("firebase-status").textContent = JSON.stringify(
-        snapshot.val(),
-        null,
-        2
-      );
-    });
-  firebase
-    .database()
-    .ref("Users/test")
-    .set({
-      username: "user",
-      email: "user.email",
-      data: dat
-    });
-}
-
-// function handleSignIn() {
-//   var email = document.getElementById("email").value;
-//   var password = document.getElementById("password").value;
-//   // alert("sign in button pressed");
-//   if (email.length < 4) {
-//     alert("Please enter an email address.");
-//     return;
-//   }
-//   if (password.length < 4) {
-//     alert("Please enter a password.");
-//     return;
-//   }
-//   alert("entered email");
-//   // Sign in with email and pass.
-//   // [START authwithemail]
 //   firebase
-//     .auth()
-//     .signInWithEmailAndPassword(email, password)
-//     .catch(function(error) {
-//       // Handle Errors here.
-//       var errorCode = error.code;
-//       var errorMessage = error.message;
-//       // [START_EXCLUDE]
-//       if (errorCode === "auth/wrong-password") {
-//         alert("Wrong password.");
-//       } else {
-//         alert(errorMessage);
-//       }
-//       console.log(error);
-//       // [END_EXCLUDE]
+//     .database()
+//     .ref("Users/test")
+//     .set({
+//       username: "user",
+//       email: "user.email",
+//       data: dat
 //     });
-//   // [END authwithemail]
-
-//   firebase.auth().onAuthStateChanged(function(user) {
-//     if (user) {
-//       window.location.href = "home.html";
-//     }
-//   });
 // }
 
 function handleSignOut() {
@@ -111,41 +40,6 @@ function handleSignOut() {
   firebase.auth().signOut();
   window.location.href = "login.html";
 }
-
-/**
- * Handles the sign up button press.
- */
-// function handleSignUp() {
-//   var email = document.getElementById("signup-Email").value;
-//   var password = document.getElementById("signup-Password").value;
-//   if (email.length < 4) {
-//     alert("Please enter an email address.");
-//     return;
-//   }
-//   if (password.length < 4) {
-//     alert("Please enter a password.");
-//     return;
-//   }
-//   // Sign up with email and pass.
-//   // [START createwithemail]
-//   firebase
-//     .auth()
-//     .createUserWithEmailAndPassword(email, password)
-//     .catch(function(error) {
-//       // Handle Errors here.
-//       var errorCode = error.code;
-//       var errorMessage = error.message;
-//       // [START_EXCLUDE]
-//       if (errorCode == "auth/weak-password") {
-//         alert("The password is too weak.");
-//       } else {
-//         alert(errorMessage);
-//       }
-//       console.log(error);
-//       // [END_EXCLUDE]
-//     });
-//   // [END createwithemail]
-// }
 
 // /**
 //  * Sends an email verification to the user.
@@ -160,59 +54,35 @@ function handleSignOut() {
 //     });
 // }
 
-function sendPasswordReset() {
-  var email = document.getElementById("resetEmail").value;
-  // [START sendpasswordemail]
-  firebase
-    .auth()
-    .sendPasswordResetEmail(email)
-    .then(function() {
-      // Password Reset Email Sent!
-      // [START_EXCLUDE]
-      alert("Password Reset Email Sent!");
-      // [END_EXCLUDE]
-    })
-    .catch(function(error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // [START_EXCLUDE]
-      if (errorCode == "auth/invalid-email") {
-        alert(errorMessage);
-      } else if (errorCode == "auth/user-not-found") {
-        alert(errorMessage);
-      }
-      console.log(error);
-      // [END_EXCLUDE]
-    });
-  // [END sendpasswordemail];
-}
 
-function generateVehicleTable() {
-  var header_count =
-    $("#vehicleTable > thead")
-      .children("tr")
-      .children("th").length - 1;
-  console.log(header_count);
-}
+
 
 async function generateTripTable(trips) {
+  // console.log(trips[0]);
   var dataSets = [];
+  var totalMiles = 0;
+  var totalCharges = 0
   for (var i = 0; i < trips.length; i++) {
     let date = new Date(trips[i].startTime);
+    totalMiles += trips[i].milesTraveled;
+    totalCharges += trips[i].totCharges;
     // console.log(date.toLocaleDateString());
-    console.log("New Trip Object = " + trips[i].tripKey);
+    // console.log("Miles Travelled = " + trips[i].milesTraveled);
     dataSets.push([
       date.toLocaleDateString(),
       trips[i].notes,
       trips[i].vehicle,
       trips[i].milesTraveled,
+      "$" + trips[i].totCharges,
       '<div class="text-center"><button data-toggle="modal" data-target="#myDeleteModal" id="deleteRow" class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></button> <button data-toggle="modal" data-target="#myUpdateModal" id="editRow" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></button></div>',
-      trips[i].tripKey
-      
+      trips[i].tripKey,
+      trips[i].startOdometer,
+      trips[i].endOdometer
     ]);
   }
 
+  console.log("Total miles logged = " + totalMiles);
+  console.log("Total Charges = $" + totalCharges);
   console.log(dataSets);
 
   /*
@@ -220,131 +90,116 @@ async function generateTripTable(trips) {
    */
   var oTable = $("#hidden-table-info").dataTable({
     aaData: dataSets,
-    // aoColumnDefs: [
-    //   {
-    //     bSortable: false,
-    //     aTargets: [0]
-    //   }
-    // ],
+    aoColumnDefs: [
+      {
+        bSortable: false,
+        aTargets: [0]
+      }
+    ],
     aaSorting: [[0, "desc"]]
   });
 
   /* Formating function for row details */
-  function fnFormatDetails(oTable, nTr) {
-    var aData = oTable.fnGetData(nTr);
-    var sOut = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
-    sOut += "<tr><td>Vehicle:</td><td>" + aData[2] + "</td></tr>";
-    sOut += "<tr><td>Final Odometer:</td><td> Final Reading </td></tr>";
-    sOut += "<tr><td>Fees or Tolls:</td><td>Total Fees</td></tr>";
-    sOut += "</table>";
+  // function fnFormatDetails(oTable, nTr) {
+  //   var aData = oTable.fnGetData(nTr);
+  //   var sOut = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
+  //   sOut += "<tr><td>Vehicle:</td><td>" + aData[2] + "</td></tr>";
+  //   sOut += "<tr><td>Final Odometer:</td><td>" + aData[8] + "</td></tr>";
+  //   sOut += "<tr><td>Fees or Tolls:</td><td>$" + aData[6] + "</td></tr>";
+  //   sOut += "</table>";
 
-    return sOut;
-  }
+  //   return sOut;
+  // }
 
-
-  // Delete Trip Log
-  // $('#hidden-table-info tbody').on( 'click', 'tr', function () {
-  //   // oTable.$('tr.selected').addClass('selected');
-  //   var aData = oTable.fnGetData(this);
-  //   if ( $(this).hasClass('selected') ) {
-  //     $("#deleteLog").click(function() {
-  //       console.log("Row selected to Delete Vehicle: " + aData[2] + ": Date is: " + aData[0] + " Trip Key = " + aData[5]);
-  //       // table.row('.selected').remove().draw( false );
-  //       // tripsRef.child(aData[5]).remove();
-  //     });
-  //     // tripsRef.child(aData[5]).remove();
-  //     $(this).removeClass('selected');
-  //     // console.log("Row selected Vehicle - " + aData[2] + ": Date is: " + aData[0] + " Trip Key = " + aData[5]);
-  //   }
-  //   else {
-  //       oTable.$('tr.selected').removeClass('selected');
-  //       $(this).addClass('selected');
-  //   }
-  // });
-
-
-  // Update or Delete Trip Log
+  // ------------------------------- //
+  // UPDATING AND DELETING TRIP LOG  //
+  // ------------------------------- //
+  var id
   $('#hidden-table-info tbody').on( 'click', 'tr', function () {
     // oTable.$('tr.selected').addClass('selected');
-    var aData = oTable.fnGetData(this);
-    console.log("Row selected - Vehicle: " + aData[2] + ": Date is: " + aData[0] + " Trip Key = " + aData[5]);
-    // if ( $(this).hasClass('selected') ) {
-    //   var start = document.getElementById("updateStartOdo");
-    //   var final = document.getElementById("updateEndOdo");
-    //   var notes = document.getElementById("updateNotes");
-    //   var fees = document.getElementById("updateFees");
-    //   notes.value = aData[1];
-    //   console.log("Notes = " + aData[1]);
+    var row = this.rowIndex;
+    
+    $(this).addClass('selected');
+    if ( $(this).hasClass('selected') ) {
+      // console.log("Row index  " + row);
+      $(this).removeClass('selected');
+      var aData = oTable.fnGetData(this);
+      id = aData[6];
+      console.log("Row " + row + " selected - Vehicle: " + aData[2] + ": Date is: " + aData[0] + " Trip Key = " + aData[6]);
+      var start = document.getElementById("updateStartOdo");
+      var final = document.getElementById("updateEndOdo");
+      var notes = document.getElementById("updateNotes");
+      var fees = document.getElementById("updateFees");
+      start.value = aData[7];
+      final.value = aData[8];
+      notes.value = aData[1];
+      fees.placeholder = aData[4];
+    }
+    
+    // Listener for updating Trip Log
+    $("#updateLog").on('click', function() {
+      console.log("Trip Key for Updating = " + id);
+      console.log("starting Odo = " + start.value + " Final Odo = " + final.value + " Notes = " + notes.value + " Fees = " + fees.value);
+      // oTable.$('tr.selected').removeClass('selected');
+    });
 
-    //   // Listener for updating Trip Log
-    //   $("#updateLog").click(function() {
-        
-    //     // console.log("Row selected for Update - Vehicle: " + aData[2] + ": Date is: " + aData[0] + " Trip Key = " + aData[5]);
-    //   });
+    // Listener for deleting log
+    $("#deleteLog").on('click', function() {
+      console.log("Trip Key for Deleting = " + id);
+      // oTable.$('tr.selected').removeClass('selected');
+      // table.row('.selected').remove().draw( false );
+      tripsRef.child(id).remove();
+    });
 
-    //   // Listener for deleting log
-    //   $("#deleteLog").click(function() {
-    //     // console.log("Row selected to Delete Vehicle: " + aData[2] + ": Date is: " + aData[0] + " Trip Key = " + aData[5]);
-    //     // table.row('.selected').remove().draw( false );
-    //     // tripsRef.child(aData[5]).remove();
-    //   });
-      
-    //   $(this).removeClass('selected');
-    //   // console.log("Row selected Vehicle - " + aData[2] + ": Date is: " + aData[0] + " Trip Key = " + aData[5]);
-    // }
-    // else {
-    //     oTable.$('tr.selected').removeClass('selected');
-    //     $(this).addClass('selected');
-    // }
   });
+  
 
 
   $(document).ready(function() {
-    /*
-     * Insert a 'details' column to the table
-     */
-    var nCloneTh = document.createElement("th");
-    var nCloneTd = document.createElement("td");
-    nCloneTh.style.width = "50px";
-    nCloneTh.innerHTML = "Details";
-    nCloneTd.innerHTML =
-      '<img src="lib/advanced-datatable/images/details_open.png">';
-    nCloneTd.className = "center";
+  //   /*
+  //    * Insert a 'details' column to the table
+  //    */
+  //   var nCloneTh = document.createElement("th");
+  //   var nCloneTd = document.createElement("td");
+  //   nCloneTh.style.width = "50px";
+  //   nCloneTh.innerHTML = "Details";
+  //   nCloneTd.innerHTML =
+  //     '<img src="lib/advanced-datatable/images/details_open.png">';
+  //   nCloneTd.className = "center";
 
-    $("#hidden-table-info thead tr").each(function() {
-      this.insertBefore(nCloneTh, this.childNodes[4]);
-    });
+  //   $("#hidden-table-info thead tr").each(function() {
+  //     this.insertBefore(nCloneTh, this.childNodes[4]);
+  //   });
 
-    $("#hidden-table-info tbody tr").each(function() {
-      this.insertBefore(nCloneTd.cloneNode(true), this.childNodes[4]);
-    });
+  //   $("#hidden-table-info tbody tr").each(function() {
+  //     this.insertBefore(nCloneTd.cloneNode(true), this.childNodes[4]);
+  //   });
 
-    /* Add event listener for opening and closing details
-     * Note that the indicator for showing which row is open is not controlled by DataTables,
-     * rather it is done here
-     */
-    $("#hidden-table-info tbody td img").live("click", function() {
-      var nTr = $(this).parents("tr")[0];
-      if (oTable.fnIsOpen(nTr)) {
-        /* This row is already open - close it */
-        this.src = "lib/advanced-datatable/media/images/details_open.png";
-        oTable.fnClose(nTr);
-      } else {
-        /* Open this row */
-        this.src = "lib/advanced-datatable/images/details_close.png";
-        oTable.fnOpen(nTr, fnFormatDetails(oTable, nTr), "details");
-      }
-    });
+  //   /* Add event listener for opening and closing details
+  //    * Note that the indicator for showing which row is open is not controlled by DataTables,
+  //    * rather it is done here
+  //    */
+  //   $("#hidden-table-info tbody td img").live("click", function() {
+  //     var nTr = $(this).parents("tr")[0];
+  //     if (oTable.fnIsOpen(nTr)) {
+  //       /* This row is already open - close it */
+  //       this.src = "lib/advanced-datatable/media/images/details_open.png";
+  //       oTable.fnClose(nTr);
+  //     } else {
+  //       /* Open this row */
+  //       this.src = "lib/advanced-datatable/images/details_close.png";
+  //       oTable.fnOpen(nTr, fnFormatDetails(oTable, nTr), "details");
+  //     }
+  //   });
 
-    $("#hidden-table-info tbody td").live("click", function() {
-      var nTr = $(this).parents("tr")[0];
-    });
+  //   $("#hidden-table-info tbody td").live("click", function() {
+  //     var nTr = $(this).parents("tr")[0];
+  //   });
 
   });
 }
 
 function getTripData(snapshot, uid) {
-  // tripsRef.once("value").then(function(snapshot) {
   var tripArray = [];
   snapshot.forEach(function(childSnapshot) {
     var key = childSnapshot.key;
@@ -355,52 +210,194 @@ function getTripData(snapshot, uid) {
     
     if (value.userID == uid) {
       tripArray.push(value);
-
-      tripDate = value.startTime;
-      tripNotes = value.notes;
-      tripVehicle = value.vehicle;
-      tripMiles = value.milesTraveled;
-      // console.log("Trip array = " + tripArray.notes);
-      // Dynamically generating tables from users data
-      $("#vehicleTable > tbody").append("<tr></tr>");
-      $("#vehicleTable > tbody > tr:last-child").append(
-        "<td>" +
-          value.vehicle +
-          '<td class="centered">' +
-          value.milesTraveled +
-          "</td><td class=\"centered\"><button class='btn btn-primary btn-xs'><i class='fa fa-pencil'></i></button>\n" +
-          "<button class='btn btn-danger btn-xs'><i class='fa fa-trash-o '></i></button> </td>"
-      );
     }
   });
   return tripArray;
-  // });
 }
 
-function createLog() {
-  
+function getVehicleData(snapshot, uid) {
+  var vehicleArray = [];
+  snapshot.forEach(function(childSnapshot) {
+    var key = childSnapshot.key;
+
+    var value = childSnapshot.val();
+    value.vehicleKey = key;
+    if (value.userID ==  uid) {
+      vehicleArray.push(value);
+    }
+  });
+  return vehicleArray;
 }
 
-// Delete log
-function deleteLog(tripKey) {
+function generateVehicleTable(vehicles, userId) {
+  var dataSets = [];
+  for(var i = 0; i < vehicles.length; i++) {
+    dataSets.push([
+      vehicles[i].name,
+      vehicles[i].lastKnownOdometer,
+      '<div class="text-center"><button data-toggle="modal" data-target="#myDeleteModal" id="deleteRow" class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></button> <button data-toggle="modal" data-target="#myUpdateModal" id="editRow" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></button></div>',
+      vehicles[i].vehicleKey
+      
+    ]);
+    
+  }
 
+  console.log(dataSets);
+
+  for(var i = 0; i < dataSets.length; i++) {
+    $("#vehicleTable > tbody").append("<tr></tr>");
+      $("#vehicleTable > tbody > tr:last-child").append(
+        "<td>" +
+          vehicles[i].name +
+          '</td><td class="centered">' +
+          vehicles[i].lastKnownOdometer +
+          "</td><td class=\"centered\"><button class='btn btn-primary btn-xs' data-toggle='modal' data-target='#updateVehicleModal'><i class='fa fa-pencil'></i></button>\n" +
+          "<button class='btn btn-danger btn-xs' data-toggle='modal' data-target='#deleteVehicleModal'><i class='fa fa-trash-o '></i></button> </td>" +
+          "<td style='display: none'>" + vehicles[i].vehicleKey +  "</td>"
+      );
+  }
+
+  $(document).ready(function() {
+    // ---------------------------------- //
+    // SELECTING ROW TO UPDATE OR DELETE  //
+    // ---------------------------------- //
+    $('#vehicleTable tbody tr').on( 'click', function () {
+      var name = this.cells[0].innerHTML;
+      var id = this.cells[3].innerHTML;
+
+      var newName = document.getElementById("newVehicleName");
+      newName.placeholder = name;
+      var title = document.getElementById("nameTitle");
+      title.innerHTML = name;
+      var deleteTitle = document.getElementById("nameTitleDelete");
+      deleteTitle.innerHTML = name;
+      console.log("Row " + this.rowIndex + " has been clicked and the Name is " + name);
+      // console.log("Name = " + this.cells[0].innerHTML + " Vehicle Id: " + this.cells[3].innerHTML);
+      // UPDATING VEHICLE
+      $("#updateVehicle").on('click', function() {
+        console.log("Vehicle to be Updated: " + name + ": ID = " + id);
+
+      });
+      // DELETING VEHICLE
+      $("#deleteVehicle").on('click', function() {
+        console.log("Vehicle to be Deleted: " + name + ": ID = " + id);
+      });
+    });
+
+    // --------------------------- //
+    // Generate Vehicle Drop Down  //
+    // --------------------------- //
+    var list = document.getElementById("vehicle-list");
+    for(var i = 0; i < vehicles.length; i++) {
+      var option = document.createElement('option');
+      option.setAttribute("id", i);
+      option.value = option.innerHTML = vehicles[i].name;
+      list.appendChild(option);
+    }    
+    // console.log(document.getElementById(1).innerHTML);
+
+    // ------------------ //
+    //  CREATE NEW TRIP
+    // ------------------ //
+    $("#createLog").on('click', function() {
+      var tripDate = document.getElementById('tripDate').value;
+      var tripVehicle;
+      for(var i = 0; i < vehicles.length; i++) {
+        if(document.getElementById(i).selected) {
+          tripVehicle = document.getElementById(i).innerHTML;
+        }
+      }
+      // var tripVehicle = document.getElementById('vehicle').value;
+      var totMileage = document.getElementById('totalMileage').value;
+      var startMileage = document.getElementById('initialOdo').value;
+      var finalMileage = document.getElementById('finalOdo').value;
+      var tripNotes = document.getElementById('tripNotes').value;
+      var tripFees = document.getElementById('tripFees').value;
+
+      // Make sure user enters mileage or odometer readings
+      if (totMileage == "" && startMileage == "" && finalMileage == "" || tripNotes == ""
+          || tripDate == "" || tripVehicle == "") {
+        alert("Must enter required fields");
+      } else if (totMileage == "" && startMileage != "" && finalMileage == "") {
+        alert("Must enter Final Odometer Reading");
+      } else if (totMileage == "" && startMileage == "" && finalMileage != ""){
+        alert("Must enter Starting Odometer Reading");
+      } else if (totMileage == "" && startMileage != "" && finalMileage != "" && startMileage > finalMileage){
+        alert("Final odometer reading must be greater than the Starting odometer reading");
+      } else {
+        var totalMiles;
+        var fees;
+        if(totMileage != "") {
+          totalMiles = totMileage;
+          
+        } else {
+          totalMiles = finalMileage - startMileage;
+        }
+        totalMiles = parseInt(totalMiles);
+        if(tripFees == "") {
+          fees = 0;
+        } else {
+          fees = parseFloat(tripFees);
+        }
+        tripDate = tripDate.split("-");
+        var thisdate = tripDate[0] + "/" + tripDate[1] + "/" + tripDate[2];
+        console.log(thisdate);
+        var date = new Date(thisdate).getTime();
+        console.log("Trip Date = " + date, "Vehicle: " + tripVehicle, "Total Mileage: " + totalMiles, " Starting Odometer: " + startMileage, " Final Odometer: " + finalMileage, " Notes: " + tripNotes, " Fees: " + fees);
+        tripsRef.push({
+          endOdometer: finalMileage,
+          endTime: 0,
+          inProgress: false,
+          milesTraveled: totalMiles,
+          notes: tripNotes,
+          paused: false,
+          startOdometer: startMileage,
+          startTime: date,
+          totCharges: fees,
+          userID: userId,
+          vehicle: tripVehicle
+        });
+        document.getElementById('tripDate').value = "";
+        document.getElementById('totalMileage').value = "";
+        document.getElementById('initialOdo').value = "";
+        document.getElementById('finalOdo').value = "";
+        document.getElementById('tripNotes').value = "";
+        document.getElementById('tripFees').value = "";
+      }
+
+    });
+
+    $("#addVehicle").on('click', function() {
+      var vehicleName = document.getElementById("vehicleName").value;
+      console.log(vehicleName);
+      // vehicleRef.push({
+      //   inUse: false,
+      //   lastKnownOdometer: 0,
+      //   name: vehicleName,
+      //   userID: userID
+      // });
+    });
+
+    vehicleRef.on('child_added', function(data) {
+      // addCommentElement(postElement, data.key, data.val().text, data.val().author);
+
+      console.log("Vehicle added");
+    });
+    
+    vehicleRef.on('child_changed', function(data) {
+      // setCommentValues(postElement, data.key, data.val().text, data.val().author);
+      console.log("Vehicle Updated");
+    });
+    
+    vehicleRef.on('child_removed', function(data) {
+      // deleteComment(postElement, data.key);
+      console.log("Vehicle Deleted");
+    });
+
+  });
 }
 
-function updateLog() {
 
-}
-
-function addVehicle() {
-
-}
-
-function deleteVehicle() {
-
-}
-
-function updateVehicle() {
-
-}
 
 /**
  * initApp handles setting up UI event listeners and registering Firebase auth listeners:
@@ -410,24 +407,28 @@ function updateVehicle() {
 function initApp() {
   // Listening for auth state changes.
   // [START authstatelistener]
-  var tripArray = [];
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
       // User is signed in.
-      var header_count = $("#vehicleTable > thead")
-        .children("tr")
-        .children("th").length;
-      // console.log(header_count);
-      // alert(user.email + " is signed in");
       document.getElementById("userEmail").textContent = user.email;
 
       var tripArray = [];
-      // Get users data
+      // Getting users trip data
       tripsRef.once("value").then(function(snapshot) {
         tripArray = getTripData(snapshot, user.uid);
-        console.log("Trip array = " + tripArray.length);
+        console.log("Trip array length = " + tripArray.length);
         generateTripTable(tripArray);
       });
+
+      var vehicleArray = [];
+      // Getting users Vehicle Data
+      vehicleRef.once("value").then(function(snapshot) {
+        vehicleArray = getVehicleData(snapshot, user.uid);
+        console.log("Vehicle array length = " + vehicleArray.length)
+        generateVehicleTable(vehicleArray, user.uid);
+      });
+
+      // alert(user.email + " is signed in");
     } else {
       // User is signed out.
       alert("No one is signed in");
@@ -437,20 +438,14 @@ function initApp() {
   // [END authstatelistener]
 
   // document
-  //   .getElementById("sign-in")
-  //   .addEventListener("click", handleSignIn, false);
+  //   .getElementById("changeEmail")
+  //   .addEventListener("click", changeEmail, false);
   // document
-  //   .getElementById("googleSignIn")
-  //   .addEventListener("click", googleSignIn, false);
+  //   .getElementById("resetPassword")
+  //   .addEventListener("click", changeEmail, false);
   document
     .getElementById("sign-out")
     .addEventListener("click", handleSignOut, false);
-  // document
-  //   .getElementById("sign-up")
-  //   .addEventListener("click", handleSignUp, false);
-  document
-    .getElementById("password-reset")
-    .addEventListener("click", sendPasswordReset, false);
 }
 
 window.onload = function() {
@@ -461,11 +456,55 @@ window.onload = function() {
 
 // jQuery ready start
 $(document).ready(function() {
-  // jQuery code
+  // -------------------------------------------------------- //
+  // Preventing the use of "e, -, +, ." for any number inputs //
+  // -------------------------------------------------------- //
+  var tot = document.getElementById("totalMileage");
+  tot.addEventListener("keydown", function(e) {
+    // prevent: "e", "=", ",", "-", "."
+    if ([69, 187, 188, 189, 190].includes(e.keyCode)) {
+      e.preventDefault();
+    }
+  })
+  var start = document.getElementById("initialOdo");
+  start.addEventListener("keydown", function(e) {
+    // prevent: "e", "=", ",", "-", "."
+    if ([69, 187, 188, 189, 190].includes(e.keyCode)) {
+      e.preventDefault();
+    }
+  })
+  var final = document.getElementById("finalOdo");
+  final.addEventListener("keydown", function(e) {
+    // prevent: "e", "=", ",", "-", "."
+    if ([69, 187, 188, 189, 190].includes(e.keyCode)) {
+      e.preventDefault();
+    }
+  })
+  var newTot = document.getElementById("totalMileage");
+  newTot.addEventListener("keydown", function(e) {
+    // prevent: "e", "=", ",", "-", "."
+    if ([69, 187, 188, 189, 190].includes(e.keyCode)) {
+      e.preventDefault();
+    }
+  })
+  var newStart = document.getElementById("updateStartOdo");
+  newStart.addEventListener("keydown", function(e) {
+    // prevent: "e", "=", ",", "-", "."
+    if ([69, 187, 188, 189, 190].includes(e.keyCode)) {
+      e.preventDefault();
+    }
+  })
+  var newFinal = document.getElementById("updateEndOdo");
+  newFinal.addEventListener("keydown", function(e) {
+    // prevent: "e", "=", ",", "-", "."
+    if ([69, 187, 188, 189, 190].includes(e.keyCode)) {
+      e.preventDefault();
+    }
+  })
+  // ---------------- END OF NUMBER PREVETIONS --------------- //
 
 
-
-
+  // Formatting the currency fields
   $("input[data-type='currency']").on({
     keyup: function() {
       formatCurrency($(this));
@@ -524,13 +563,13 @@ $(document).ready(function() {
       right_side = right_side.substring(0, 2);
 
       // join number by .
-      input_val = "$" + left_side + "." + right_side;
+      input_val = left_side + "." + right_side;
     } else {
       // no decimal entered
       // add commas to number
       // remove all non-digits
       input_val = formatNumber(input_val);
-      input_val = "$" + input_val;
+      input_val = input_val;
 
       // final formatting
       if (blur === "blur") {

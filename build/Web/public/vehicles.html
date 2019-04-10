@@ -17,6 +17,9 @@
   <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <!--external css-->
   <link href="lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
+  <!-- <link href="lib/advanced-datatable/css/demo_page.css" rel="stylesheet" /> -->
+  <!-- <link href="lib/advanced-datatable/css/demo_table.css" rel="stylesheet" /> -->
+  <!-- <link rel="stylesheet" href="lib/advanced-datatable/css/DT_bootstrap.css" /> -->
   <!-- Custom styles for this template -->
   <link href="css/style-more.css" rel="stylesheet">
   <link href="css/style-responsive.css" rel="stylesheet">
@@ -81,12 +84,12 @@
               <span>Vehicles</span>
               </a>
           </li>
-          <li class="sub-menu">
+          <!-- <li class="sub-menu">
             <a href="print-export.html">
               <i class="fa fa-print"></i>
               <span>Print/Export</span>
             </a>
-          </li>
+          </li> -->
           <li class="sub-menu">
             <a href="profile.html">
               <i class="fa fa-user"></i>
@@ -124,7 +127,52 @@
         </div>
       </div>
     </div>
-    <!-- modal -->  
+    <!-- End modal -->  
+
+    <!-- Modal - Update Vehicle -->
+    <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="updateVehicleModal" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Update Vehicle</h4>
+          </div>
+          <div class="modal-body">
+            <p>Enter New Name For:</p><h4 id="nameTitle"></h4>
+            <input type="text" id="newVehicleName" name="vehicle" placeholder="Vehicle" autocomplete="off" class="form-control placeholder-no-fix">
+            <br>
+          </div>
+          <div class="modal-footer">
+            <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
+            <input id="updateVehicle" class="btn btn-theme" data-dismiss="modal" type="submit" value="Submit">
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End modal -->  
+
+    <!-- Modal - Delete Vehicle -->
+    <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="deleteVehicleModal" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Delete Vehicle</h4>
+          </div>
+          <div class="modal-body text-center">
+            <h3>Confirm You Want to Delete This Vehicle</h3>
+            <h3 id="nameTitleDelete"></h3>
+            <h5 class="text-danger">This action will permanently delete this vehicle.</h5>
+            <br />
+          </div>
+          <div class="modal-footer">
+            <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
+            <input id="deleteVehicle" class="btn btn-theme04" data-dismiss="modal" type="submit" value="Submit">
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End modal -->  
     <!--sidebar end-->
     <!-- **********************************************************************************************************************************************************
         MAIN CONTENT
@@ -149,14 +197,11 @@
                 <thead>
                   <tr>
                     <th><i class="fa fa-car"></i> Vehicle Name</th>
-                    <th class="hidden-phone centered"><i class="fa fa-globe"></i> Miles Travelled</th>
+                    <th class="hidden-phone centered"><i class="fa fa-globe"></i> Last Ododmeter Reading</th>
                     <th class="hidden-phone centered"><i class="fa fa-edit"></i> Update/Delete</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-
-                  </tr>
                 </tbody>
               </table>
             </div>
@@ -212,7 +257,7 @@
   <script src="https://www.gstatic.com/firebasejs/5.8.6/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/5.8.6/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/5.8.6/firebase-database.js"></script>
-  <script type="text/javascript" src="js/script.js"></script>
+  <script type="text/javascript" src="js/vehicles.js"></script>
   
 </body>
 

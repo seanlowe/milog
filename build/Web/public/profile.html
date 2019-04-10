@@ -90,12 +90,12 @@
                 <span>Vehicles</span>
               </a>
             </li>
-            <li class="sub-menu">
+            <!-- <li class="sub-menu">
               <a href="print-export.html">
                 <i class="fa fa-print"></i>
                 <span>Print/Export</span>
               </a>
-            </li>
+            </li> -->
             <li class="sub-menu">
               <a class="active" href="#">
                 <i class="fa fa-user"></i>
@@ -144,9 +144,12 @@
                           <label class="col-xs-4 col-lg-3 col-xl-2 control-label">
                             <b>Change Email</b>
                           </label>
+                          <div class="col-lg-6">
+                            <input type="email" placeholder="new email" id="newEmail" class="form-control">
+                          </div>
                           <div class="col-xs-8 col-lg-9 col-xl-10">
-                            <button class="btn btn-theme03" type="submit">
-                              Submit Request
+                            <button id="changeEmail" class="btn btn-theme03" type="submit">
+                              Submit 
                             </button>
                           </div>
                         </div>
@@ -155,7 +158,7 @@
                             <b>Change Password</b>
                           </label>
                           <div class="col-xs-8 col-lg-9 col-xl-10">
-                            <button class="btn btn-theme03" type="submit">
+                            <button id="resetPassword" class="btn btn-theme03" type="submit">
                               Submit Request
                             </button>
                           </div>
@@ -237,6 +240,6 @@
     <script src="https://www.gstatic.com/firebasejs/5.8.6/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.8.6/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.8.6/firebase-database.js"></script>
-    <script type="text/javascript" src="js/script.js"></script>
+    <script type="text/javascript" src="js/profile.js"></script>
   </body>
 </html>
