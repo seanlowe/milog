@@ -351,26 +351,28 @@ class _LogScreenState extends State<LogScreen> {
               } else {
                 // We check if any fields are empty (true means there are empty fields)
                 if (!_checkEmptyFields()) {
-                  _setVehicleActive(selected);
-                  // TODO: use push class/object instead
-                  tripsReference.push().set({
-                    'notes': _notesController.text.toString(),
-                    // 'vehicle': _vehicleController.text,
-                    'vehicle': selected.name.toString(),
-                    'startOdometer':
-                        int.parse(_odometerReading.text.toString()),
-                    'startTime': ServerValue.timestamp,
-                    'endTime': 0,
-                    'endOdometer': 0,
-                    'milesTraveled': 0,
-                    'totCharges': 0.0,
-                    'userID': widget.userId,
-                    'vehicleID': selected.vehicleID,
-                    'inProgress': true,
-                    'paused': false
-                  }).then((_) {
-                    Navigator.pop(context);
-                  });
+                  if (_checkOdo()) {
+                    _setVehicleActive(selected);
+                    // TODO: use push class/object instead
+                    tripsReference.push().set({
+                      'notes': _notesController.text.toString(),
+                      // 'vehicle': _vehicleController.text,
+                      'vehicle': selected.name.toString(),
+                      'startOdometer':
+                          int.parse(_odometerReading.text.toString()),
+                      'startTime': ServerValue.timestamp,
+                      'endTime': 0,
+                      'endOdometer': 0,
+                      'milesTraveled': 0,
+                      'totCharges': 0.0,
+                      'userID': widget.userId,
+                      'vehicleID': selected.vehicleID,
+                      'inProgress': true,
+                      'paused': false
+                    }).then((_) {
+                      Navigator.pop(context);
+                    });
+                  }
                 }
               }
             },
@@ -406,24 +408,62 @@ class _LogScreenState extends State<LogScreen> {
     bool result = false;
     bool odoEmpty = false;
     if (_odometerReading.text.toString() == "0" ||
-        _odometerReading.text.toString() == "") {
+        _odometerReading.text.isEmpty) {
       odoEmpty = true;
     }
     bool notesEmpty = _notesController.text.isEmpty;
     bool selectedVehicleEmpty = false;
-    // bool odoValueNotValid = selected.checkOdoValid(int.parse(_odometerReading.text.toString()));
     if (selected == null) {
       selectedVehicleEmpty = true;
       result = true;
     }
 
     // If one of the fields are empty - call the dialog
-    // or if the odo is less than selected vehicles's lastKnownOdometer
     if (notesEmpty || odoEmpty || selectedVehicleEmpty) {
       _showDialogEmptyFields(odoEmpty, notesEmpty, selectedVehicleEmpty);
+      result = true;
     }
 
     return result;
+  }
+
+  bool _checkOdo() {
+    bool result = widget._vehicleList[widget._vehicleList.indexOf(selected)]
+        .checkOdoValid(int.parse(_odometerReading.text.toString()));
+
+    if (!result) {
+      _showDialogInvalidOdometer();
+    }
+
+    return result;
+    // return widget._vehicleList[widget._vehicleList.indexOf(widget._vehicleList.where((v) => v.vehicleID == widget.trip.vehicleID).elementAt(0))].checkOdoValid(newOdo);
+  }
+
+  void _showDialogInvalidOdometer() {
+    print("_showDialogInvalidOdometer() invoked");
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Oops!",
+              style: TextStyle(fontSize: 18.0, color: Colors.red)),
+          content: Text(
+              "The Mileage you entered is less than the last known odometer for your" +
+                  selected.name.toString() +
+                  ".\n \nYour last known odometer was " +
+                  selected.lastKnownOdometer.toString() +
+                  " miles.",
+              style: TextStyle(fontSize: 18.0, color: Colors.black)),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("OK",
+                  style: TextStyle(fontSize: 18.0, color: Colors.blueAccent)),
+              onPressed: () => Navigator.of(context).pop(),
+            )
+          ],
+        );
+      },
+    );
   }
 
   // Shows appropriate dialog when fields are empty
@@ -468,6 +508,7 @@ class _LogScreenState extends State<LogScreen> {
 
   // Displays the information of the selected trip
   Widget _showSelectedTrip() {
+    final formatCurrency = new NumberFormat.simpleCurrency();
     return Container(
         margin: EdgeInsets.all(15.0),
         decoration: BoxDecoration(
@@ -482,6 +523,9 @@ class _LogScreenState extends State<LogScreen> {
               textAlign: TextAlign.left,
               style: new TextStyle(fontSize: 20.0, color: Colors.black)),
           Text("Miles Traveled: " + widget.trip.milesTraveled.toString(),
+              textAlign: TextAlign.left,
+              style: new TextStyle(fontSize: 20.0, color: Colors.black)),
+          Text("Fees: "+ "${formatCurrency.format(widget.trip.totCharges)}",
               textAlign: TextAlign.left,
               style: new TextStyle(fontSize: 20.0, color: Colors.black)),
           Text("Date: " + getTripDate(),

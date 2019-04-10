@@ -29,8 +29,8 @@ class _VehicleListState extends State<VehicleList> {
 
   final FirebaseDatabase _database = FirebaseDatabase.instance;
   
-  StreamSubscription<Event> _onVehicleAddedSub;
-  StreamSubscription<Event> _onVehicleChangedSub;
+  // StreamSubscription<Event> _onVehicleAddedSub;
+  // StreamSubscription<Event> _onVehicleChangedSub;
 
   // ----------------------------------------
   /* FUNCTION OVERRIDES / CLERICAL FUNCTIONS */
@@ -39,19 +39,19 @@ class _VehicleListState extends State<VehicleList> {
   @override
   void initState() {
     super.initState();
-    widget._vehicleList = [];
+    // widget._vehicleList = [];
 
     FirebaseDatabase.instance.setPersistenceEnabled(true);
     vehicleReference = _database.reference().child('Vehicles');
 
-    _onVehicleAddedSub = widget._vehicleQuery.onChildAdded.listen(_onVehicleAdded);
-    _onVehicleChangedSub = widget._vehicleQuery.onChildChanged.listen(_onVehicleUpdated);
+    // _onVehicleAddedSub = widget._vehicleQuery.onChildAdded.listen(_onVehicleAdded);
+    // _onVehicleChangedSub = widget._vehicleQuery.onChildChanged.listen(_onVehicleUpdated);
   }
 
   @override
   void dispose() {
-    _onVehicleAddedSub.cancel();
-    _onVehicleChangedSub.cancel();
+    // _onVehicleAddedSub.cancel();
+    // _onVehicleChangedSub.cancel();
     super.dispose();
   }
 
@@ -157,19 +157,19 @@ class _VehicleListState extends State<VehicleList> {
   /*    DATABASE SUBSCRIPTION FUNCTIONS    */
   // ----------------------------------------
 
-  void _onVehicleAdded(Event event) {
-    print("activated onVehicleAdded");
-    setState(() {
-      widget._vehicleList.add(new Vehicle.fromSnapshot(event.snapshot));
-    });
-  }
+  // void _onVehicleAdded(Event event) {
+  //   print("activated onVehicleAdded");
+  //   setState(() {
+  //     widget._vehicleList.add(new Vehicle.fromSnapshot(event.snapshot));
+  //   });
+  // }
 
-  void _onVehicleUpdated(Event event) {
-    var oldVehicleValue = widget._vehicleList.singleWhere((vehicle) => vehicle.vehicleID == event.snapshot.key);
-    setState(() {
-      widget._vehicleList[widget._vehicleList.indexOf(oldVehicleValue)] = new Vehicle.fromSnapshot(event.snapshot);
-    });
-  }
+  // void _onVehicleUpdated(Event event) {
+  //   var oldVehicleValue = widget._vehicleList.singleWhere((vehicle) => vehicle.vehicleID == event.snapshot.key);
+  //   setState(() {
+  //     widget._vehicleList[widget._vehicleList.indexOf(oldVehicleValue)] = new Vehicle.fromSnapshot(event.snapshot);
+  //   });
+  // }
 
   // ----------------------------------------
   /*         VEHICLELIST FUNCTIONS         */
@@ -191,8 +191,8 @@ class _VehicleListState extends State<VehicleList> {
           ),
         ),
         subtitle: Text(
-          // "Odometer: " + widget._vehicleList[position].lastKnownOdometer.toString(),
-          "bool -> " + widget._vehicleList[position].inUse.toString(),
+          "Last known Odometer: " + widget._vehicleList[position].lastKnownOdometer.toString(),
+          //"bool -> " + widget._vehicleList[position].inUse.toString(),
           style: TextStyle(
             fontSize: 18.0,
             fontStyle: FontStyle.italic,
