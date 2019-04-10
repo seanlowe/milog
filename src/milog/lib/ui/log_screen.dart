@@ -402,7 +402,14 @@ class _LogScreenState extends State<LogScreen> {
     // If one of the fields are empty - call the dialog
     // or if the odo is less than selected vehicles's lastKnownOdometer
     if (notesEmpty || odoEmpty || selectedVehicleEmpty || odoTooSmall) {
-      _showDialogEmptyFields(odoEmpty, notesEmpty, selectedVehicleEmpty);
+      (odoTooSmall) ? _showDialogInvalidOdometer() : _showDialogEmptyFields(odoEmpty, notesEmpty, selectedVehicleEmpty);
+      
+      // if (odoTooSmall) {
+      //   _showDialogInvalidOdometer();
+      // } 
+      // else {
+      //   _showDialogEmptyFields(odoEmpty, notesEmpty, selectedVehicleEmpty);
+      // }
     }
 
     return result;
@@ -411,6 +418,28 @@ class _LogScreenState extends State<LogScreen> {
   bool _checkOdo(int newOdo) {
     return widget._vehicleList[widget._vehicleList.indexOf(selected)].checkOdoValid(newOdo);
     // return widget._vehicleList[widget._vehicleList.indexOf(widget._vehicleList.where((v) => v.vehicleID == widget.trip.vehicleID).elementAt(0))].checkOdoValid(newOdo);
+  }
+
+  void _showDialogInvalidOdometer() {
+    var name = selected.name.toString();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Oops!",
+            style: TextStyle(fontSize: 18.0, color: Colors.red)),
+          content: Text("The Mileage you entered is less than the last known odometer for$name",
+            style: TextStyle(fontSize: 18.0, color: Colors.black)),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("OK",
+                style: TextStyle(fontSize: 18.0, color: Colors.blueAccent)),
+                onPressed: () => Navigator.of(context).pop(),
+            )
+          ],
+        );
+      },
+    );
   }
 
   // Shows appropriate dialog when fields are empty
