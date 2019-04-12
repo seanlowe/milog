@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:milog/model/User.dart';
 
 // Page for viewing and editing user information such as:
 // - email
 // - password
+
+// page is currently a mock-up
 
 class UserScreen extends StatefulWidget {
 
@@ -25,7 +26,6 @@ class _UserScreenState extends State<UserScreen> {
   // ----------------------------------------
 
   @override void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -38,7 +38,6 @@ class _UserScreenState extends State<UserScreen> {
         alignment: Alignment.topCenter,
         child: ListView(
           children: <Widget>[
-            //_showBody(),
             _showLogo(),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -65,12 +64,6 @@ class _UserScreenState extends State<UserScreen> {
       ),
     );
   }
-
-  // Widget _showBody() {
-  //   return Container(
-  //     child: ,
-  //   );
-  // }
 
   Widget _showLogo() {
     return new Hero(
