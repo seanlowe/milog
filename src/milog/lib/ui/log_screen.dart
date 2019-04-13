@@ -49,6 +49,8 @@ class _LogScreenState extends State<LogScreen> {
   String strNewTripTitle = "New Trip";
   String title;
 
+  int odometerFromPicture;
+
   // ----------------------------------------
   /* FUNCTION OVERRIDES / CLERICAL FUNCTIONS */
   // ----------------------------------------
@@ -58,6 +60,8 @@ class _LogScreenState extends State<LogScreen> {
   void initState() {
     super.initState();
     getTripDate();
+
+    odometerFromPicture = 0;
 
     tripDatabase = FirebaseDatabase.instance.reference();
     tripsReference = tripDatabase.child('Trips');
@@ -324,6 +328,7 @@ class _LogScreenState extends State<LogScreen> {
       context,
       MaterialPageRoute(builder: (context) => CameraScreen()),
     );
+    _showDialogCheckOdometer();
   }
 
   // ----------------------------------------
@@ -394,6 +399,28 @@ class _LogScreenState extends State<LogScreen> {
         .child('endOdometer')
         .set(int.parse(_odometerReading.text));
     Navigator.pop(context);
+  }
+
+  void _showDialogCheckOdometer() {
+    print("_showDialogInvalidOdometer() invoked");
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Check odometer",
+              style: TextStyle(fontSize: 18.0, color: Colors.red)),
+          content: Text("We think the odomer is: " + odometerFromPicture.toString() + "\n Is this correct? ",
+              style: TextStyle(fontSize: 18.0, color: Colors.black)),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("OK",
+                  style: TextStyle(fontSize: 18.0, color: Colors.blueAccent)),
+              onPressed: () => Navigator.of(context).pop(),
+            )
+          ],
+        );
+      },
+    );
   }
 
   // supporting function for _showPrimaryButton()

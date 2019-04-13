@@ -159,6 +159,10 @@ class _CameraScreenState extends State<CameraScreen> {
     }else{
       print("visionTest is NULL!!!");
     }
+    odoReading = 4556;
+
+    //Go back to log screen
+    Navigator.pop(context);
   }
 
   @override
