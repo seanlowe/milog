@@ -127,28 +127,6 @@ class _CameraScreenState extends State<CameraScreen> {
     print("in findBestOdometerCandidate, _scanResults = " + _scanResults.toString());
 
     String strDect = "";
-
-    //Finds the best odometer candidate
-    int odoCandidate(String inputStr) {
-      String strResult = "";
-      int intCode = 0;
-
-      //Check to see if they are all digits
-      for (int i = 0; i < inputStr.length; i++) {
-        intCode = inputStr.codeUnitAt(i);
-        if (intCode >= 48 && intCode <= 57) {
-          strResult += String.fromCharCode(intCode);
-        } else {
-          strResult = "";
-          break;
-        }
-      }
-      if (strResult.isNotEmpty)
-        return int.parse(strResult);
-      else
-        return 0;
-    }
-
     print("Finding text/numbers in image...");
     if (visionText != null) {
       for (TextBlock block in visionText.blocks) {
@@ -179,6 +157,7 @@ class _CameraScreenState extends State<CameraScreen> {
     int max = 0;
     int temp = -1;
     int intCode = 0;
+    List <int> phase1 = [];
     String strResult = "";
   
     for (String element in listOfResults){
@@ -189,10 +168,11 @@ class _CameraScreenState extends State<CameraScreen> {
         if (intCode >= 48 && intCode <= 57) {
           strResult += String.fromCharCode(intCode);
         }else {
-          if(element.codeUnitAt(i) == 46 || element.codeUnitAt(i) == 58){
-            listOfResults.remove(element);
-            break;
-          }        
+          break;
+          // if(element.codeUnitAt(i) == 46 || element.codeUnitAt(i) == 58){
+          //   //listOfResults.remove(element);
+          //   break;
+          // }        
         }
       }
       if(strResult.length > 3){
