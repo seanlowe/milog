@@ -186,12 +186,12 @@ class _ListViewLogState extends State<ListViewLog> {
   }
 
   void _navigateToVehicles(BuildContext context) async {
+    Navigator.pop(context);
     await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => VehicleList(widget.userId, _vehicleQuery, _vehicleList)),
     );
-    Navigator.pop(context);
   }
 
   void _navigateToLog(BuildContext context, Trip trip) async {
@@ -212,11 +212,11 @@ class _ListViewLogState extends State<ListViewLog> {
   }
 
   void _navigateToUserScreen() async {
+    Navigator.pop(context);
     await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => UserScreen()),
     );
-    Navigator.pop(context);
   }
 
   // Signs out the user
