@@ -15,6 +15,7 @@ import 'package:intl/intl.dart';
 class LogScreen extends StatefulWidget {
   final Trip trip;
   final List<Vehicle> _vehicleList;
+  Integer odometerFromPicture;
   final Query _vehicleQuery;
   final String userId;
   final bool update; // are we updating a trip?
@@ -49,8 +50,7 @@ class _LogScreenState extends State<LogScreen> {
   String strNewTripTitle = "New Trip";
   String title;
 
-  int odometerFromPicture;
-
+  
   // ----------------------------------------
   /* FUNCTION OVERRIDES / CLERICAL FUNCTIONS */
   // ----------------------------------------
@@ -61,7 +61,8 @@ class _LogScreenState extends State<LogScreen> {
     super.initState();
     getTripDate();
 
-    odometerFromPicture = 0;
+
+    widget.odometerFromPicture = Integer(0);
 
     tripDatabase = FirebaseDatabase.instance.reference();
     tripsReference = tripDatabase.child('Trips');
@@ -324,11 +325,14 @@ class _LogScreenState extends State<LogScreen> {
   }
 
   void _navigateToCamera(BuildContext contect) async {
+    print("Before Camera Screen: " + widget.odometerFromPicture.value.toString());
     await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => CameraScreen()),
+      MaterialPageRoute(builder: (context) => CameraScreen(widget.odometerFromPicture)),
     );
+    print("After Camera Screen: " + widget.odometerFromPicture.value.toString());
     _showDialogCheckOdometer();
+
   }
 
   // ----------------------------------------
@@ -351,6 +355,7 @@ class _LogScreenState extends State<LogScreen> {
                 : Text('Add Trip',
                     style: new TextStyle(fontSize: 25.0, color: Colors.white)),
             onPressed: () {
+              print("OdoFromPic: " + widget.odometerFromPicture.value.toString());
               if (widget.trip.tripID != null) {
                 updateTrip();
               } else {
@@ -401,15 +406,16 @@ class _LogScreenState extends State<LogScreen> {
     Navigator.pop(context);
   }
 
-  void _showDialogCheckOdometer() {
+  void _showDialogCheckOdometer() async {
+    print("odoFromPic: " + widget.odometerFromPicture.value.toString());
     print("_showDialogInvalidOdometer() invoked");
-    showDialog(
+    await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Check odometer",
               style: TextStyle(fontSize: 18.0, color: Colors.red)),
-          content: Text("We think the odomer is: " + odometerFromPicture.toString() + "\n Is this correct? ",
+          content: Text("We think the odomer is: " + widget.odometerFromPicture.value.toString() + "\n Is this correct? ",
               style: TextStyle(fontSize: 18.0, color: Colors.black)),
           actions: <Widget>[
             FlatButton(
@@ -572,3 +578,12 @@ class _LogScreenState extends State<LogScreen> {
     return formatted;
   }
 } // end of class _LogScreenState
+
+//Wrapper for Ints
+class Integer{
+  int _value;
+  Integer(this._value);
+
+  set setValue(int input) => _value = input;
+  get value => _value;
+}

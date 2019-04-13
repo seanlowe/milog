@@ -4,12 +4,16 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:milog/ui/log_screen.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:milog/main.dart';
 
 enum Detector { text }
 
 class CameraScreen extends StatefulWidget {
+  Integer bestGuess;
+
+  CameraScreen(this.bestGuess);
   @override
   _CameraScreenState createState() {
     return _CameraScreenState();
@@ -26,6 +30,8 @@ class _CameraScreenState extends State<CameraScreen> {
   Size _imageSize; //The size of the image
   VisionText _scanResults; //Results from scan
   Detector _currentDetector = Detector.text; //Enum
+
+  List<String> listOfResults;
   bool working = false;
 
   //Recognized text/numbers in an image
@@ -34,6 +40,8 @@ class _CameraScreenState extends State<CameraScreen> {
   @override
   void initState() {
     super.initState();
+    listOfResults = [];
+
     controller = CameraController(cameras[0], ResolutionPreset.medium);
     controller.initialize().then((_) {
       if (!mounted) {
@@ -119,7 +127,6 @@ class _CameraScreenState extends State<CameraScreen> {
     print("in findBestOdometerCandidate, _scanResults = " + _scanResults.toString());
 
     String strDect = "";
-    int odoReading = 0;
 
     //Finds the best odometer candidate
     int odoCandidate(String inputStr) {
@@ -147,22 +154,56 @@ class _CameraScreenState extends State<CameraScreen> {
       for (TextBlock block in visionText.blocks) {
         for (TextLine line in block.lines) {
           for (TextElement element in line.elements) {
-            strDect = element.text.toString();
-
-            print("Detected: " + strDect);
-            
-            //showInSnackBar("Detected: " + strDect.toString());
-
+            strDect = element.text.toString();    
+            listOfResults.add(strDect);
           }
         }
       }
     }else{
-      print("visionTest is NULL!!!");
+      print("visionTest is NULL!");
     }
-    odoReading = 4556;
 
-    //Go back to log screen
+    
+    // setState(() {
+        print("before bestGuess: " + widget.bestGuess.toString());
+         widget.bestGuess.setValue = filterResult();
+         print("after bestGuess: " + widget.bestGuess.toString());
+    //   });
+   
+
+    //Go back to log screen, expect to see a dialog that pops up
     Navigator.pop(context);
+  }
+
+  int filterResult(){
+    int max = 0;
+    int temp = -1;
+    int intCode = 0;
+    String strResult = "";
+  
+    for (String element in listOfResults){
+      //Check to see if they are all digits
+      strResult = "";
+      for (int i = 0; i < element.length; i++) {
+        intCode = element.codeUnitAt(i);
+        if (intCode >= 48 && intCode <= 57) {
+          strResult += String.fromCharCode(intCode);
+        }else {
+          if(element.codeUnitAt(i) == 46 || element.codeUnitAt(i) == 58){
+            listOfResults.remove(element);
+            break;
+          }        
+        }
+      }
+      if(strResult.length > 3){
+        temp = int.parse(strResult);
+        if (temp > 1000){
+          if (temp > max) max = temp;
+          print("Max: " + max.toString());
+        }
+      }
+    }
+    return max;
   }
 
   @override
@@ -306,15 +347,6 @@ class _CameraScreenState extends State<CameraScreen> {
   void _showCameraException(CameraException e) {
     logError(e.code, e.description);
     showInSnackBar('Error: ${e.code}\n${e.description}');
-  }
-}
-
-class CameraApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: CameraScreen(),
-    );
   }
 }
 
