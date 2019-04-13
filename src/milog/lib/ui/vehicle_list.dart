@@ -200,7 +200,9 @@ class _VehicleListState extends State<VehicleList> {
         ),
       // onTap -> update
       // onLongPress -> delete
-      onTap: () => _navigateToVehicleAction(context, widget._vehicleList[position]),
+      onTap: () {
+        if (!widget._vehicleList[position].inUse) _navigateToVehicleAction(context, widget._vehicleList[position]);
+      },
       onLongPress: () => _checkIfCanDel(context, widget._vehicleList[position], position),
       )
     );

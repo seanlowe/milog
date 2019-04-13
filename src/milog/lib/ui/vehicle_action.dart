@@ -53,7 +53,7 @@ class _VehicleActionState extends State<VehicleAction> {
       body: Container(
         margin: EdgeInsets.all(15.0),
         alignment: Alignment.center,
-        child: Column(
+        child: ListView(
           children: <Widget>[
             TextField(
               // name field
@@ -63,11 +63,34 @@ class _VehicleActionState extends State<VehicleAction> {
                 fontSize: 22.0,
                 color: Colors.black,
               )
-            )
+            ),
+            _showUpdateNameButton(),
           ],
         )
       )
     );
+  }
+
+   Widget _showUpdateNameButton() {
+    print("User Pressed Toll Charge Button!");
+    return new Padding(
+        padding: EdgeInsets.all(15.0),
+        child: SizedBox(
+          height: 40.0,
+          child: RaisedButton(
+            elevation: 5.0,
+            shape: new RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(60.0)),
+            color: Colors.blue,
+            child: Text('Update Vehicle',
+                style: new TextStyle(fontSize: 20.0, color: Colors.white)),
+            onPressed: () {
+              //widget.vehicle.setName = _nameController.text.toString();
+              vehicleReference.child(widget.vehicle.vehicleID).child("name").set(_nameController.text.toString());
+              Navigator.pop(context);
+            },
+          ),
+        ));
   }
 
 } // end of class _VehicleActionState

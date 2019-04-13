@@ -347,7 +347,7 @@ class _TripScreenActionState extends State<TripAction> {
       // End the trip - set inProgress and paused to false just in case
       tripsReference.child(widget.trip.tripID).child("inProgress").set(false);
       tripsReference.child(widget.trip.tripID).child("paused").set(false);
-      _setVehicleInactive(widget.trip.vehicle);
+      _setVehicleInactive(widget.trip.vehicleID);
       Navigator.pop(context);
     } else {
       // Sets the end Odometer reading in the DB
@@ -370,7 +370,7 @@ class _TripScreenActionState extends State<TripAction> {
       // End the trip - set inProgress and paused to false just in case
       tripsReference.child(widget.trip.tripID).child("inProgress").set(false);
       tripsReference.child(widget.trip.tripID).child("paused").set(false);
-      _setVehicleInactive(widget.trip.vehicle);
+      _setVehicleInactive(widget.trip.vehicleID);
       Navigator.pop(context);
     }
   }
@@ -378,7 +378,7 @@ class _TripScreenActionState extends State<TripAction> {
   // supporting function of processOdoMiles
   void _setVehicleInactive(String active) {
     for (int i = 0; i < widget._vehicleList.length; i++) {
-      if (widget._vehicleList[i].name.toString() == active) {
+      if (widget._vehicleList[i].vehicleID.toString() == active) {
         widget._vehicleList[i].setInUse = false;
         vehicleReference.child(widget._vehicleList[i].vehicleID).child('inUse').set(false);
         vehicleReference.child(widget._vehicleList[i].vehicleID).child('lastKnownOdometer').set(widget.trip.endOdometer);

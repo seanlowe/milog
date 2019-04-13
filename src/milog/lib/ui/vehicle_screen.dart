@@ -21,7 +21,7 @@ class VehicleScreen extends StatefulWidget {
 
 class _VehicleScreenState extends State<VehicleScreen> {
   // ----------------------------------------
-  /*         VARIABLE DECLARATIONS         */ 
+  /*         VARIABLE DECLARATIONS         */
   // ----------------------------------------
   // every textbox needs a "controller"
   TextEditingController _nameController;
@@ -56,7 +56,7 @@ class _VehicleScreenState extends State<VehicleScreen> {
         body: Container(
             margin: EdgeInsets.all(15.0),
             alignment: Alignment.center,
-            child: Column(
+            child: ListView(
               children: <Widget>[
                 _showNameTextBox(),
                 _showOdometerTextBox(),
@@ -66,7 +66,7 @@ class _VehicleScreenState extends State<VehicleScreen> {
   }
 
   // ----------------------------------------
-  /*              INPUT FIELDS             */ 
+  /*              INPUT FIELDS             */
   // ----------------------------------------
 
   Widget _showNameTextBox() {
@@ -95,26 +95,27 @@ class _VehicleScreenState extends State<VehicleScreen> {
 
   Widget _showAddVehicleButton() {
     return Padding(
-      padding: EdgeInsets.all(15.0),
-      child: RaisedButton(
-        elevation: 5.0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(60.0)),
-        color: Colors.blue,
-        child: Text('Add vehicle',
-          style: TextStyle(fontSize: 20.0, color: Colors.white)),
-          onPressed: () {
-            vehicleReference.push().set({
-              'name': _nameController.text,
-              'lastKnownOdometer': int.parse(_lastKnownOdoController.text.toString()),
-              'inUse': false,
-              'userID': widget.userID,
-            }).then((_) {
-              Navigator.pop(context);
-            });
-          },
-        )
-    );
+        padding: EdgeInsets.all(15.0),
+        child: SizedBox(
+            height: 40,
+            child: RaisedButton(
+              elevation: 5.0,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(60.0)),
+              color: Colors.blue,
+              child: Text('Add vehicle',
+                  style: TextStyle(fontSize: 20.0, color: Colors.white)),
+              onPressed: () {
+                vehicleReference.push().set({
+                  'name': _nameController.text,
+                  'lastKnownOdometer':
+                      int.parse(_lastKnownOdoController.text.toString()),
+                  'inUse': false,
+                  'userID': widget.userID,
+                }).then((_) {
+                  Navigator.pop(context);
+                });
+              },
+            )));
   }
-
 } // end of class _VehicleScreenState

@@ -353,9 +353,8 @@ class _LogScreenState extends State<LogScreen> {
                 ? Text('Update Trip',
                     style: new TextStyle(fontSize: 20.0, color: Colors.white))
                 : Text('Add Trip',
-                    style: new TextStyle(fontSize: 25.0, color: Colors.white)),
+                    style: new TextStyle(fontSize: 20.0, color: Colors.white)),
             onPressed: () {
-              print("OdoFromPic: " + widget.odometerFromPicture.value.toString());
               if (widget.trip.tripID != null) {
                 updateTrip();
               } else {

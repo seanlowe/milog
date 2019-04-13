@@ -43,7 +43,8 @@ class Vehicle {
 
   // Setters
   set setInUse(bool value) => _inUse = value;
-
+  set setName(String input) => _name = input;
+  
   // Database snapshot getters
   Vehicle.fromSnapshot(DataSnapshot snapshot) :
     _vehicleID = snapshot.key,
