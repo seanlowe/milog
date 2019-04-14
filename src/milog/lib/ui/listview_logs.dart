@@ -9,6 +9,7 @@ import 'package:milog/ui/log_screen.dart';
 import 'package:milog/ui/trip_action.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:milog/ui/vehicle_list.dart';
+import 'package:milog/ui/faq_screen.dart';
 
 class ListViewLog extends StatefulWidget {
   ListViewLog({Key key, this.auth, this.userId, this.onSignedOut})
@@ -25,7 +26,7 @@ class ListViewLog extends StatefulWidget {
 
 class _ListViewLogState extends State<ListViewLog> {
   // ----------------------------------------
-  /*         VARIABLE DECLARATIONS         */ 
+  /*         VARIABLE DECLARATIONS         */
   // ----------------------------------------
 
   List<Trip> _tripList;
@@ -67,10 +68,10 @@ class _ListViewLogState extends State<ListViewLog> {
         .orderByChild("userID")
         .equalTo(widget.userId);
     _vehicleQuery = _database
-      .reference()
-      .child("Vehicles")
-      .orderByChild("userID")
-      .equalTo(widget.userId);
+        .reference()
+        .child("Vehicles")
+        .orderByChild("userID")
+        .equalTo(widget.userId);
 
     //Turns on Persistence
     FirebaseDatabase.instance.setPersistenceEnabled(true);
@@ -86,7 +87,8 @@ class _ListViewLogState extends State<ListViewLog> {
 
     //Listeners for Vehicle List
     _onVehicleAddedSub = _vehicleQuery.onChildAdded.listen(_onVehicleAdded);
-    _onVehicleChangedSub = _vehicleQuery.onChildChanged.listen(_onVehicleUpdated);
+    _onVehicleChangedSub =
+        _vehicleQuery.onChildChanged.listen(_onVehicleUpdated);
   }
 
   @override
@@ -100,7 +102,7 @@ class _ListViewLogState extends State<ListViewLog> {
 
   // We need to return a Scaffold instead of another instance of
   // Material app for the Drawer to work
- @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("My Trips")),
@@ -130,69 +132,73 @@ class _ListViewLogState extends State<ListViewLog> {
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            decoration: BoxDecoration(color: Colors.blueAccent[400]),
+              decoration: BoxDecoration(color: Colors.blueAccent[400]),
               child: Container(
-            child: Text(
-              '\n\n\nMain Menu',
-              style: TextStyle(
-                fontSize: 26.0,
-                color: Colors.white,
-              ),
-            ),
-            margin: const EdgeInsets.only(bottom: 10.0),
-            width: 10.0,
-            height: 10.0,
-            decoration: new BoxDecoration(
-              shape: BoxShape.rectangle,
-              image: DecorationImage(
-                image: AssetImage("images/miLog.png"),
-                alignment: Alignment(1, 1),
-                fit: BoxFit.scaleDown,
-              ),
-              // Add the Drawer image here (user icon perhaps?)
-            ),
-          )),
+                child: Text(
+                  '\n\n\nMain Menu',
+                  style: TextStyle(
+                    fontSize: 26.0,
+                    color: Colors.white,
+                  ),
+                ),
+                margin: const EdgeInsets.only(bottom: 10.0),
+                width: 10.0,
+                height: 10.0,
+                decoration: new BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  image: DecorationImage(
+                    image: AssetImage("images/miLog.png"),
+                    alignment: Alignment(1, 1),
+                    fit: BoxFit.scaleDown,
+                  ),
+                  // Add the Drawer image here (user icon perhaps?)
+                ),
+              )),
           Container(
-            child: Column(
-              children: <Widget>[
-                ListTile(
-                  title: Text('Account'),
-                  leading: new Icon(Icons.perm_identity, color: Colors.black),
-                  // trailing: Container(decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.blue,)))),
-                  onTap: () {
-                    _navigateToUserScreen();
-                  }, 
-                ),
-                ListTile(
-                  title: Text('Vehicles'),
-                  leading: new Icon(Icons.directions_car, color: Colors.blue),
-                  onTap: () {
-                    _navigateToVehicles(context);
-                  },
-                ),
-                ListTile(
-                  leading: new Icon(Icons.web, color: Colors.blue[300]),
-                  title: Text('Go to MiLog.org'),
-                  onTap: () {
-                    //Open milog.org in browser
-                     _launchInBrowser(miLogSite);
-                    Navigator.pop(context);
-                  },
-                  
-                ),
-                 ListTile(
-                  leading: new Icon(Icons.exit_to_app, color: Colors.red[300]),
-                  title: Text('Sign Out'),
-                  onTap: () {
-                    _signOut();
-                    Navigator.pop(context);
-                  },             
-                ),
-                // End of container -> column -> children
-              ],
-            )
-          ),
-          
+              child: Column(
+            children: <Widget>[
+              ListTile(
+                title: Text('Account'),
+                leading: new Icon(Icons.perm_identity, color: Colors.black),
+                // trailing: Container(decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.blue,)))),
+                onTap: () {
+                  _navigateToUserScreen();
+                },
+              ),
+              ListTile(
+                title: Text('Vehicles'),
+                leading: new Icon(Icons.directions_car, color: Colors.blue),
+                onTap: () {
+                  _navigateToVehicles(context);
+                },
+              ),
+              ListTile(
+                leading: new Icon(Icons.web, color: Colors.blue[300]),
+                title: Text('Go to milog.org'),
+                onTap: () {
+                  //Open milog.org in browser
+                  _launchInBrowser(miLogSite);
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: new Icon(Icons.help, color: Colors.orange),
+                title: Text('FAQ'),
+                onTap: () {
+                 _navigateToFAQ(context);
+                },
+              ),
+              ListTile(
+                leading: new Icon(Icons.exit_to_app, color: Colors.red[300]),
+                title: Text('Sign Out'),
+                onTap: () {
+                  _signOut();
+                  Navigator.pop(context);
+                },
+              ),
+              // End of container -> column -> children
+            ],
+          )),
         ],
       ),
     );
@@ -203,7 +209,8 @@ class _ListViewLogState extends State<ListViewLog> {
     await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => VehicleList(widget.userId, _vehicleQuery, _vehicleList)),
+          builder: (context) =>
+              VehicleList(widget.userId, _vehicleQuery, _vehicleList)),
     );
   }
 
@@ -212,7 +219,8 @@ class _ListViewLogState extends State<ListViewLog> {
       context,
       // We want to update the Trip, so pass true
       MaterialPageRoute(
-          builder: (context) => LogScreen(_vehicleList, _vehicleQuery, widget.userId, trip, true)),
+          builder: (context) => LogScreen(
+              _vehicleList, _vehicleQuery, widget.userId, trip, true)),
     );
   }
 
@@ -220,8 +228,17 @@ class _ListViewLogState extends State<ListViewLog> {
     await Navigator.push(
       context,
       // We're not updating the Trip, so don't pass in true
-      MaterialPageRoute(builder: (context) => TripAction(widget.userId, trip, _vehicleList)),
+      MaterialPageRoute(
+          builder: (context) => TripAction(widget.userId, trip, _vehicleList)),
     );
+  }
+
+  void _navigateToFAQ(BuildContext context) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => FAQScreen()),
+    );
+    Navigator.pop(context);
   }
 
   void _navigateToUserScreen() async {
@@ -245,7 +262,7 @@ class _ListViewLogState extends State<ListViewLog> {
   // ----------------------------------------
   /*            WEB FUNCTIONS              */
   // ----------------------------------------
-  
+
   Future<void> _launchInBrowser(String url) async {
     if (await canLaunch(url)) {
       await launch(url, forceSafariVC: false, forceWebView: false);
@@ -260,8 +277,7 @@ class _ListViewLogState extends State<ListViewLog> {
 
   // Check to make sure we can't delete a trip that is in progress
   void checkIfCanDel(BuildContext context, Trip trip, int position) {
-    if(!trip.inProgress)
-      _showConfimDelDialog(context, trip, position);
+    if (!trip.inProgress) _showConfimDelDialog(context, trip, position);
   }
 
   // supporting function to checkIfCanDel()
@@ -288,13 +304,12 @@ class _ListViewLogState extends State<ListViewLog> {
                 Navigator.of(context).pop();
               },
             ),
-             FlatButton(
+            FlatButton(
               child: Text(
                 "No",
                 style: TextStyle(fontSize: 18.0, color: Colors.black),
               ),
               onPressed: () {
-                
                 Navigator.of(context).pop();
               },
             ),
@@ -314,7 +329,7 @@ class _ListViewLogState extends State<ListViewLog> {
   }
 
   // function used to create a log
-  void _createNewLog(BuildContext context) async { 
+  void _createNewLog(BuildContext context) async {
     if (!_checkEmptyVehicleList()) {
       // for (int i = 0; i < _vehicleList.length; i++) {
       //   print(_vehicleList[i].name.toString());
@@ -331,8 +346,8 @@ class _ListViewLogState extends State<ListViewLog> {
         await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) =>
-                  LogScreen(_vehicleList, _vehicleQuery, widget.userId, Trip.newTrip(), false),
+              builder: (context) => LogScreen(_vehicleList, _vehicleQuery,
+                  widget.userId, Trip.newTrip(), false),
             ));
       }
     }
@@ -411,10 +426,12 @@ class _ListViewLogState extends State<ListViewLog> {
     });
   }
 
-   void _onVehicleUpdated(Event event) {
-    var oldVehicleValue = _vehicleList.singleWhere((vehicle) => vehicle.vehicleID == event.snapshot.key);
+  void _onVehicleUpdated(Event event) {
+    var oldVehicleValue = _vehicleList
+        .singleWhere((vehicle) => vehicle.vehicleID == event.snapshot.key);
     setState(() {
-      _vehicleList[_vehicleList.indexOf(oldVehicleValue)] = new Vehicle.fromSnapshot(event.snapshot);
+      _vehicleList[_vehicleList.indexOf(oldVehicleValue)] =
+          new Vehicle.fromSnapshot(event.snapshot);
     });
   }
 
@@ -485,10 +502,16 @@ class _ListViewLogState extends State<ListViewLog> {
                   height: 5.0,
                 ),
                 Container(
-                  decoration: 
-                  (_tripList[position].inProgress)
-                      ? new BoxDecoration(color: Colors.yellow[300], border: new Border(bottom: BorderSide(color: Colors.blue, width: 2)))
-                      : new BoxDecoration(color: Colors.white, border: new Border(bottom: BorderSide(color: Colors.blue, width: 2))),
+                  decoration: (_tripList[position].inProgress)
+                      ? new BoxDecoration(
+                          color: Colors.yellow[300],
+                          border: new Border(
+                              bottom: BorderSide(color: Colors.blue, width: 2)))
+                      : new BoxDecoration(
+                          color: Colors.white,
+                          border: new Border(
+                              bottom:
+                                  BorderSide(color: Colors.blue, width: 2))),
                   // If trip is in progress, the containers is yellow
                   child: ListTile(
                       title: Text(
@@ -511,8 +534,8 @@ class _ListViewLogState extends State<ListViewLog> {
                         }
                       },
                       // LONG PRESS
-                      onLongPress: () =>
-                          checkIfCanDel(context, _tripList[position],position)),
+                      onLongPress: () => checkIfCanDel(
+                          context, _tripList[position], position)),
                 ),
               ],
             );
@@ -559,5 +582,4 @@ class _ListViewLogState extends State<ListViewLog> {
       return Icon(Icons.check_circle, color: Colors.green[300]);
     }
   }
-
 } // end of class _ListViewLogState
