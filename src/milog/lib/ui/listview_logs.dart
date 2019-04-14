@@ -7,6 +7,7 @@ import 'package:milog/model/Vehicle.dart';
 import 'package:milog/ui/user_screen.dart';
 import 'package:milog/ui/log_screen.dart';
 import 'package:milog/ui/trip_action.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:milog/ui/vehicle_list.dart';
 
 class ListViewLog extends StatefulWidget {
@@ -46,6 +47,8 @@ class _ListViewLogState extends State<ListViewLog> {
   StreamSubscription<Event> _onTripChangedSubscription;
   StreamSubscription<Event> _onVehicleAddedSub;
   StreamSubscription<Event> _onVehicleChangedSub;
+
+  String miLogSite = 'https://milog.org';
 
   // ----------------------------------------
   /* FUNCTION OVERRIDES / CLERICAL FUNCTIONS */
@@ -168,12 +171,22 @@ class _ListViewLogState extends State<ListViewLog> {
                   },
                 ),
                 ListTile(
+                  leading: new Icon(Icons.web, color: Colors.blue[300]),
+                  title: Text('Go to MiLog.org'),
+                  onTap: () {
+                    //Open milog.org in browser
+                     _launchInBrowser(miLogSite);
+                    Navigator.pop(context);
+                  },
+                  
+                ),
+                 ListTile(
                   leading: new Icon(Icons.exit_to_app, color: Colors.red[300]),
                   title: Text('Sign Out'),
                   onTap: () {
                     _signOut();
                     Navigator.pop(context);
-                  },
+                  },             
                 ),
                 // End of container -> column -> children
               ],
@@ -226,6 +239,18 @@ class _ListViewLogState extends State<ListViewLog> {
       widget.onSignedOut();
     } catch (e) {
       print(e);
+    }
+  }
+
+  // ----------------------------------------
+  /*            WEB FUNCTIONS              */
+  // ----------------------------------------
+  
+  Future<void> _launchInBrowser(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url, forceSafariVC: false, forceWebView: false);
+    } else {
+      throw 'Could not launch $url';
     }
   }
 
