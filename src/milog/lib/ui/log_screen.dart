@@ -86,7 +86,7 @@ class _LogScreenState extends State<LogScreen> {
     if (widget.update) {
       _notesController.text = widget.trip.notes.toString();
       _vehicleController.text = widget.trip.vehicle.toString();
-      _odometerReading.text = widget.trip.endOdometer.toString();
+      _odometerReading.text = widget.trip.milesTraveled.toString();
     }
   }
 
@@ -208,7 +208,7 @@ class _LogScreenState extends State<LogScreen> {
   Widget _showOdometerTextBox() {
     return TextField(
       controller: _odometerReading,
-      decoration: InputDecoration(labelText: "Odometer Reading"),
+      decoration: (widget.update) ? InputDecoration(labelText: "Miles Traveled") : InputDecoration(labelText: "Odometer Reading"),
       style: TextStyle(
         fontSize: 22,
         color: Colors.black,
@@ -400,7 +400,7 @@ class _LogScreenState extends State<LogScreen> {
         );
     tripsReference
         .child(widget.trip.tripID)
-        .child('endOdometer')
+        .child('milesTraveled')
         .set(int.parse(_odometerReading.text));
     Navigator.pop(context);
   }
