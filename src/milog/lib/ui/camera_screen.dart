@@ -142,9 +142,9 @@ class _CameraScreenState extends State<CameraScreen> {
     }
 
     
-    print("before bestGuess: " + widget.bestGuess.value.toString());
+    //print("before bestGuess: " + widget.bestGuess.value.toString());
     widget.bestGuess.setValue = filterResult();
-    print("after bestGuess: " + widget.bestGuess.value.toString());
+    //print("after bestGuess: " + widget.bestGuess.value.toString());
   
     //Go back to log screen, expect to see a dialog that pops up
     Navigator.pop(context);
@@ -165,11 +165,7 @@ class _CameraScreenState extends State<CameraScreen> {
         if (intCode >= 48 && intCode <= 57) {
           strResult += String.fromCharCode(intCode);
         }else {
-          break;
-          // if(element.codeUnitAt(i) == 46 || element.codeUnitAt(i) == 58){
-          //   //listOfResults.remove(element);
-          //   break;
-          // }        
+          break;       
         }
       }
       if(strResult.length > 3){
