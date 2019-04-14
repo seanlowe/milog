@@ -161,7 +161,9 @@ class _LogScreenState extends State<LogScreen> {
                 hint: Text("Select a Vehicle"),
                 onChanged: (value) {
                   selected = value;
-                  _odometerReading.text = selected.lastKnownOdometer.toString();
+                  if(int.parse(_odometerReading.text.toString()) < int.parse( selected.lastKnownOdometer.toString())){
+                    _odometerReading.text = selected.lastKnownOdometer.toString();
+                  }
                   print("selected = " +
                       selected.name +
                       " | value = " +
@@ -404,14 +406,14 @@ class _LogScreenState extends State<LogScreen> {
   }
 
   void _showDialogCheckOdometer() async {
-    TextEditingController _odometerFieldControl = TextEditingController();
+    TextEditingController _odometerFieldDialog = TextEditingController();
     //Setting textField in this Dialog to the one from picture
-    _odometerFieldControl.text = widget.odometerFromPicture.value.toString();
+    _odometerFieldDialog.text = widget.odometerFromPicture.value.toString();
 
     //Local helper function
     Widget _showTextField() {
       return TextField(
-        controller: _odometerFieldControl,
+        controller: _odometerFieldDialog,
         keyboardType: TextInputType.number,
       );
     }
@@ -432,6 +434,10 @@ class _LogScreenState extends State<LogScreen> {
                 style: TextStyle(fontSize: 18.0, color: Colors.green),
               ),
               onPressed: () {
+                //Copy what's in the TextField in Dialog to TextField in LogScreen.
+                if(int.parse(_odometerFieldDialog.text.toString()) > int.parse(_odometerReading.text.toString())){
+                  _odometerReading.text = _odometerFieldDialog.text.toString();
+                }
                 Navigator.of(context).pop();
               },
             ),
