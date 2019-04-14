@@ -11,6 +11,7 @@ import 'package:milog/model/Vehicle.dart';
 import 'package:milog/ui/vehicle_list.dart';
 import 'package:milog/ui/camera_screen.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 
 class LogScreen extends StatefulWidget {
   final Trip trip;
@@ -35,8 +36,8 @@ class _LogScreenState extends State<LogScreen> {
   // Every textbox needs a "controller"
   TextEditingController _vehicleController;
   TextEditingController _notesController;
-  TextEditingController _odometerReading;
-  TextEditingController _feesTextController;
+  MaskedTextController _odometerReading;
+  MoneyMaskedTextController _feesTextController;
 
   // for dropdown selector .. DON'T TOUCH
   // the dropdown is fragile . . .
@@ -78,8 +79,8 @@ class _LogScreenState extends State<LogScreen> {
     // This happens at start... what's written in the TextBoxes
     _notesController = new TextEditingController();
     _vehicleController = new TextEditingController();
-    _odometerReading = new TextEditingController();
-    _feesTextController = new TextEditingController();
+    _odometerReading = new MaskedTextController(mask: '000000');
+    _feesTextController = new MoneyMaskedTextController(leftSymbol: '\$', decimalSeparator: '.', thousandSeparator: "");
 
     // make sure odometerReading has some value in it regardless
     _odometerReading.text = "0";
@@ -284,7 +285,7 @@ class _LogScreenState extends State<LogScreen> {
 
   // supporting function for _showAddChargeButton()
   void _showDialogAddCharge() {
-    TextEditingController _chargeFieldControl = TextEditingController();
+    MoneyMaskedTextController _chargeFieldControl = new MoneyMaskedTextController(leftSymbol: '\$', decimalSeparator: '.', thousandSeparator: "");
     print("showDialogAddCharge invoked");
     showDialog(
       context: context,
@@ -296,7 +297,7 @@ class _LogScreenState extends State<LogScreen> {
           content: TextField(
             controller: _chargeFieldControl,
             keyboardType: TextInputType.numberWithOptions(decimal: true),
-            decoration: InputDecoration(hintText: "0.00"),
+            decoration: InputDecoration(),
           ),
           actions: <Widget>[
             // buttons at the bottom of the dialog
@@ -306,8 +307,7 @@ class _LogScreenState extends State<LogScreen> {
                 style: TextStyle(fontSize: 18.0, color: Colors.green),
               ),
               onPressed: () {
-                double newChargeAmt =
-                    double.parse(_chargeFieldControl.text.toString());
+                double newChargeAmt = _chargeFieldControl.numberValue;
                 print("Got: " + newChargeAmt.toString() + " from user.");
                 // Set it in the trip object
                 widget.trip.addCharge(newChargeAmt);
@@ -425,7 +425,7 @@ class _LogScreenState extends State<LogScreen> {
     tripsReference
         .child(widget.trip.tripID)
         .child('totCharges')
-        .set(double.parse(_feesTextController.text));
+        .set(_feesTextController.numberValue);
     Navigator.pop(context);
   }
 

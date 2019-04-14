@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:milog/model/Trip.dart';
 import 'package:milog/model/Vehicle.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 
 // This class handles pausing, resuming and ending trips
 
@@ -27,7 +28,7 @@ class _TripScreenActionState extends State<TripAction> {
   var tripsReference;
   var vehicleReference;
   // TextEditing for the odometer input
-  TextEditingController _odometerReadingDiag;
+  MaskedTextController _odometerReadingDiag;
 
   // ----------------------------------------
   /* FUNCTION OVERRIDES / CLERICAL FUNCTIONS */
@@ -42,7 +43,7 @@ class _TripScreenActionState extends State<TripAction> {
     tripDatabase = FirebaseDatabase.instance.reference();
     tripsReference = tripDatabase.child('Trips');
     vehicleReference = tripDatabase.child('Vehicles');
-    _odometerReadingDiag = new TextEditingController();
+    _odometerReadingDiag = new MaskedTextController(mask: '000000');
 
     // Turns on Persistence
     FirebaseDatabase.instance.setPersistenceEnabled(true);
@@ -61,9 +62,9 @@ class _TripScreenActionState extends State<TripAction> {
           shrinkWrap: true,
           children: <Widget>[
             _showSelectedTrip(),
+            _showOdoTextField(),
             _showPauseResumeButton(),
             _showEndTripButton(),
-            _showOdoTextField(),
             _showAddChargeButton(),
           ],
         ),
@@ -138,7 +139,7 @@ class _TripScreenActionState extends State<TripAction> {
             shape: new RoundedRectangleBorder(
                 borderRadius: new BorderRadius.circular(60.0)),
             color: Colors.red[300],
-            child: Text('END TRIP',
+            child: Text('End Trip',
                 style: new TextStyle(fontSize: 20.0, color: Colors.black)),
             onPressed: () {
               if (!_isOdoLessThanStart()) processOdoMiles();
@@ -159,7 +160,7 @@ class _TripScreenActionState extends State<TripAction> {
                 borderRadius: new BorderRadius.circular(60.0)),
             color: Colors.orange,
             child: Text('Add Charges \$',
-                style: new TextStyle(fontSize: 20.0, color: Colors.white)),
+                style: new TextStyle(fontSize: 20.0, color: Colors.black)),
             onPressed: () {
               _showDialogAddCharge();
             },
@@ -400,7 +401,7 @@ class _TripScreenActionState extends State<TripAction> {
 
   // supporting function of _showAddChargeButton()
   void _showDialogAddCharge() {
-    TextEditingController _chargeFieldControl = TextEditingController();
+    MoneyMaskedTextController _chargeFieldControl = new MoneyMaskedTextController(leftSymbol: '\$', decimalSeparator: '.', thousandSeparator: "");
     print("showDialogAddCharge invoked");
     showDialog(
       context: context,
@@ -422,8 +423,7 @@ class _TripScreenActionState extends State<TripAction> {
                 style: TextStyle(fontSize: 18.0, color: Colors.green),
               ),
               onPressed: () {
-                double newChargeAmt =
-                    double.parse(_chargeFieldControl.text.toString());
+                double newChargeAmt = _chargeFieldControl.numberValue;
                 print("Got: " + newChargeAmt.toString() + " from user.");
                 // Set it in the trip object
                 widget.trip.addCharge(newChargeAmt);

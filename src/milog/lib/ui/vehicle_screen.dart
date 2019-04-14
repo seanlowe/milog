@@ -8,6 +8,7 @@ This widget adds vehicles. It's called using a navigator.
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:milog/model/Vehicle.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 
 class VehicleScreen extends StatefulWidget {
   final String userID;
@@ -25,7 +26,7 @@ class _VehicleScreenState extends State<VehicleScreen> {
   // ----------------------------------------
   // every textbox needs a "controller"
   TextEditingController _nameController;
-  TextEditingController _lastKnownOdoController;
+  MaskedTextController _lastKnownOdoController;
 
   var vehicleDatabase;
   var vehicleReference;
@@ -46,7 +47,7 @@ class _VehicleScreenState extends State<VehicleScreen> {
     FirebaseDatabase.instance.setPersistenceEnabled(true);
 
     _nameController = new TextEditingController(text: widget.vehicle.name);
-    _lastKnownOdoController = new TextEditingController();
+    _lastKnownOdoController = new MaskedTextController(mask: '000000');
   }
 
   @override
