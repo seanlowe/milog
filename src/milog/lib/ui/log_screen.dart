@@ -36,6 +36,7 @@ class _LogScreenState extends State<LogScreen> {
   TextEditingController _vehicleController;
   TextEditingController _notesController;
   TextEditingController _odometerReading;
+  TextEditingController _feesTextController;
 
   // for dropdown selector .. DON'T TOUCH
   // the dropdown is fragile . . .
@@ -78,6 +79,7 @@ class _LogScreenState extends State<LogScreen> {
     _notesController = new TextEditingController();
     _vehicleController = new TextEditingController();
     _odometerReading = new TextEditingController();
+    _feesTextController = new TextEditingController();
 
     // make sure odometerReading has some value in it regardless
     _odometerReading.text = "0";
@@ -87,6 +89,7 @@ class _LogScreenState extends State<LogScreen> {
       _notesController.text = widget.trip.notes.toString();
       _vehicleController.text = widget.trip.vehicle.toString();
       _odometerReading.text = widget.trip.milesTraveled.toString();
+      _feesTextController.text = widget.trip.totCharges.toString();
     }
   }
 
@@ -106,6 +109,7 @@ class _LogScreenState extends State<LogScreen> {
             _showNotesTextBox(),
             (widget.update) ? _showVehicleTextBox() : _showVehicleDropdown(),
             (widget.update) ? _showOdometerTextBox() : _showOdoAndCamera(),
+            (widget.update) ? _showFeesTextBox() : null,
             // Optional
             (widget.trip.startOdometer != 0) ? _showAddChargeButton() : null,
             _showPrimaryButton(),
@@ -161,8 +165,10 @@ class _LogScreenState extends State<LogScreen> {
                 hint: Text("Select a Vehicle"),
                 onChanged: (value) {
                   selected = value;
-                  if(int.parse(_odometerReading.text.toString()) < int.parse( selected.lastKnownOdometer.toString())){
-                    _odometerReading.text = selected.lastKnownOdometer.toString();
+                  if (int.parse(_odometerReading.text.toString()) <
+                      int.parse(selected.lastKnownOdometer.toString())) {
+                    _odometerReading.text =
+                        selected.lastKnownOdometer.toString();
                   }
                   print("selected = " +
                       selected.name +
@@ -195,6 +201,18 @@ class _LogScreenState extends State<LogScreen> {
         ));
   }
 
+  // show a textbox for vehicle field on existing trips
+  Widget _showFeesTextBox() {
+    return TextField(
+        controller: _feesTextController,
+        keyboardType: TextInputType.numberWithOptions(decimal: true),
+        decoration: InputDecoration(labelText: 'Incurred Fees'),
+        style: TextStyle(
+          fontSize: 22,
+          color: Colors.black,
+        ));
+  }
+
   Widget _showNotesTextBox() {
     return TextField(
         controller: _notesController,
@@ -208,7 +226,9 @@ class _LogScreenState extends State<LogScreen> {
   Widget _showOdometerTextBox() {
     return TextField(
       controller: _odometerReading,
-      decoration: (widget.update) ? InputDecoration(labelText: "Miles Traveled") : InputDecoration(labelText: "Odometer Reading"),
+      decoration: (widget.update)
+          ? InputDecoration(labelText: "Miles Traveled")
+          : InputDecoration(labelText: "Odometer Reading"),
       style: TextStyle(
         fontSize: 22,
         color: Colors.black,
@@ -402,6 +422,10 @@ class _LogScreenState extends State<LogScreen> {
         .child(widget.trip.tripID)
         .child('milesTraveled')
         .set(int.parse(_odometerReading.text));
+    tripsReference
+        .child(widget.trip.tripID)
+        .child('totCharges')
+        .set(double.parse(_feesTextController.text));
     Navigator.pop(context);
   }
 
@@ -425,7 +449,7 @@ class _LogScreenState extends State<LogScreen> {
         return AlertDialog(
           title: Text("We think your Odometer is:",
               style: TextStyle(fontSize: 18.0, color: Colors.black)),
-          content:  _showTextField(),
+          content: _showTextField(),
           actions: <Widget>[
             // buttons at the bottom of the dialog
             FlatButton(
@@ -435,7 +459,8 @@ class _LogScreenState extends State<LogScreen> {
               ),
               onPressed: () {
                 //Copy what's in the TextField in Dialog to TextField in LogScreen.
-                if(int.parse(_odometerFieldDialog.text.toString()) > int.parse(_odometerReading.text.toString())){
+                if (int.parse(_odometerFieldDialog.text.toString()) >
+                    int.parse(_odometerReading.text.toString())) {
                   _odometerReading.text = _odometerFieldDialog.text.toString();
                 }
                 Navigator.of(context).pop();
