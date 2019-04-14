@@ -6,7 +6,7 @@ import 'dart:async';
 
 List<CameraDescription> cameras;
 
-Future<void> main() async {
+void main()async {
   void logError(String code, String message) =>
     print('Error: $code\nError Message: $message');
 

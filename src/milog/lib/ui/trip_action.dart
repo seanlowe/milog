@@ -20,7 +20,7 @@ class TripAction extends StatefulWidget {
 
 class _TripScreenActionState extends State<TripAction> {
   // ----------------------------------------
-  /*         VARIABLE DECLARATIONS         */ 
+  /*         VARIABLE DECLARATIONS         */
   // ----------------------------------------
 
   var tripDatabase;
@@ -77,6 +77,7 @@ class _TripScreenActionState extends State<TripAction> {
 
   // Displays the information of the selected trip
   Widget _showSelectedTrip() {
+    final formatCurrency = new NumberFormat.simpleCurrency();
     return Container(
         margin: EdgeInsets.all(15.0),
         decoration: BoxDecoration(
@@ -91,6 +92,9 @@ class _TripScreenActionState extends State<TripAction> {
               textAlign: TextAlign.left,
               style: new TextStyle(fontSize: 20.0, color: Colors.black)),
           Text("Starting Odometer: " + widget.trip.startOdometer.toString(),
+              textAlign: TextAlign.left,
+              style: new TextStyle(fontSize: 20.0, color: Colors.black)),
+          Text("Fees: "+ "${formatCurrency.format(widget.trip.totCharges)}",
               textAlign: TextAlign.left,
               style: new TextStyle(fontSize: 20.0, color: Colors.black)),
           Text("Date: " + getTripDate(),
@@ -117,8 +121,7 @@ class _TripScreenActionState extends State<TripAction> {
                     style: new TextStyle(fontSize: 20.0, color: Colors.black)),
             onPressed: () {
               // We are setting isPaused in Trip to true in DB
-              if(!_isOdoLessThanStart())
-                processPause();
+              if (!_isOdoLessThanStart()) processPause();
             },
           ),
         ));
@@ -138,8 +141,7 @@ class _TripScreenActionState extends State<TripAction> {
             child: Text('END TRIP',
                 style: new TextStyle(fontSize: 20.0, color: Colors.black)),
             onPressed: () {
-               if(!_isOdoLessThanStart())
-                processOdoMiles();
+              if (!_isOdoLessThanStart()) processOdoMiles();
             },
           ),
         ));
@@ -205,71 +207,75 @@ class _TripScreenActionState extends State<TripAction> {
       int newOdo = int.parse(_odometerReadingDiag.text.toString());
       // widget._vehicleList.where((v) => v.vehicleID == widget.trip.vehicleID).first;
       // TODO check if odo is >= lastKnownOdo
-        if (widget.trip.paused) {
-          // Trip is paused
-          
-          widget.trip.resumeTrip(newOdo);
-          print("In trip, miles traveled = " +
-              widget.trip.milesTraveled.toString());
-          tripsReference
-              .child(widget.trip.tripID)
-              .child("startOdometer")
-              .set(widget.trip.startOdometer);
-        } else {
-          print("#2 RAN!");
-          // Trip is not paused
-          widget.trip.pauseTrip(newOdo);
-          tripsReference
-              .child(widget.trip.tripID)
-              .child("milesTraveled")
-              .set(widget.trip.milesTraveled);
-          tripsReference
-              .child(widget.trip.tripID)
-              .child("startOdometer")
-              .set(widget.trip.startOdometer);
-        }
-        // Update the trip paused bool
-        setPausedOrResume();
-        Navigator.pop(context);
+      if (widget.trip.paused) {
+        // Trip is paused
+
+        widget.trip.resumeTrip(newOdo);
+        print("In trip, miles traveled = " +
+            widget.trip.milesTraveled.toString());
+        tripsReference
+            .child(widget.trip.tripID)
+            .child("startOdometer")
+            .set(widget.trip.startOdometer);
+      } else {
+        print("#2 RAN!");
+        // Trip is not paused
+        widget.trip.pauseTrip(newOdo);
+        tripsReference
+            .child(widget.trip.tripID)
+            .child("milesTraveled")
+            .set(widget.trip.milesTraveled);
+        tripsReference
+            .child(widget.trip.tripID)
+            .child("startOdometer")
+            .set(widget.trip.startOdometer);
+      }
+      // Update the trip paused bool
+      setPausedOrResume();
+      Navigator.pop(context);
     }
   }
 
   bool _checkOdo(int newOdo) {
-    return widget._vehicleList[widget._vehicleList.indexOf(widget._vehicleList.where((v) => v.vehicleID == widget.trip.vehicleID).elementAt(0))].checkOdoValid(newOdo);
+    return widget._vehicleList[widget._vehicleList.indexOf(widget._vehicleList
+            .where((v) => v.vehicleID == widget.trip.vehicleID)
+            .elementAt(0))]
+        .checkOdoValid(newOdo);
   }
 
-  // Returns true if entered Odo value is < starting Odometer value 
-  bool _isOdoLessThanStart(){
+  // Returns true if entered Odo value is < starting Odometer value
+  bool _isOdoLessThanStart() {
     bool result = false;
     bool emptyOdo = _odometerReadingDiag.text.isEmpty;
-    if(!emptyOdo){
+    if (!emptyOdo) {
       int odoVal = int.parse(_odometerReadingDiag.text.toString());
-      if(odoVal < widget.trip.startOdometer){
+      if (odoVal < widget.trip.startOdometer) {
         result = true;
 
         showDialog(
-        context: context,
-        builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: Text("Oops!",
-              style: TextStyle(fontSize: 18.0, color: Colors.red)),
-          content: Text("You entered an Odometer value less than your starting value.",
-              style: TextStyle(fontSize: 18.0, color: Colors.black)),
-          actions: <Widget>[
-            // buttons at the bottom of the dialog
-            FlatButton(
-              child: Text(
-                "Ok",
-                style: TextStyle(fontSize: 18.0, color: Colors.blueAccent),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-          );
-        },
+          context: context,
+          builder: (BuildContext context) {
+            // return object of type Dialog
+            return AlertDialog(
+              title: Text("Oops!",
+                  style: TextStyle(fontSize: 18.0, color: Colors.red)),
+              content: Text(
+                  "You entered an Odometer value less than your starting value.",
+                  style: TextStyle(fontSize: 18.0, color: Colors.black)),
+              actions: <Widget>[
+                // buttons at the bottom of the dialog
+                FlatButton(
+                  child: Text(
+                    "Ok",
+                    style: TextStyle(fontSize: 18.0, color: Colors.blueAccent),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
         );
       }
     }
@@ -380,12 +386,18 @@ class _TripScreenActionState extends State<TripAction> {
     for (int i = 0; i < widget._vehicleList.length; i++) {
       if (widget._vehicleList[i].vehicleID.toString() == active) {
         widget._vehicleList[i].setInUse = false;
-        vehicleReference.child(widget._vehicleList[i].vehicleID).child('inUse').set(false);
-        vehicleReference.child(widget._vehicleList[i].vehicleID).child('lastKnownOdometer').set(widget.trip.endOdometer);
-      } 
+        vehicleReference
+            .child(widget._vehicleList[i].vehicleID)
+            .child('inUse')
+            .set(false);
+        vehicleReference
+            .child(widget._vehicleList[i].vehicleID)
+            .child('lastKnownOdometer')
+            .set(widget.trip.endOdometer);
+      }
     }
   }
-  
+
   // supporting function of _showAddChargeButton()
   void _showDialogAddCharge() {
     TextEditingController _chargeFieldControl = TextEditingController();
@@ -437,5 +449,4 @@ class _TripScreenActionState extends State<TripAction> {
       },
     );
   }
-
 } // end of class _TripScreenActionState

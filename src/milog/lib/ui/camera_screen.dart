@@ -142,13 +142,10 @@ class _CameraScreenState extends State<CameraScreen> {
     }
 
     
-    // setState(() {
-        print("before bestGuess: " + widget.bestGuess.toString());
-         widget.bestGuess.setValue = filterResult();
-         print("after bestGuess: " + widget.bestGuess.toString());
-    //   });
-   
-
+    print("before bestGuess: " + widget.bestGuess.value.toString());
+    widget.bestGuess.setValue = filterResult();
+    print("after bestGuess: " + widget.bestGuess.value.toString());
+  
     //Go back to log screen, expect to see a dialog that pops up
     Navigator.pop(context);
   }

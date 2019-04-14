@@ -50,7 +50,6 @@ class _LogScreenState extends State<LogScreen> {
   String strNewTripTitle = "New Trip";
   String title;
 
-  
   // ----------------------------------------
   /* FUNCTION OVERRIDES / CLERICAL FUNCTIONS */
   // ----------------------------------------
@@ -60,7 +59,6 @@ class _LogScreenState extends State<LogScreen> {
   void initState() {
     super.initState();
     getTripDate();
-
 
     widget.odometerFromPicture = Integer(0);
 
@@ -107,7 +105,7 @@ class _LogScreenState extends State<LogScreen> {
             _selectTopWidget(),
             _showNotesTextBox(),
             (widget.update) ? _showVehicleTextBox() : _showVehicleDropdown(),
-            (widget.update) ? _showOdometerTextBox() : _showOdoAndCamera(), 
+            (widget.update) ? _showOdometerTextBox() : _showOdoAndCamera(),
             // Optional
             (widget.trip.startOdometer != 0) ? _showAddChargeButton() : null,
             _showPrimaryButton(),
@@ -325,14 +323,14 @@ class _LogScreenState extends State<LogScreen> {
   }
 
   void _navigateToCamera(BuildContext contect) async {
-    print("Before Camera Screen: " + widget.odometerFromPicture.value.toString());
+    //print("Before Camera Screen: " + widget.odometerFromPicture.value.toString());
     await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => CameraScreen(widget.odometerFromPicture)),
+      MaterialPageRoute(
+          builder: (context) => CameraScreen(widget.odometerFromPicture)),
     );
-    print("After Camera Screen: " + widget.odometerFromPicture.value.toString());
+    //print("After Camera Screen: " + widget.odometerFromPicture.value.toString());
     _showDialogCheckOdometer();
-
   }
 
   // ----------------------------------------
@@ -406,22 +404,37 @@ class _LogScreenState extends State<LogScreen> {
   }
 
   void _showDialogCheckOdometer() async {
-    print("odoFromPic: " + widget.odometerFromPicture.value.toString());
-    print("_showDialogInvalidOdometer() invoked");
+    TextEditingController _odometerFieldControl = TextEditingController();
+    //Setting textField in this Dialog to the one from picture
+    _odometerFieldControl.text = widget.odometerFromPicture.value.toString();
+
+    //Local helper function
+    Widget _showTextField() {
+      return TextField(
+        controller: _odometerFieldControl,
+        keyboardType: TextInputType.number,
+      );
+    }
+
     await showDialog(
       context: context,
       builder: (BuildContext context) {
+        // return object of type Dialog
         return AlertDialog(
-          title: Text("Check odometer",
-              style: TextStyle(fontSize: 18.0, color: Colors.red)),
-          content: Text("We think the odomer is: " + widget.odometerFromPicture.value.toString() + "\n Is this correct? ",
+          title: Text("We think your Odometer is:",
               style: TextStyle(fontSize: 18.0, color: Colors.black)),
+          content:  _showTextField(),
           actions: <Widget>[
+            // buttons at the bottom of the dialog
             FlatButton(
-              child: Text("OK",
-                  style: TextStyle(fontSize: 18.0, color: Colors.blueAccent)),
-              onPressed: () => Navigator.of(context).pop(),
-            )
+              child: Text(
+                "OK",
+                style: TextStyle(fontSize: 18.0, color: Colors.green),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
           ],
         );
       },
@@ -557,7 +570,7 @@ class _LogScreenState extends State<LogScreen> {
           Text("Miles Traveled: " + widget.trip.milesTraveled.toString(),
               textAlign: TextAlign.left,
               style: new TextStyle(fontSize: 20.0, color: Colors.black)),
-          Text("Fees: "+ "${formatCurrency.format(widget.trip.totCharges)}",
+          Text("Fees: " + "${formatCurrency.format(widget.trip.totCharges)}",
               textAlign: TextAlign.left,
               style: new TextStyle(fontSize: 20.0, color: Colors.black)),
           Text("Date: " + getTripDate(),
@@ -579,7 +592,7 @@ class _LogScreenState extends State<LogScreen> {
 } // end of class _LogScreenState
 
 //Wrapper for Ints
-class Integer{
+class Integer {
   int _value;
   Integer(this._value);
 
