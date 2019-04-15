@@ -736,11 +736,11 @@ input:-webkit-autofill:focus {
     background-color: #f5f6ff;
 }
 
-.toggole-boxs {
+.toggle-boxes {
     margin-top: -20px;
 }
 
-.toggole-boxs h3 {
+.toggle-boxes h3 {
     font-size: 18px;
     background-color: #ffffff;
     margin-bottom: 0;
@@ -753,8 +753,8 @@ input:-webkit-autofill:focus {
     position: relative;
 }
 
-.toggole-boxs h3:before,
-.toggole-boxs h3:after {
+.toggle-boxes h3:before,
+.toggle-boxes h3:after {
     content: '';
     position: absolute;
     left: 30px;
@@ -764,7 +764,7 @@ input:-webkit-autofill:focus {
     background-color: #434345;
 }
 
-.toggole-boxs h3:before {
+.toggle-boxes h3:before {
     -webkit-transform: rotate(90deg);
     -ms-transform: rotate(90deg);
     transform: rotate(90deg);
@@ -773,13 +773,13 @@ input:-webkit-autofill:focus {
     transition: 0.3s;
 }
 
-.toggole-boxs h3.ui-state-active:before {
+.toggle-boxes h3.ui-state-active:before {
     -webkit-transform: rotate(0deg);
     -ms-transform: rotate(0deg);
     transform: rotate(0deg)
 }
 
-.toggole-boxs div {
+.toggle-boxes div {
     background-color: #ffffff;
     padding: 0 30px 20px 60px;
     border-left: 5px solid #5e88fc;

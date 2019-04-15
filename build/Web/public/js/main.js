@@ -64,7 +64,7 @@
     //         }
     //     }
     // });
-    // $(".toggole-boxs").accordion();
+    $(".toggle-boxes").accordion();
     /*---------------------------
     MICHIMP INTEGRATION
     -----------------------------*/
