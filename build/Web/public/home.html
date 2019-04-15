@@ -78,7 +78,7 @@
             </p>
             <h5 id="userEmail" class="centered"></h5>
             <li class="mt">
-              <a href="home.html#myModal" data-toggle="modal">
+              <a id="create" href="home.html#myModal" data-toggle="modal">
                 <i class="fa fa-plus"></i>
                 <span>Create Log</span>
               </a>
@@ -123,9 +123,12 @@
       </aside>
       <!--sidebar end-->
 
+      <!-- **********************************************************************************************************************************************************
+        MODALS AREA
+        *********************************************************************************************************************************************************** -->
       <!-- Modal - Create Log -->
       <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
-        <div class="modal-dialog">
+        <div class="modal-dialog" role="document" style="overflow-y: initial !important">
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -149,9 +152,10 @@
               <br />
               <p>Mileage</p>
               <div class="form-panel">
-                <div class="form-panel">
-                  <p>Enter Total Mileage.</p>
-                  <input
+                <!-- <div class="form-panel">
+                  <p>Know Total Mileage?</p>
+                  <a href="home.html#totMilesModal" data-toggle="modal" class="btn btn-theme03">Enter</a> -->
+                  <!-- <input
                     oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                     type = "number"
                     min="0"
@@ -162,12 +166,12 @@
                     value=""
                     autocomplete="off"
                     class="form-control placeholder-no-fix"
-                  />
-                  <br />
-                </div>
-                <div class="text-center">
+                  /> -->
+                  <!-- <br />
+                </div> -->
+                <!-- <div class="text-center">
                   <label>OR</label>
-                </div>
+                </div> -->
                 <div class="form-panel">
                   <p>Enter starting mileage.</p>
                   <input
@@ -196,6 +200,18 @@
                     autocomplete="off"
                     class="form-control placeholder-no-fix"
                   />
+                  <br>
+                  <div class="row">
+                    <div class="col-xs-4">
+                      <p>Know Total Miles?</p>
+                      <a id="knowMilesBtn" href="home.html#totMilesModal" data-toggle="modal" class="btn btn-theme03">Enter</a>
+                    </div>
+                    <div id="showMiles" class="hidden col-xs-6 text-center">
+                      <p>Total Miles Travelled</p>
+                      <h4 ><b id="totMiles"></b></h4>
+                    </div>
+                </div>
+                  <br />
                 </div>
               </div>
               <br/>
@@ -204,6 +220,7 @@
                 type="text"
                 id="tripNotes"
                 name="notes"
+                required
                 placeholder="Notes"
                 maxlength="250"
                 autocomplete="off"
@@ -225,6 +242,7 @@
             </div>
             <div class="modal-footer">
               <button
+                id="cancelCreate"
                 data-dismiss="modal"
                 class="btn btn-default"
                 type="button"
@@ -315,7 +333,21 @@
               <h4 class="modal-title">Update Log</h4>
             </div>
             <div class="modal-body">
-              <p>Update starting mileage.</p>
+              <p>Update Total Miles Travelled.</p>
+              <input
+                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                type = "number"
+                min="0"
+                maxlength = "6"
+                id="updateMiles"
+                name="initial"
+                placeholder="Total Miles"
+                value=""
+                autocomplete="off"
+                class="form-control placeholder-no-fix"
+              />
+              <br />
+              <!-- <p>Update starting mileage.</p>
               <input
                 oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                 type = "number"
@@ -339,7 +371,7 @@
                 placeholder="Final Mileage"
                 autocomplete="off"
                 class="form-control placeholder-no-fix"
-              />
+              /> -->
               <br />
               <p>Update notes.</p>
               <input
@@ -388,13 +420,13 @@
       </div>
       <!-- End Update modal -->
 
-      <!-- Error Modal -->
+      <!-- TOTAL MILES Modal -->
       <div
         aria-hidden="true"
         aria-labelledby="myModalLabel"
         role="dialog"
         tabindex="-1"
-        id="errorModal"
+        id="totMilesModal"
         class="modal fade"
       >
         <div class="modal-dialog">
@@ -409,16 +441,48 @@
               >
                 &times;
               </button>
-              <h4 class="modal-title">Oops, You Forgot To Enter Something!</h4>
-            </div>
-            <div class="modal-body text-center">
-                <h4 id="errorMsg"></h4>
+              <h4 class="modal-title">Total Miles</h4>
+              
               <br />
+            </div>
+            <div class="form-panel">
+              <p>Enter Total Miles Travelled.</p>
+              <input
+                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                type = "number"
+                min="0"
+                maxlength = "4"
+                id="totalMileage"
+                name="initial"
+                placeholder="Total Mileage"
+                value=""
+                autocomplete="off"
+                class="form-control placeholder-no-fix"
+              />
+              <br />
+            </div>
+            <div class="modal-footer">
+              <button
+                data-dismiss="modal"
+                class="btn btn-default"
+                type="button"
+              >
+                Cancel
+              </button>
+              <input
+                id="knowMiles"
+                class="btn btn-theme03"
+                data-dismiss="modal"
+                data-toggle="modal"
+
+                type="submit"
+                value="Submit"
+              />
             </div>
           </div>
         </div>
       </div>
-      <!-- End Error modal -->
+      <!-- End Total Miles modal -->
       <!-- **********************************************************************************************************************************************************
         MAIN CONTENT
         *********************************************************************************************************************************************************** -->
@@ -430,26 +494,28 @@
                   <h3><i class="fa fa-angle-right"></i> Trip Logs</h3>
                 </div>
                 <div class="col-sm-8">
-                  <form action="#" class="style-form">
+                  <div action="#" class="style-form">
                     <div class="form-group">
                       <label class="col-xs-2 control-label">
                         <i class="fa fa-file-pdf-o fa-3x"></i>
                         <b>Export to PDF</b>
                       </label>
                       <div class="control-label col-xs-10">
-                        <button class="btn btn-theme" type="submit">
+                        <button id="makePDF" class="btn btn-theme" type="submit">
                           Submit
                         </button>
                       <div class="col-md-6">
                         
                         <div class="input-group input-large" data-date="01/01/2014" data-date-format="mm/dd/yyyy">
                           <input
+                            id="startDate"
                             type="text"
                             class="form-control dpd1"
                             name="from"
                           />
                           <span class="input-group-addon">To</span>
                           <input
+                            id="endDate"
                             type="text"
                             class="form-control dpd2"
                             name="to"
@@ -460,7 +526,7 @@
                         </div>
                       </div>
                     </div>
-                  </form>
+                  </div>
                 </div>
                 <!--  /col-lg-12 -->
                 
@@ -543,7 +609,7 @@
       <div id="googleSignIn"></div>
     </section>
     <!-- js placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
     <script src="lib/bootstrap/js/bootstrap.min.js"></script>
     <script src="lib/jquery/jquery.min.js"></script>
@@ -551,9 +617,12 @@
     <script class="include" type="text/javascript" src="lib/jquery.dcjqaccordion.2.7.js"></script>
     <script src="lib/jquery.scrollTo.min.js"></script>
     <script src="lib/jquery.nicescroll.js" type="text/javascript"></script>
-    <script type="text/javascript" language="javascript" src="lib/advanced-datatable/js/jquery.dataTables.js"></script>
+    <!-- <script type="text/javascript" language="javascript" src="lib/advanced-datatable/js/jquery.dataTables.js"></script> -->
+    <script src="https://cdn.datatables.net/1.10.0/js/jquery.dataTables.js"></script>
     <script type="text/javascript" src="lib/advanced-datatable/js/DT_bootstrap.js"></script>
     <script type="text/javascript" src="lib/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js" integrity="sha384-NaWTHo/8YCBYJ59830LTz/P4aQZK1sS0SneOgAvhsIl3zBu8r9RevNg5lHCHAuQ/" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/jspdf-autotable@3.1.1/dist/jspdf.plugin.autotable.js"></script>
     <!--common script for all pages-->
     <script src="lib/common-scripts.js"></script>
     <script src="lib/advanced-form-components.js"></script>

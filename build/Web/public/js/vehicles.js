@@ -54,7 +54,7 @@ var config = {
       
     }
   
-    console.log(dataSets[0]);
+    // console.log(dataSets);
   
     for(var i = 0; i < dataSets.length; i++) {
       $("#vehicleTable > tbody").append("<tr></tr>");
