@@ -44,11 +44,12 @@ class _ListViewLogState extends State<ListViewLog> {
   final FirebaseDatabase _database = FirebaseDatabase.instance;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  StreamSubscription<Event> _onTripAddedSubscription;
-  StreamSubscription<Event> _onTripChangedSubscription;
-  StreamSubscription<Event> _onVehicleAddedSub;
-  StreamSubscription<Event> _onVehicleChangedSub;
-  StreamSubscription<Event> _onTripRemoved;
+  StreamSubscription<Event> _onTripAddedSubscription;         //Triggers when a trip is added
+  StreamSubscription<Event> _onTripChangedSubscription;       //Triggers when a trip is changed
+  StreamSubscription<Event> _onVehicleAddedSub;               //Triggers when a vehicle is added
+  StreamSubscription<Event> _onVehicleChangedSub;             //Triggers when a vehicle is changed
+  StreamSubscription<Event> _onTripRemovedSub;                //Triggers when a trip is removed
+  StreamSubscription<Event> _onVehicleRemovedSub;             //Triggers when a vehicle is removed
 
   String miLogSite = 'https://milog.org';
 
@@ -91,7 +92,8 @@ class _ListViewLogState extends State<ListViewLog> {
     _onVehicleChangedSub =
         _vehicleQuery.onChildChanged.listen(_onVehicleUpdated);
 
-    _onTripRemoved = _tripQuery.onChildRemoved.listen(_onTripRemovedDB);
+    _onTripRemovedSub = _tripQuery.onChildRemoved.listen(_onTripRemovedDB);
+    _onVehicleRemovedSub = _vehicleQuery.onChildRemoved.listen(_onVehicleRemovedDB);
   }
 
   @override
@@ -100,7 +102,8 @@ class _ListViewLogState extends State<ListViewLog> {
     _onTripChangedSubscription.cancel();
     _onVehicleAddedSub.cancel();
     _onVehicleChangedSub.cancel();
-     _onTripRemoved.cancel();
+    _onTripRemovedSub.cancel();
+    _onVehicleRemovedSub.cancel();
     super.dispose();
   }
 
@@ -436,6 +439,15 @@ class _ListViewLogState extends State<ListViewLog> {
         .singleWhere((trip) => trip.tripID == event.snapshot.key);
     setState(() {
       _tripList.removeAt(_tripList.indexOf(oldTripValue));
+    });
+  }
+
+  void _onVehicleRemovedDB(Event event){
+    print("onVehicleRemovedDB was invoked");
+    var oldVehicleValue = _vehicleList
+        .singleWhere((vehicle) => vehicle.vehicleID == event.snapshot.key);
+    setState(() {
+      _vehicleList.removeAt(_vehicleList.indexOf(oldVehicleValue));
     });
   }
 
