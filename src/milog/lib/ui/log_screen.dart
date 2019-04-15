@@ -12,6 +12,7 @@ import 'package:milog/ui/vehicle_list.dart';
 import 'package:milog/ui/camera_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
+import 'package:flutter/services.dart';
 
 class LogScreen extends StatefulWidget {
   final Trip trip;
@@ -96,6 +97,12 @@ class _LogScreenState extends State<LogScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ]);
     return Scaffold(
       appBar: AppBar(title: Text(title)),
       body: Container(
@@ -624,7 +631,7 @@ class _LogScreenState extends State<LogScreen> {
 
 //Wrapper for Ints
 class Integer {
-  int _value;
+  int _value = 0;
   Integer(this._value);
 
   set setValue(int input) => _value = input;

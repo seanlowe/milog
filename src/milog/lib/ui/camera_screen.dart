@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:milog/ui/log_screen.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:milog/main.dart';
+import 'package:flutter/services.dart';
 
 enum Detector { text }
 
@@ -181,10 +182,14 @@ class _CameraScreenState extends State<CameraScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //Prevent horizontal orientation for now...
+    SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp
+      ]);
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: const Text('Take a picture of your odometer'),
+        title: const Text('Odometer'),
       ),
       body: Column(
         children: <Widget>[
