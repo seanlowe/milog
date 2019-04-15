@@ -81,7 +81,8 @@ class _LogScreenState extends State<LogScreen> {
     _notesController = new TextEditingController();
     _vehicleController = new TextEditingController();
     _odometerReading = new MaskedTextController(mask: '000000');
-    _feesTextController = new MoneyMaskedTextController(leftSymbol: '\$', decimalSeparator: '.', thousandSeparator: "");
+    _feesTextController = new MoneyMaskedTextController(
+        leftSymbol: '\$', decimalSeparator: '.', thousandSeparator: "");
 
     // make sure odometerReading has some value in it regardless
     _odometerReading.text = "0";
@@ -98,11 +99,11 @@ class _LogScreenState extends State<LogScreen> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-        DeviceOrientation.landscapeLeft,
-        DeviceOrientation.landscapeRight,
-      ]);
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
     return Scaffold(
       appBar: AppBar(title: Text(title)),
       body: Container(
@@ -292,7 +293,9 @@ class _LogScreenState extends State<LogScreen> {
 
   // supporting function for _showAddChargeButton()
   void _showDialogAddCharge() {
-    MoneyMaskedTextController _chargeFieldControl = new MoneyMaskedTextController(leftSymbol: '\$', decimalSeparator: '.', thousandSeparator: "");
+    MoneyMaskedTextController _chargeFieldControl =
+        new MoneyMaskedTextController(
+            leftSymbol: '\$', decimalSeparator: '.', thousandSeparator: "");
     print("showDialogAddCharge invoked");
     showDialog(
       context: context,
@@ -466,9 +469,12 @@ class _LogScreenState extends State<LogScreen> {
               ),
               onPressed: () {
                 //Copy what's in the TextField in Dialog to TextField in LogScreen.
-                if (int.parse(_odometerFieldDialog.text.toString()) >
-                    int.parse(_odometerReading.text.toString())) {
-                  _odometerReading.text = _odometerFieldDialog.text.toString();
+                if (int.parse(_odometerFieldDialog.text.toString()) > 0) {
+                  if (int.parse(_odometerFieldDialog.text.toString()) >
+                      int.parse(_odometerReading.text.toString())) {
+                    _odometerReading.text =
+                        _odometerFieldDialog.text.toString();
+                  }
                 }
                 Navigator.of(context).pop();
               },

@@ -4,6 +4,8 @@ import 'package:milog/model/Trip.dart';
 import 'package:milog/model/Vehicle.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
+import 'package:milog/ui/log_screen.dart';
+import 'package:milog/ui/camera_screen.dart';
 
 // This class handles pausing, resuming and ending trips
 
@@ -12,6 +14,7 @@ class TripAction extends StatefulWidget {
   final String userId;
   // Query _vehicleQuery;
   List<Vehicle> _vehicleList;
+  Integer odometerFromPicture;
 
   TripAction(this.userId, this.trip, this._vehicleList);
 
@@ -40,6 +43,8 @@ class _TripScreenActionState extends State<TripAction> {
     print("Entered TripAction (via navigator");
     super.initState();
 
+    widget.odometerFromPicture = Integer(0);
+
     tripDatabase = FirebaseDatabase.instance.reference();
     tripsReference = tripDatabase.child('Trips');
     vehicleReference = tripDatabase.child('Vehicles');
@@ -62,7 +67,7 @@ class _TripScreenActionState extends State<TripAction> {
           shrinkWrap: true,
           children: <Widget>[
             _showSelectedTrip(),
-            _showOdoTextField(),
+            _showOdoAndCamera(),
             _showPauseResumeButton(),
             _showEndTripButton(),
             _showAddChargeButton(),
@@ -95,7 +100,7 @@ class _TripScreenActionState extends State<TripAction> {
           Text("Starting Odometer: " + widget.trip.startOdometer.toString(),
               textAlign: TextAlign.left,
               style: new TextStyle(fontSize: 20.0, color: Colors.black)),
-          Text("Fees: "+ "${formatCurrency.format(widget.trip.totCharges)}",
+          Text("Fees: " + "${formatCurrency.format(widget.trip.totCharges)}",
               textAlign: TextAlign.left,
               style: new TextStyle(fontSize: 20.0, color: Colors.black)),
           Text("Date: " + getTripDate(),
@@ -165,6 +170,18 @@ class _TripScreenActionState extends State<TripAction> {
               _showDialogAddCharge();
             },
           ),
+        ));
+  }
+
+  Widget _showOdoAndCamera() {
+    return ListTile(
+        title: _showOdoTextField(),
+        trailing: IconButton(
+          icon: const Icon(Icons.camera_alt, color: Colors.blue),
+          color: Colors.blue,
+          onPressed: () {
+            _navigateToCamera(context);
+          },
         ));
   }
 
@@ -401,7 +418,9 @@ class _TripScreenActionState extends State<TripAction> {
 
   // supporting function of _showAddChargeButton()
   void _showDialogAddCharge() {
-    MoneyMaskedTextController _chargeFieldControl = new MoneyMaskedTextController(leftSymbol: '\$', decimalSeparator: '.', thousandSeparator: "");
+    MoneyMaskedTextController _chargeFieldControl =
+        new MoneyMaskedTextController(
+            leftSymbol: '\$', decimalSeparator: '.', thousandSeparator: "");
     print("showDialogAddCharge invoked");
     showDialog(
       context: context,
@@ -441,6 +460,63 @@ class _TripScreenActionState extends State<TripAction> {
                 style: TextStyle(fontSize: 18.0, color: Colors.red),
               ),
               onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _navigateToCamera(BuildContext contect) async {
+    //print("Before Camera Screen: " + widget.odometerFromPicture.value.toString());
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => CameraScreen(widget.odometerFromPicture)),
+    );
+    //print("After Camera Screen: " + widget.odometerFromPicture.value.toString());
+    _showDialogCheckOdometer();
+  }
+
+  void _showDialogCheckOdometer() async {
+    TextEditingController _odometerFieldDialog = TextEditingController();
+    //Setting textField in this Dialog to the one from picture
+    _odometerFieldDialog.text = widget.odometerFromPicture.value.toString();
+
+    //Local helper function
+    Widget _showTextField() {
+      return TextField(
+        controller: _odometerFieldDialog,
+        keyboardType: TextInputType.number,
+      );
+    }
+
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text("We think your Odometer is:",
+              style: TextStyle(fontSize: 18.0, color: Colors.black)),
+          content: _showTextField(),
+          actions: <Widget>[
+            // buttons at the bottom of the dialog
+            FlatButton(
+              child: Text(
+                "OK",
+                style: TextStyle(fontSize: 18.0, color: Colors.green),
+              ),
+              onPressed: () {
+                //Copy what's in the TextField in Dialog to TextField in LogScreen.
+                if (int.parse(_odometerFieldDialog.text.toString()) > 0) {
+                  if (int.parse(_odometerFieldDialog.text.toString()) >
+                      int.parse(_odometerReadingDiag.text.toString())) {
+                    _odometerReadingDiag.text =
+                        _odometerFieldDialog.text.toString();
+                  }
+                }
                 Navigator.of(context).pop();
               },
             ),
