@@ -48,6 +48,7 @@ class _ListViewLogState extends State<ListViewLog> {
   StreamSubscription<Event> _onTripChangedSubscription;
   StreamSubscription<Event> _onVehicleAddedSub;
   StreamSubscription<Event> _onVehicleChangedSub;
+  StreamSubscription<Event> _onTripRemoved;
 
   String miLogSite = 'https://milog.org';
 
@@ -89,6 +90,8 @@ class _ListViewLogState extends State<ListViewLog> {
     _onVehicleAddedSub = _vehicleQuery.onChildAdded.listen(_onVehicleAdded);
     _onVehicleChangedSub =
         _vehicleQuery.onChildChanged.listen(_onVehicleUpdated);
+
+    _onTripRemoved = _tripQuery.onChildRemoved.listen(_onTripRemovedDB);
   }
 
   @override
@@ -97,6 +100,7 @@ class _ListViewLogState extends State<ListViewLog> {
     _onTripChangedSubscription.cancel();
     _onVehicleAddedSub.cancel();
     _onVehicleChangedSub.cancel();
+     _onTripRemoved.cancel();
     super.dispose();
   }
 
@@ -423,6 +427,15 @@ class _ListViewLogState extends State<ListViewLog> {
     print("Entered _onVehicleAdded");
     setState(() {
       _vehicleList.add(new Vehicle.fromSnapshot(event.snapshot));
+    });
+  }
+
+  void _onTripRemovedDB(Event event){
+    print("onTripRemovedDB was invoked");
+    var oldTripValue = _tripList
+        .singleWhere((trip) => trip.tripID == event.snapshot.key);
+    setState(() {
+      _tripList.removeAt(_tripList.indexOf(oldTripValue));
     });
   }
 
