@@ -53,7 +53,7 @@ class _TripScreenActionState extends State<TripAction> {
     // Turns on Persistence
     FirebaseDatabase.instance.setPersistenceEnabled(true);
 
-    _odometerReadingDiag.text = "";
+    _odometerReadingDiag.text = "0";
   }
 
   @override
