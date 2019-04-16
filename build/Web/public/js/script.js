@@ -256,14 +256,19 @@ async function generateTripTable(userId) {
     //           Generate Vehicle Drop Down             //
     // ------------------------------------------------ //
     var list = document.getElementById("vehicle-list");
-    for(var i = 0; i < vehicles.length; i++) {
-      // console.log(vehicles[i]);
-      var option = document.createElement('option');
-      option.setAttribute("id", i);
-      option.value = option.innerHTML = vehicles[i].name;
-      list.appendChild(option);
-    }    
-    // console.log(document.getElementById(1).innerHTML);
+    if(vehicles.length == 0) {
+      document.getElementById('vehicleStatus').innerHTML = "MUST ADD A VEHICLE BEFORE LOGGING ANY TRIPS";
+    } else {
+      document.getElementById('vehicleStatus').innerHTML = "Select Vehicle";
+      for(var i = 0; i < vehicles.length; i++) {
+        // console.log(vehicles[i]);
+        var option = document.createElement('option');
+        option.setAttribute("id", i);
+        option.value = option.innerHTML = vehicles[i].name;
+        list.appendChild(option);
+      }    
+      // console.log(document.getElementById(1).innerHTML);
+    }
 
     // ------------------------------------------------ //
     //       GET TOTAL MILES TRAVELED FROM USER         //
