@@ -56,6 +56,11 @@ async function generateTripTable(userId) {
     ]);
   }
 
+  // Sorting the trips array by startTime
+  trips.sort(function (a, b) {
+      return a.startTime - b.startTime;
+    });
+
   // ------------------------------------------------ //
   //               CREATE PDF OF LOGS                 //
   // ------------------------------------------------ //
@@ -91,7 +96,7 @@ async function generateTripTable(userId) {
       // console.log("Starting Timestamp: " + newStartDate, "Ending Timestamp: " + newEndDate);
       if(newEndDate > newStartDate) {
         for(var i = 0; i < trips.length; i++) {
-          if(trips[i].startTime > newStartDate && trips[i].startTime <= newEndDate) {
+          if(trips[i].startTime > newStartDate && trips[i].startTime <= newEndDate + (1000*60*60*24)) {
             let date = new Date(trips[i].startTime);
             totalMiles += parseInt(trips[i].milesTraveled);
             totalCharges += parseFloat(trips[i].totCharges);
@@ -110,7 +115,6 @@ async function generateTripTable(userId) {
         alert("Final Date cannot be earlier than the Starting Date");
       }
     }
-
 
     // init the jsPDF library
     const pdf = new jsPDF();
