@@ -22,7 +22,7 @@ class _LoginSignUpPageState extends State<LoginSignUpPage> {
 
   String _email;
   String _password;
-  String _errorMessage;
+  String _errorMessage = "";
 
   // Initial form is login form
   FormMode _formMode = FormMode.LOGIN;
@@ -176,7 +176,8 @@ class _LoginSignUpPageState extends State<LoginSignUpPage> {
   }
 
   Widget _showErrorMessage() {
-    if (_errorMessage.length > 0 && _errorMessage != null) {
+    if(_errorMessage != null){
+      if (_errorMessage.length > 0 && _errorMessage != null) {
       return new Text(
         _errorMessage,
         style: TextStyle(
@@ -189,6 +190,7 @@ class _LoginSignUpPageState extends State<LoginSignUpPage> {
       return new Container(
         height: 0.0,
       );
+    }
     }
   }
 
