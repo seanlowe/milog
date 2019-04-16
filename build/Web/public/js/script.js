@@ -83,17 +83,19 @@ async function generateTripTable(userId) {
           trips[i].milesTraveled,
           "$" + trips[i].totCharges
         ]);
+        console.log(rows[i]);
       }
     } else {
       newStartDate = new Date(startDate).getTime();
       newEndDate = new Date(endDate).getTime();
-      // console.log("To timestamp: " + new Date(startDate).getTime());
+      console.log("Starting Timestamp: " + newStartDate, "Ending Timestamp: " + newEndDate);
       if(newEndDate > newStartDate) {
         for(var i = 0; i < trips.length; i++) {
           if(trips[i].startTime > newStartDate && trips[i].startTime <= newEndDate) {
             let date = new Date(trips[i].startTime);
             totalMiles += parseInt(trips[i].milesTraveled);
             totalCharges += parseFloat(trips[i].totCharges);
+            console.log("Trip " + " Note = " + trips[i].notes);
             rows.push([
               date.toLocaleDateString(),
               trips[i].notes,
@@ -102,6 +104,7 @@ async function generateTripTable(userId) {
               "$" + trips[i].totCharges
             ]);
           }
+          // console.log(rows[i]);
         }
       } else {
         alert("Final Date cannot be earlier than the Starting Date");
