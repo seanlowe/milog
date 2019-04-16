@@ -483,6 +483,7 @@ class _ListViewLogState extends State<ListViewLog> {
   // supporting function for _onLogAdded() & _onLogUpdated()
   // Sets tripInProgress if a trip is in progress, otherwise sets to false
   void isTripInProg() {
+    sortTrips();
     bool inProgress = false;
     for (Trip t in _tripList) {
       if (t.inProgress) {
@@ -506,6 +507,11 @@ class _ListViewLogState extends State<ListViewLog> {
         }
       }
     }
+  }
+
+  //Sorts the tips based on the timestamp (in progress trip always first)
+  void sortTrips(){
+    _tripList.sort((b, a) => a.startTime.compareTo(b.startTime));
   }
 
   // ----------------------------------------
