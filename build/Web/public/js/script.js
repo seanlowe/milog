@@ -154,8 +154,8 @@ async function generateTripTable(userId) {
   })
 
 
-  console.log("Total miles logged = " + totalMiles);
-  console.log("Total Charges = $" + totalCharges);
+  // console.log("Total miles logged = " + totalMiles);
+  // console.log("Total Charges = $" + totalCharges);
   // console.log(dataSets);
 
   var oTable = $("#hidden-table-info").dataTable({
