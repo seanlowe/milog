@@ -66,12 +66,12 @@ async function generateTripTable(userId) {
     // Get and set Date ranges for the array of trips to be printed
     var startDate = document.getElementById('startDate').value;
     var endDate = document.getElementById('endDate').value;
-    console.log("Start Date = " + startDate, "End Date = " + endDate);
+    // console.log("Start Date = " + startDate, "End Date = " + endDate);
     totalMiles = 0;
     totalCharges = 0;
     var rows = [];
     if(startDate == "" && endDate == "") {
-      console.log("To timestamp: " + new Date(startDate).getTime());
+      // console.log("To timestamp: " + new Date(startDate).getTime());
       for(var i = 0; i < trips.length; i++) {
         let date = new Date(trips[i].startTime);
         totalMiles += parseInt(trips[i].milesTraveled);
@@ -83,19 +83,19 @@ async function generateTripTable(userId) {
           trips[i].milesTraveled,
           "$" + trips[i].totCharges
         ]);
-        console.log(rows[i]);
+        // console.log(rows[i]);
       }
     } else {
       newStartDate = new Date(startDate).getTime();
       newEndDate = new Date(endDate).getTime();
-      console.log("Starting Timestamp: " + newStartDate, "Ending Timestamp: " + newEndDate);
+      // console.log("Starting Timestamp: " + newStartDate, "Ending Timestamp: " + newEndDate);
       if(newEndDate > newStartDate) {
         for(var i = 0; i < trips.length; i++) {
           if(trips[i].startTime > newStartDate && trips[i].startTime <= newEndDate) {
             let date = new Date(trips[i].startTime);
             totalMiles += parseInt(trips[i].milesTraveled);
             totalCharges += parseFloat(trips[i].totCharges);
-            console.log("Trip " + " Note = " + trips[i].notes);
+            // console.log("Trip " + " Note = " + trips[i].notes);
             rows.push([
               date.toLocaleDateString(),
               trips[i].notes,
