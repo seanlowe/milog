@@ -392,6 +392,8 @@ async function generateTripTable(userId) {
         var fees;
         if(totMileage != "") {
           totalMiles = totMileage;
+          startMileage = lastOdo;
+          finalMileage = lastOdo;
         } else if(totMileage == "" && startMileage == "" && finalMileage == "") {
           totalMiles = "ERROR";
         } else {
@@ -404,6 +406,9 @@ async function generateTripTable(userId) {
         } else {
           fees = parseFloat(tripFees);
         }
+
+        startMileage = parseInt(startMileage);
+        finalMileage = parseInt(finalMileage);
         console.log("Trip Date = " + tripDate, "Vehicle: " + tripVehicle, "Total Miles: " + totalMiles, " Starting Odometer: " + startMileage, " Final Odometer: " + finalMileage, " Notes: " + tripNotes, " Fees: " + fees);
         console.log("The selected vehicles key is " + vehicleKey);
         tripsRef.child("Trips").push({
@@ -417,7 +422,8 @@ async function generateTripTable(userId) {
           startTime: tripDate,
           totCharges: fees,
           userID: userId,
-          vehicle: tripVehicle
+          vehicle: tripVehicle,
+          vehicleID: vehicleKey
         });
         // Adding the data to the database
         vehicleRef.child("Vehicles").child(vehicleKey).update({
