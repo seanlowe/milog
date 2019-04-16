@@ -599,28 +599,29 @@ class _LogScreenState extends State<LogScreen> {
   Widget _showSelectedTrip() {
     final formatCurrency = new NumberFormat.simpleCurrency();
     return Container(
-        margin: EdgeInsets.all(15.0),
-        decoration: BoxDecoration(
-            color: Colors.blueAccent[100],
-            border: Border.all(color: Colors.black, width: 2),
-            borderRadius: BorderRadius.all(Radius.circular(20.0))),
-        child: Column(children: <Widget>[
-          Text("Notes: " + widget.trip.notes,
-              textAlign: TextAlign.left,
-              style: new TextStyle(fontSize: 20.0, color: Colors.black)),
-          Text("Vehicle: " + widget.trip.vehicle,
-              textAlign: TextAlign.left,
-              style: new TextStyle(fontSize: 20.0, color: Colors.black)),
-          Text("Miles Traveled: " + widget.trip.milesTraveled.toString(),
-              textAlign: TextAlign.left,
-              style: new TextStyle(fontSize: 20.0, color: Colors.black)),
-          Text("Fees: " + "${formatCurrency.format(widget.trip.totCharges)}",
-              textAlign: TextAlign.left,
-              style: new TextStyle(fontSize: 20.0, color: Colors.black)),
-          Text("Date: " + getTripDate(),
-              textAlign: TextAlign.left,
-              style: new TextStyle(fontSize: 20.0, color: Colors.black))
-        ]));
+      margin: EdgeInsets.all(1.0),
+      decoration: BoxDecoration(
+          color: Colors.blueAccent[100],
+          border: Border.all(color: Colors.black, width: 2),
+          borderRadius: BorderRadius.all(Radius.elliptical(5, 5))),
+      child: Column(children: <Widget>[
+        Text("Notes: " + widget.trip.notes,
+            textAlign: TextAlign.left,
+            style: new TextStyle(fontSize: 22.0, color: Colors.black, wordSpacing: 2)),
+        Text("Vehicle: " + widget.trip.vehicle,
+            textAlign: TextAlign.left,
+            style: new TextStyle(fontSize: 22.0, color: Colors.black, wordSpacing: 2)),
+        Text("Miles Traveled: " + widget.trip.milesTraveled.toString(),
+            textAlign: TextAlign.left,
+            style: new TextStyle(fontSize: 22.0, color: Colors.black, wordSpacing: 2)),
+        Text("Incurred Fees: " + "${formatCurrency.format(widget.trip.totCharges)}",
+            textAlign: TextAlign.left,
+            style: new TextStyle(fontSize: 22.0, color: Colors.black, wordSpacing: 2)),
+        Text("Date: " + getTripDate(),
+            textAlign: TextAlign.left,
+            style: new TextStyle(fontSize: 22.0, color: Colors.black))
+      ], crossAxisAlignment: CrossAxisAlignment.center,),
+    );
   }
 
   // supporting function for _showSelectedTrip()

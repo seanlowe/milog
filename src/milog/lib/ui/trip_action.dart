@@ -89,24 +89,24 @@ class _TripScreenActionState extends State<TripAction> {
         decoration: BoxDecoration(
             color: Colors.blueAccent[100],
             border: Border.all(color: Colors.black, width: 2),
-            borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            borderRadius: BorderRadius.all(Radius.elliptical(5, 5))),
         child: Column(children: <Widget>[
           Text("Notes: " + widget.trip.notes,
               textAlign: TextAlign.left,
-              style: new TextStyle(fontSize: 20.0, color: Colors.black)),
+              style: new TextStyle(fontSize: 22.0, color: Colors.black)),
           Text("Vehicle: " + widget.trip.vehicle,
               textAlign: TextAlign.left,
-              style: new TextStyle(fontSize: 20.0, color: Colors.black)),
+              style: new TextStyle(fontSize: 22.0, color: Colors.black)),
           Text("Starting Odometer: " + widget.trip.startOdometer.toString(),
               textAlign: TextAlign.left,
-              style: new TextStyle(fontSize: 20.0, color: Colors.black)),
+              style: new TextStyle(fontSize: 22.0, color: Colors.black)),
           Text("Fees: " + "${formatCurrency.format(widget.trip.totCharges)}",
               textAlign: TextAlign.left,
-              style: new TextStyle(fontSize: 20.0, color: Colors.black)),
+              style: new TextStyle(fontSize: 22.0, color: Colors.black)),
           Text("Date: " + getTripDate(),
               textAlign: TextAlign.left,
-              style: new TextStyle(fontSize: 20.0, color: Colors.black))
-        ]));
+              style: new TextStyle(fontSize: 22.0, color: Colors.black))
+        ],crossAxisAlignment: CrossAxisAlignment.center));
   }
 
   // TODO probably need to check if miles is >= starting odo here as well
