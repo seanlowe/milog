@@ -211,10 +211,12 @@ async function generateTripTable(userId) {
   // ------------------------------------------------ //
   $("#updateLog").on('click', function() {
     var updatedFees;
+    var travelled = totMiles.value;
+    travelled = parseInt(travelled);
     if(fees.value != "") {
       updatedFees = parseFloat(fees.value);
       tripsRef.child("Trips").child(id).update({
-        milesTraveled: totMiles.value,
+        milesTraveled: travelled,
         notes: notes.value,
         totCharges: updatedFees
       })
@@ -222,7 +224,7 @@ async function generateTripTable(userId) {
     } else {
       // updatedFees = parseFloat(fees.placeholder);
       tripsRef.child("Trips").child(id).update({
-        milesTraveled: totMiles.value,
+        milesTraveled: travelled,
         notes: notes.value
       })
       location.reload();
@@ -264,7 +266,7 @@ async function generateTripTable(userId) {
         // console.log(vehicles[i]);
         var option = document.createElement('option');
         option.setAttribute("id", i);
-        option.value = option.innerHTML = vehicles[i].name;
+        option.value = option.innerHTML = vehicles[i].name + "  -----  Last Odometer Reading: " + vehicles[i].lastKnownOdometer;
         list.appendChild(option);
       }    
       // console.log(document.getElementById(1).innerHTML);
@@ -409,6 +411,7 @@ async function generateTripTable(userId) {
 
         startMileage = parseInt(startMileage);
         finalMileage = parseInt(finalMileage);
+        lastOdo = parseInt(lastOdo);
         console.log("Trip Date = " + tripDate, "Vehicle: " + tripVehicle, "Total Miles: " + totalMiles, " Starting Odometer: " + startMileage, " Final Odometer: " + finalMileage, " Notes: " + tripNotes, " Fees: " + fees);
         console.log("The selected vehicles key is " + vehicleKey);
         tripsRef.child("Trips").push({

@@ -1,6 +1,12 @@
 {
   "rules": {
     ".read": "true",
-    ".write": "true"
+    ".write": "true",
+    "Vehicles": {
+      ".indexOn": "userID"
+    },
+    "Trips": {
+      ".indexOn": "userID"
+    }
   }
 }

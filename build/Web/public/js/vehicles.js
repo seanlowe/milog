@@ -61,8 +61,8 @@ var config = {
         $("#vehicleTable > tbody > tr:last-child").append(
           "<td style='padding-left: 30px'>" +
             vehicles[i].name +
-            // '</td><td class="centered">' +
-            // vehicles[i].lastKnownOdometer +
+            '</td><td class="centered">' +
+            vehicles[i].lastKnownOdometer +
             "</td><td class=\"centered\"><button class='btn btn-primary btn-xs' data-toggle='modal' data-target='#updateVehicleModal'><i class='fa fa-pencil'></i></button>\n" +
             "<button class='btn btn-danger btn-xs' data-toggle='modal' data-target='#deleteVehicleModal'><i class='fa fa-trash-o '></i></button> </td>" +
             "<td style='display: none'>" + vehicles[i].vehicleKey +  "</td>"
@@ -98,11 +98,12 @@ var config = {
     
         // UPDATING VEHICLE
         $("#updateVehicle").on('click', function() {
+          odo = parseInt(odo);
           newName = document.getElementById("newVehicleName").value;
           console.log(name + " to be Updated to " + newName + ": ID = " + id);
           vehicleRef.child("Vehicles").child(id).update({
               inUse: false,
-              lastKnownOdometer: 0,
+              lastKnownOdometer: odo,
               name: newName,
               userID: userId
           });
