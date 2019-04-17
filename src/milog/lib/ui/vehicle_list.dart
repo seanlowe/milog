@@ -136,13 +136,10 @@ class _VehicleListState extends State<VehicleList> {
     );
   }
 
-  // function used to delete a vehicle
+  /*Deletes the passed in vehicle from the DB
+  _onVehicleRemovedSub (in listview_logs) then gets activated by DB and deletes the vehicle in the app*/
   void _deleteVehicle(BuildContext context, Vehicle vehicle, int position) async {
-    await vehicleReference.child(vehicle.vehicleID).remove().then((_) {
-      setState(() {
-        widget._vehicleList.removeAt(position);
-      });
-    });
+    await vehicleReference.child(vehicle.vehicleID).remove();
   }
 
   // function used to create a vehicle
@@ -157,19 +154,6 @@ class _VehicleListState extends State<VehicleList> {
   /*    DATABASE SUBSCRIPTION FUNCTIONS    */
   // ----------------------------------------
 
-  // void _onVehicleAdded(Event event) {
-  //   print("activated onVehicleAdded");
-  //   setState(() {
-  //     widget._vehicleList.add(new Vehicle.fromSnapshot(event.snapshot));
-  //   });
-  // }
-
-  // void _onVehicleUpdated(Event event) {
-  //   var oldVehicleValue = widget._vehicleList.singleWhere((vehicle) => vehicle.vehicleID == event.snapshot.key);
-  //   setState(() {
-  //     widget._vehicleList[widget._vehicleList.indexOf(oldVehicleValue)] = new Vehicle.fromSnapshot(event.snapshot);
-  //   });
-  // }
 
   // ----------------------------------------
   /*         VEHICLELIST FUNCTIONS         */
@@ -231,6 +215,4 @@ class _VehicleListState extends State<VehicleList> {
         ));
     }
   }
-
-
 } // end of class _VehicleListState

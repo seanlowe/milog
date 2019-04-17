@@ -307,7 +307,8 @@ class _ListViewLogState extends State<ListViewLog> {
                 style: TextStyle(fontSize: 18.0, color: Colors.red),
               ),
               onPressed: () {
-                _deleteTrip(context, trip, position);
+                //Delete trip from the database rather than the applicatio
+                _deleteTrip(context, trip, position);          
                 Navigator.of(context).pop();
               },
             ),
@@ -326,13 +327,10 @@ class _ListViewLogState extends State<ListViewLog> {
     );
   }
 
-  // function used to delete a log
+  /*Deletes the passed in trip from the DB
+  _onTripRemovedSub then gets activated by DB and deletes the trip in the app*/
   void _deleteTrip(BuildContext context, Trip trip, int position) async {
-    await tripsReference.child(trip.tripID).remove().then((_) {
-      setState(() {
-        _tripList.removeAt(position);
-      });
-    });
+    await tripsReference.child(trip.tripID).remove();
   }
 
   // function used to create a log
