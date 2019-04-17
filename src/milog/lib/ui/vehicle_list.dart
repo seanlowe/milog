@@ -140,6 +140,10 @@ class _VehicleListState extends State<VehicleList> {
   _onVehicleRemovedSub (in listview_logs) then gets activated by DB and deletes the vehicle in the app*/
   void _deleteVehicle(BuildContext context, Vehicle vehicle, int position) async {
     await vehicleReference.child(vehicle.vehicleID).remove();
+    //Need to setState to inform the widgets that the vehicle list changed...
+    setState(() {
+      widget._vehicleList = widget._vehicleList;
+    });
   }
 
   // function used to create a vehicle

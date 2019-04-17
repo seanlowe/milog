@@ -80,8 +80,6 @@ class _ListViewLogState extends State<ListViewLog> {
     tripsReference = _database.reference().child('Trips');
     vehicleReference = _database.reference().child('Vehicles');
 
-    //TODO: Need to add Listener for when the database data changes
-
     //Listeners for Trip List
     _onTripAddedSubscription = _tripQuery.onChildAdded.listen(_onLogAdded);
     _onTripChangedSubscription =
