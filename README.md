@@ -8,7 +8,7 @@ app aims to give companies and their employees a convenient way to log trip mile
 ## Navigation
 
 + <a href="https://github.com/seanlowe/milog/tree/master/src/milog" target="_blank">Flutter source</a>
-+ <a href="https://github.com/seanlowe/milog/tree/master/build/Web" target="_blank">Web HTML</a>
++ <a href="https://github.com/seanlowe/milog/tree/master/web" target="_blank">Web HTML</a>
 
 # Developers
 <ul>
