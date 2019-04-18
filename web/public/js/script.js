@@ -266,7 +266,7 @@ async function generateTripTable(userId) {
         // console.log(vehicles[i]);
         var option = document.createElement('option');
         option.setAttribute("id", i);
-        option.value = option.innerHTML = vehicles[i].name + "  -----  Last Odometer Reading: " + vehicles[i].lastKnownOdometer;
+        option.value = option.innerHTML = vehicles[i].name;
         list.appendChild(option);
       }    
       // console.log(document.getElementById(1).innerHTML);
