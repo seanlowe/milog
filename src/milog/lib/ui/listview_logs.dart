@@ -43,6 +43,7 @@ class _ListViewLogState extends State<ListViewLog> {
   // The database reference
   final FirebaseDatabase _database = FirebaseDatabase.instance;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   StreamSubscription<Event> _onTripAddedSubscription;         //Triggers when a trip is added
   StreamSubscription<Event> _onTripChangedSubscription;       //Triggers when a trip is changed
@@ -110,6 +111,7 @@ class _ListViewLogState extends State<ListViewLog> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(title: Text("My Trips")),
       drawer: _showDrawer(context),
       body: Scaffold(
@@ -436,6 +438,7 @@ class _ListViewLogState extends State<ListViewLog> {
     setState(() {
       _tripList.removeAt(_tripList.indexOf(oldTripValue));
     });
+    showInSnackBar("Trip deleted!");
   }
 
   void _onVehicleRemovedDB(Event event){
@@ -445,6 +448,7 @@ class _ListViewLogState extends State<ListViewLog> {
     setState(() {
       _vehicleList.removeAt(_vehicleList.indexOf(oldVehicleValue));
     });
+    showInSnackBar("Vehicle deleted!");
   }
 
   void _onVehicleUpdated(Event event) {
@@ -508,6 +512,10 @@ class _ListViewLogState extends State<ListViewLog> {
   //Sorts the tips based on the timestamp (in progress trip always first)
   void sortTrips(){
     _tripList.sort((b, a) => a.startTime.compareTo(b.startTime));
+  }
+
+  void showInSnackBar(String message) {
+    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(message)));
   }
 
   // ----------------------------------------
