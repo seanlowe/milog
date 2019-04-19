@@ -144,7 +144,8 @@ class _CameraScreenState extends State<CameraScreen> {
 
     
     //print("before bestGuess: " + widget.bestGuess.value.toString());
-    widget.bestGuess.setValue = filterResult();
+    if(widget.bestGuess != null)
+      widget.bestGuess.setValue = filterResult();
     //print("after bestGuess: " + widget.bestGuess.value.toString());
   
     //Go back to log screen, expect to see a dialog that pops up
@@ -254,8 +255,9 @@ class _CameraScreenState extends State<CameraScreen> {
       children: <Widget>[
         IconButton(
           icon: const Icon(Icons.camera_alt),
-          color: Colors.red,
+          color: Colors.blue,
           onPressed: takePictureAndProcess,
+          splashColor: Colors.red,
         ),
       ],
     );

@@ -193,6 +193,7 @@ class _LogScreenState extends State<LogScreen> {
         trailing: IconButton(
           icon: const Icon(Icons.camera_alt, color: Colors.blue),
           color: Colors.blue,
+          splashColor: Colors.red,
           onPressed: () {
             _navigateToCamera(context);
           },
@@ -441,6 +442,9 @@ class _LogScreenState extends State<LogScreen> {
 
   void _showDialogCheckOdometer() async {
     TextEditingController _odometerFieldDialog = TextEditingController();
+    if(widget.odometerFromPicture == null){
+      widget.odometerFromPicture = Integer(0);
+    }
     //Setting textField in this Dialog to the one from picture
     _odometerFieldDialog.text = widget.odometerFromPicture.value.toString();
 

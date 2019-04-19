@@ -60,7 +60,7 @@ class _VehicleScreenState extends State<VehicleScreen> {
             child: ListView(
               children: <Widget>[
                 _showNameTextBox(),
-                _showOdometerTextBox(),
+               _showOdoAndCamera(),
                 _showAddVehicleButton(),
               ],
             )));
@@ -74,7 +74,7 @@ class _VehicleScreenState extends State<VehicleScreen> {
     return TextField(
         // name field
         controller: _nameController,
-        decoration: InputDecoration(labelText: 'Name'),
+        decoration: InputDecoration(labelText: 'Vehicle Name'),
         style: TextStyle(
           fontSize: 22.0,
           color: Colors.black,
@@ -94,6 +94,19 @@ class _VehicleScreenState extends State<VehicleScreen> {
     );
   }
 
+   Widget _showOdoAndCamera() {
+    return ListTile(
+        title: _showOdometerTextBox(),
+        trailing: IconButton(
+          icon: const Icon(Icons.camera_alt, color: Colors.blue),
+          color: Colors.blue,
+           splashColor: Colors.red,
+          onPressed: () {
+            //Navigate to camera
+          },
+        ));
+  }
+
   Widget _showAddVehicleButton() {
     return Padding(
         padding: EdgeInsets.all(15.0),
@@ -103,7 +116,7 @@ class _VehicleScreenState extends State<VehicleScreen> {
               elevation: 5.0,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(60.0)),
-              color: Colors.blue,
+              color: Colors.green,
               child: Text('Add vehicle',
                   style: TextStyle(fontSize: 20.0, color: Colors.white)),
               onPressed: () {
