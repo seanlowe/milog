@@ -24,12 +24,6 @@
     <link href="css/style-more.css" rel="stylesheet" />
     <link href="css/style-responsive.css" rel="stylesheet" />
 
-    <!-- =======================================================
-    Template Name: Dashio
-    Template URL: https://templatemag.com/dashio-bootstrap-admin-template/
-    Author: TemplateMag.com
-    License: https://templatemag.com/license/
-  ======================================================= -->
   </head>
 
   <body>
@@ -95,21 +89,11 @@
                 <span>Vehicles</span>
               </a>
             </li>
-            <!-- <li class="sub-menu">
-              <a href="print-export.html">
-                <i class="fa fa-print"></i>
-                <span>Print/Export</span>
-              </a>
-            </li> -->
             <li class="sub-menu">
               <a href="profile.html">
                 <i class="fa fa-user"></i>
                 <span>Account</span>
               </a>
-              <!-- <ul class="sub">
-              <li><a href="home.html">Change Email</a></li>
-              <li><a href="home.html">Change Password</a></li>
-            </ul> -->
             </li>
             <li class="sub-menu">
               <a href="faq.html">
@@ -135,17 +119,7 @@
               <h4 class="modal-title">Create Log</h4>
             </div>
             <div class="modal-body">
-              <!-- <p>Select Date</p>
-              <input
-                class="form-control form-control-inline input-medium default-date-picker"
-                id="tripDate"
-                size="16"
-                type="text"
-                value=""
-              />
-              <br /> -->
               <p id="vehicleStatus"></p>
-              <!-- <button>Add</button> -->
               <div>
                 <select id="vehicle-list" class="form-control"></select>
               </div>
@@ -153,26 +127,6 @@
               <p>Mileage</p>
               <div class="form-panel">
                 <h4 id="lastOdo"></h4>
-                <!-- <div class="form-panel">
-                  <p>Know Total Mileage?</p>
-                  <a href="home.html#totMilesModal" data-toggle="modal" class="btn btn-theme03">Enter</a> -->
-                  <!-- <input
-                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-                    type = "number"
-                    min="0"
-                    maxlength = "6"
-                    id="totalMileage"
-                    name="initial"
-                    placeholder="Total Mileage"
-                    value=""
-                    autocomplete="off"
-                    class="form-control placeholder-no-fix"
-                  /> -->
-                  <!-- <br />
-                </div> -->
-                <!-- <div class="text-center">
-                  <label>OR</label>
-                </div> -->
                 <div class="form-panel">
                   <p>Enter starting mileage.</p>
                   <input
@@ -349,31 +303,6 @@
                 class="form-control placeholder-no-fix"
               />
               <br />
-              <!-- <p>Update starting mileage.</p>
-              <input
-                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-                type = "number"
-                min="0"
-                maxlength = "6"
-                id="updateStartOdo"
-                name="initial"
-                placeholder="Starting Mileage"
-                autocomplete="off"
-                class="form-control placeholder-no-fix"
-              />
-              <br />
-              <p>Update final mileage.</p>
-              <input
-                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-                type = "number"
-                min="0"
-                maxlength = "6"
-                id="updateEndOdo"
-                name="final"
-                placeholder="Final Mileage"
-                autocomplete="off"
-                class="form-control placeholder-no-fix"
-              /> -->
               <br />
               <p>Update notes.</p>
               <input
@@ -486,6 +415,7 @@
         </div>
       </div>
       <!-- End Total Miles modal -->
+
       <!-- **********************************************************************************************************************************************************
         MAIN CONTENT
         *********************************************************************************************************************************************************** -->
@@ -589,12 +519,6 @@
         <div class="text-center">
           <p>&copy; Copyrights <strong>Dashio</strong>. All Rights Reserved</p>
           <div class="credits">
-            <!--
-            You are NOT allowed to delete the credit link to TemplateMag with free version.
-            You can delete the credit link only if you bought the pro version.
-            Buy the pro version with working PHP/AJAX contact form: https://templatemag.com/dashio-bootstrap-admin-template/
-            Licensing information: https://templatemag.com/license/
-          -->
             Created with Dashio template by
             <a href="https://templatemag.com/">TemplateMag</a>
           </div>
@@ -619,23 +543,21 @@
     <script type="text/javascript" language="javascript" src="lib/advanced-datatable/js/jquery.js"></script>
     <script class="include" type="text/javascript" src="lib/jquery.dcjqaccordion.2.7.js"></script>
     <script src="lib/jquery.scrollTo.min.js"></script>
-    <script src="lib/jquery.nicescroll.js" type="text/javascript"></script>
-    <!-- <script type="text/javascript" language="javascript" src="lib/advanced-datatable/js/jquery.dataTables.js"></script> -->
     <script src="https://cdn.datatables.net/1.10.0/js/jquery.dataTables.js"></script>
     <script type="text/javascript" src="lib/advanced-datatable/js/DT_bootstrap.js"></script>
-    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script> -->
     <script type="text/javascript" src="lib/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js" integrity="sha384-NaWTHo/8YCBYJ59830LTz/P4aQZK1sS0SneOgAvhsIl3zBu8r9RevNg5lHCHAuQ/" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/jspdf-autotable@3.1.1/dist/jspdf.plugin.autotable.js"></script>
     <!--common script for all pages-->
     <script src="lib/common-scripts.js"></script>
     <script src="lib/advanced-form-components.js"></script>
-    <!-- <script type="text/javascript" src="lib/gritter/js/jquery.gritter.js"></script> -->
 
     <!-- FIREBASE STUFF -->
     <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-database.js"></script>
+
+    <!-- Main script for this page -->
     <script type="text/javascript" src="js/script.js"></script>
   </body>
 </html>

@@ -25,7 +25,6 @@ function changeEmail() {
         });
         location.reload();
     }
-    
 }
 
 function sendPasswordReset() {
@@ -65,9 +64,9 @@ function handleSignOut() {
     window.location.href = "login.html";
 }
   
-/**
- * Sends an email verification to the user.
- */
+// *************************************************************** //
+//             Sends an email verification to the user.            //
+// *************************************************************** //
 function sendEmailVerification() {
 firebase
     .auth()

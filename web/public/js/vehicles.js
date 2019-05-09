@@ -16,6 +16,9 @@ var config = {
     window.location.href = "login.html";
   }
 
+  // *************************************************************** //
+  //                         Get Vehicle Data                        //
+  // *************************************************************** //
   function getVehicleData(uid) {
     var vehicleArray = [];
     var Query = vehicleRef.child("Vehicles").orderByChild("userID").equalTo(uid);
@@ -38,6 +41,9 @@ var config = {
       });
   }
   
+  // *************************************************************** //
+  //                  Generating the Vehicles Table                  //
+  // *************************************************************** //
   async function generateVehicleTable(userId) {
     var vehicles = [];
     vehicles = await getVehicleData(userId);
@@ -71,8 +77,6 @@ var config = {
   
     $(document).ready(function() {
 
-        // var user = firebase.auth().currentUser;
-        // var userId = user.uid;
         // ---------------------------------- //
         // SELECTING ROW TO UPDATE OR DELETE  //
         // ---------------------------------- //
@@ -96,7 +100,9 @@ var config = {
           
         });
     
-        // UPDATING VEHICLE
+        // *************************************************************** //
+        //                       UPDATING VEHICLE
+        // *************************************************************** //
         $("#updateVehicle").on('click', function() {
           odo = parseInt(odo);
           newName = document.getElementById("newVehicleName").value;
@@ -110,14 +116,18 @@ var config = {
           location.reload();
         });
     
-        // DELETING VEHICLE
+        // *************************************************************** //
+        //                         DELETING VEHICLE                        //
+        // *************************************************************** //
         $("#deleteVehicle").on('click', function() {
           console.log(name + " with ID = " + id + " was deleted");
           vehicleRef.child("Vehicles").child(id).remove();
           location.reload();
         });
     
-        // ADDING/CREATING A VEHICLE
+        // *************************************************************** //
+        //                    ADDING/CREATING A VEHICLE                    //
+        // *************************************************************** //
         $("#addVehicle").on('click', function() {
           var vehicleName = document.getElementById("vehicleName").value;
           console.log(vehicleName);

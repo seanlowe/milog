@@ -30,12 +30,6 @@ function googleSignIn() {
       var credential = error.credential;
       // ...
     });
-
-  //   firebase.auth().onAuthStateChanged(function(user) {
-  //     if (user) {
-  //       window.location.href = "home.html";
-  //     }
-  //   });
 }
 
 function handleSignIn() {
@@ -69,12 +63,6 @@ function handleSignIn() {
       // [END_EXCLUDE]
     });
   // [END authwithemail]
-
-  //   firebase.auth().onAuthStateChanged(function(user) {
-  //     if (user) {
-  //       window.location.href = "home.html";
-  //     }
-  //   });
 }
 
 function handleSignUp() {
@@ -155,15 +143,6 @@ function sendPasswordReset() {
 }
 
 function initApp() {
-  // var user = firebase.auth().currentUser;
-  // if (user) {
-  //   if(user.emailVerified == true) {
-  //     window.location.href = "home.html";
-  //     console.log(user.emailVerified);
-  //   } else {
-  //     alert("Please Verify Your Email");
-  //   }
-  // }
   // Listening for auth state changes.
   // [START authstatelistener]
   firebase.auth().onAuthStateChanged(function(user) {

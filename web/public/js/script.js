@@ -313,7 +313,7 @@ async function generateTripTable(userId) {
     });
 
     // ------------------------------------------------ //
-    //    RESETTING THE FIELDS IN THE CREAT LOG MODAL   //
+    //    RESETTING THE FIELDS IN THE CREATE LOG MODAL   //
     // ------------------------------------------------ //
     $("#cancelCreate").on('click', function() {
       document.getElementById('totalMileage').value = "";
@@ -325,7 +325,7 @@ async function generateTripTable(userId) {
     })
 
     // ------------------------------------------------ //
-    //  INITIALIZING THE FIELDS IN THE CREAT LOG MODAL  //
+    //  INITIALIZING THE FIELDS IN THE CREATE LOG MODAL  //
     // ------------------------------------------------ //
     $("#create").on('click', function() {
       document.getElementById('totalMileage').value = "";
@@ -529,11 +529,6 @@ function getVehicleData(uid) {
   });
 }
 
-/**
- * initApp handles setting up UI event listeners and registering Firebase auth listeners:
- *  - firebase.auth().onAuthStateChanged: This listener is called when the user is signed in or
- *    out, and that is where we update the UI.
- */
 function initApp() {
   // Listening for auth state changes.
   // [START authstatelistener]
@@ -616,9 +611,11 @@ $(document).ready(function() {
   //   }
   // })
   // ---------------- END OF NUMBER PREVETIONS --------------- //
+  
 
-
-  // Formatting the currency fields
+  // -------------------------------------------------------- //
+  //              Formatting the currency fields              //
+  // -------------------------------------------------------- //
   $("input[data-type='currency']").on({
     keyup: function() {
       formatCurrency($(this));
