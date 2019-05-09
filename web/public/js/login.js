@@ -32,20 +32,7 @@ function googleSignIn() {
     });
 }
 
-function handleSignIn() {
-  var email = document.getElementById("email").value;
-  var password = document.getElementById("password").value;
-  // alert("sign in button pressed");
-  if (email.length < 4) {
-    alert("Please enter an email address.");
-    return;
-  }
-  if (password.length < 4) {
-    alert("Please enter a password.");
-    return;
-  }
-  // Sign in with email and pass.
-  // [START authwithemail]
+function signIn(email,password) {
   firebase
     .auth()
     .signInWithEmailAndPassword(email, password)
@@ -62,6 +49,45 @@ function handleSignIn() {
       console.log(error);
       // [END_EXCLUDE]
     });
+}
+
+function handleSignIn() {
+  var email = document.getElementById("email").value;
+  var password = document.getElementById("password").value;
+  var remember = document.getElementById("remember").checked;
+  // alert("sign in button pressed");
+  if (email.length < 4) {
+    alert("Please enter an email address.");
+    return;
+  }
+  if (password.length < 4) {
+    alert("Please enter a password.");
+    return;
+  }
+  // Sign in with email and pass.
+  // [START authwithemail]
+  if (remember == true) {
+    firebase.
+    auth().
+    setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+    .then(function() {
+      signIn(email,password);
+    })
+    .catch(function(error) {
+      console.log(error);
+    })
+  }
+  else {
+    firebase.
+    auth().
+    setPersistence(firebase.auth.Auth.Persistence.NONE)
+    .then(function(){
+    signIn(email,password);
+    })
+    .catch(function(error){
+      console.log(error);
+    })
+  }
   // [END authwithemail]
 }
 
@@ -79,7 +105,7 @@ function handleSignUp() {
   }
   // Sign up with email and pass.
   // [START createwithemail]
-  
+
   if(password == verifyPass) {
     firebase
     .auth()
@@ -101,7 +127,7 @@ function handleSignUp() {
   } else {
     throw "Passwords do not match"
   }
-  
+
 }
 
 function sendEmailVerification() {
@@ -200,5 +226,5 @@ function initApp() {
 
 window.onload = function() {
   initApp();
-  
+
 };
