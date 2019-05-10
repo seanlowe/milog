@@ -2,7 +2,7 @@
 ### A mileage tracker for businesses
 MiLog is a cross platform mileage logger app built originally for **The Berkshire Group**, a realty company in the Denver area. The app aims to give companies and their employees a convenient way to log trip mileage for budget purposes by prompting drivers to enter their mileage based on the starting and ending odometer reading from the vehicle of choice.
 
-#### Check out our website at milog.org
+#### Check out our website at https://milog.org
 
 #### Contact us at contact@milog.org or via GitHub
 
