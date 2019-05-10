@@ -16,4 +16,6 @@ Source files for Android and iOS application
 
 2. Navigate to root project directory (*src/milog/*) and run
 
-  `flutter build [apk/ios]`
+    `flutter build [apk/ios]`
+    
+3. Resulting packages will be in the /src/milog/build directory
