@@ -11,6 +11,8 @@ MiLog is a cross platform mileage logger app built originally for **The Berkshir
 + <a href="https://github.com/seanlowe/milog/tree/master/src/milog" target="_blank">Flutter source</a>
 + <a href="https://github.com/seanlowe/milog/tree/master/web" target="_blank">Web HTML</a>
 
++ [Download](https://github.com/seanlowe/milog/releases)
+
 # Developers
 <ul>
   <li>James (JR) Mathson <a href="https://github.com/sonofmath" target="_blank">GitHub</a></li> 
