@@ -1,6 +1,9 @@
-# MiLog Web App
+# MiLog Web Source
 
-## TO BUILD:
+## Developers / Contributors:
+
+---
+
 + Install nvm(Node Version Manager), run command **npm install -g firebase-tools**
 + Navigate to local repository directory and run these commands:
   + **firebase init**
