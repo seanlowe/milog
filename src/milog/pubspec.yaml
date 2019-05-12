@@ -7,36 +7,36 @@ description: A convenient mile tracker
 # Both the version and the builder number may be overridden in flutter
 # build by specifying --build-name and --build-number, respectively.
 # Read more about versioning at semver.org.
-version: 0.1.0+1
+version: 0.2.0
 
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"
 
 dependencies:
   camera:
-  path_provider: ^0.5.0
+  path_provider:
   flutter:
     sdk: flutter
 
-  firebase_database: ^3.0.0
-  firebase_core: ^0.4.0
-  firebase_analytics: ^3.0.1
-  firebase_auth: ^0.11.0
+  firebase_database:
+  firebase_core:
+  firebase_analytics:
+  firebase_auth:
   firebase_ml_vision:
-  url_launcher: ^5.0.2
-  flutter_masked_text: ^0.8.0
+  url_launcher:
+  flutter_masked_text:
   # google_sign_in: ^3.2.4
-  flutter_launcher_icons: ^0.7.0
+  flutter_launcher_icons:
 
-  intl: ^0.15.8
+  intl:
 
 
 
-  rxdart: 0.20.0
+  rxdart:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
+  cupertino_icons:
 
 dev_dependencies:
   flutter_test:
