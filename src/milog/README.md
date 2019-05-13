@@ -18,4 +18,6 @@ Source files for Android and iOS application
 
     `flutter build [apk/ios]`
     
+    - If building apk, use https://flutter.dev/docs/deployment/android for release signing
+    
 3. Resulting packages will be in the /src/milog/build directory
