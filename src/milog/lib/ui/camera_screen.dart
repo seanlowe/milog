@@ -8,6 +8,7 @@ import 'package:milog/ui/log_screen.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:milog/main.dart';
 import 'package:flutter/services.dart';
+import 'package:milog/model/Integer.dart';
 
 enum Detector { text }
 

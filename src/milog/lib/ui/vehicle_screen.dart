@@ -9,10 +9,13 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:milog/model/Vehicle.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
+import 'package:milog/model/Integer.dart';
+import 'package:milog/ui/camera_screen.dart';
 
 class VehicleScreen extends StatefulWidget {
   final String userID;
   final Vehicle vehicle;
+  Integer odometerFromPicture;
 
   VehicleScreen(this.userID, this.vehicle);
 
@@ -40,6 +43,7 @@ class _VehicleScreenState extends State<VehicleScreen> {
   @override
   void initState() {
     super.initState();
+    widget.odometerFromPicture = Integer(0);
 
     vehicleDatabase = FirebaseDatabase.instance.reference();
     vehicleReference = vehicleDatabase.child('Vehicles');
@@ -48,6 +52,7 @@ class _VehicleScreenState extends State<VehicleScreen> {
 
     _nameController = new TextEditingController(text: widget.vehicle.name);
     _lastKnownOdoController = new MaskedTextController(mask: '000000');
+    _lastKnownOdoController.updateText("0");
   }
 
   @override
@@ -103,8 +108,66 @@ class _VehicleScreenState extends State<VehicleScreen> {
            splashColor: Colors.red,
           onPressed: () {
             //Navigate to camera
+            _navigateToCamera(context);
           },
         ));
+  }
+
+  void _navigateToCamera(BuildContext contect) async {
+    //print("Before Camera Screen: " + widget.odometerFromPicture.value.toString());
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => CameraScreen(widget.odometerFromPicture)),
+    );
+    //print("After Camera Screen: " + widget.odometerFromPicture.value.toString());
+    _showDialogCheckOdometer();
+  }
+
+  void _showDialogCheckOdometer() async {
+    TextEditingController _odometerFieldDialog = TextEditingController();
+    //Setting textField in this Dialog to the one from picture
+    _odometerFieldDialog.text = widget.odometerFromPicture.value.toString();
+
+    //Local helper function
+    Widget _showTextField() {
+      return TextField(
+        controller: _odometerFieldDialog,
+        keyboardType: TextInputType.number,
+      );
+    }
+
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text("We think your Odometer is:",
+              style: TextStyle(fontSize: 18.0, color: Colors.black)),
+          content: _showTextField(),
+          actions: <Widget>[
+            // buttons at the bottom of the dialog
+            FlatButton(
+              child: Text(
+                "OK",
+                style: TextStyle(fontSize: 18.0, color: Colors.green),
+              ),
+              onPressed: () {
+                //Copy what's in the TextField in Dialog to TextField in LogScreen.
+                if (int.parse(_odometerFieldDialog.text.toString()) > 0) {
+                  if (int.parse(_odometerFieldDialog.text.toString()) >
+                      int.parse(_lastKnownOdoController.text.toString())) {
+                    _lastKnownOdoController.text =
+                        _odometerFieldDialog.text.toString();
+                  }
+                }
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Widget _showAddVehicleButton() {

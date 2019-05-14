@@ -13,6 +13,7 @@ import 'package:milog/ui/camera_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:flutter/services.dart';
+import 'package:milog/model/Integer.dart';
 
 class LogScreen extends StatefulWidget {
   final Trip trip;
@@ -639,12 +640,3 @@ class _LogScreenState extends State<LogScreen> {
     return formatted;
   }
 } // end of class _LogScreenState
-
-//Wrapper for Ints
-class Integer {
-  int _value = 0;
-  Integer(this._value);
-
-  set setValue(int input) => _value = input;
-  get value => _value;
-}

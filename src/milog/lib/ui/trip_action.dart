@@ -5,6 +5,7 @@ import 'package:milog/model/Vehicle.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:milog/ui/log_screen.dart';
+import 'package:milog/model/Integer.dart';
 import 'package:milog/ui/camera_screen.dart';
 
 // This class handles pausing, resuming and ending trips
