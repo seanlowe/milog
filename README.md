@@ -34,7 +34,7 @@ MiLog is a cross platform mileage logger app built originally for **The Berkshir
 </p>
 
 # Contract
-<p>
+<p align="center">
   <img align="left" width="420" src="icons/Contract-pg10001.jpg">
   <img align="right" width="420" src="icons/Contract-pg10002.jpg">
 </p>
