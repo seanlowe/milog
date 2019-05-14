@@ -11,6 +11,7 @@ import 'package:milog/model/Vehicle.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:milog/model/Integer.dart';
 import 'package:milog/ui/camera_screen.dart';
+import 'package:flutter/services.dart';
 
 class VehicleScreen extends StatefulWidget {
   final String userID;
@@ -77,7 +78,10 @@ class _VehicleScreenState extends State<VehicleScreen> {
 
   Widget _showNameTextBox() {
     return TextField(
-        // name field
+        //Limit string length to 26 characters
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(26),
+        ],
         controller: _nameController,
         decoration: InputDecoration(labelText: 'Vehicle Name'),
         style: TextStyle(

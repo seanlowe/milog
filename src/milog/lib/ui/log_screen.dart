@@ -227,6 +227,10 @@ class _LogScreenState extends State<LogScreen> {
   Widget _showNotesTextBox() {
     return TextField(
         controller: _notesController,
+        //Limit string length to 70 characters
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(70),
+        ],
         decoration: InputDecoration(labelText: 'Notes'),
         style: TextStyle(
           fontSize: 22,
@@ -443,7 +447,7 @@ class _LogScreenState extends State<LogScreen> {
 
   void _showDialogCheckOdometer() async {
     TextEditingController _odometerFieldDialog = TextEditingController();
-    if(widget.odometerFromPicture == null){
+    if (widget.odometerFromPicture == null) {
       widget.odometerFromPicture = Integer(0);
     }
     //Setting textField in this Dialog to the one from picture
@@ -609,23 +613,32 @@ class _LogScreenState extends State<LogScreen> {
           color: Colors.blueAccent[100],
           border: Border.all(color: Colors.black, width: 2),
           borderRadius: BorderRadius.all(Radius.elliptical(5, 5))),
-      child: Column(children: <Widget>[
-        Text("Notes: " + widget.trip.notes,
-            textAlign: TextAlign.left,
-            style: new TextStyle(fontSize: 22.0, color: Colors.black, wordSpacing: 2)),
-        Text("Vehicle: " + widget.trip.vehicle,
-            textAlign: TextAlign.left,
-            style: new TextStyle(fontSize: 22.0, color: Colors.black, wordSpacing: 2)),
-        Text("Miles Traveled: " + widget.trip.milesTraveled.toString(),
-            textAlign: TextAlign.left,
-            style: new TextStyle(fontSize: 22.0, color: Colors.black, wordSpacing: 2)),
-        Text("Incurred Fees: " + "${formatCurrency.format(widget.trip.totCharges)}",
-            textAlign: TextAlign.left,
-            style: new TextStyle(fontSize: 22.0, color: Colors.black, wordSpacing: 2)),
-        Text("Date: " + getTripDate(),
-            textAlign: TextAlign.left,
-            style: new TextStyle(fontSize: 22.0, color: Colors.black))
-      ], crossAxisAlignment: CrossAxisAlignment.center,),
+      child: Column(
+        children: <Widget>[
+          Text("Notes: " + widget.trip.notes,
+              textAlign: TextAlign.left,
+              style: new TextStyle(
+                  fontSize: 22.0, color: Colors.black, wordSpacing: 2)),
+          Text("Vehicle: " + widget.trip.vehicle,
+              textAlign: TextAlign.left,
+              style: new TextStyle(
+                  fontSize: 22.0, color: Colors.black, wordSpacing: 2)),
+          Text("Miles Traveled: " + widget.trip.milesTraveled.toString(),
+              textAlign: TextAlign.left,
+              style: new TextStyle(
+                  fontSize: 22.0, color: Colors.black, wordSpacing: 2)),
+          Text(
+              "Incurred Fees: " +
+                  "${formatCurrency.format(widget.trip.totCharges)}",
+              textAlign: TextAlign.left,
+              style: new TextStyle(
+                  fontSize: 22.0, color: Colors.black, wordSpacing: 2)),
+          Text("Date: " + getTripDate(),
+              textAlign: TextAlign.left,
+              style: new TextStyle(fontSize: 22.0, color: Colors.black))
+        ],
+        crossAxisAlignment: CrossAxisAlignment.center,
+      ),
     );
   }
 
