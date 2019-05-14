@@ -108,6 +108,7 @@ class _LoginSignUpPageState extends State<LoginSignUpPage> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 0.0),
       child: new TextFormField(
+        key: Key("Email"),
         maxLines: 1,
         keyboardType: TextInputType.emailAddress,
         autofocus: false,
@@ -127,6 +128,7 @@ class _LoginSignUpPageState extends State<LoginSignUpPage> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
       child: new TextFormField(
+        key: Key("Password"),
         maxLines: 1,
         obscureText: true,
         autofocus: false,
