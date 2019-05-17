@@ -252,7 +252,7 @@ class _ListViewLogState extends State<ListViewLog> {
     Navigator.pop(context);
     await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => UserScreen()),
+      MaterialPageRoute(builder: (context) => UserScreen(widget.auth)),
     );
   }
 
